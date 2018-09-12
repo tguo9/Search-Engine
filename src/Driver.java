@@ -1,4 +1,7 @@
+import java.nio.file.Paths;
 import java.util.Arrays;
+
+import javafx.scene.shape.Path;
 
 /**
  * TODO Fill in your own comments!
@@ -27,6 +30,7 @@ public class Driver {
 		if (am.hasFlag("-path")) {
 
 			System.out.println(am.getPath(args[2]));
+			Path filePath = Paths.get(am.getPath(args[2]));
 			
 		}
 	}
