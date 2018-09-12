@@ -18,6 +18,8 @@ public class Driver {
 		
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
+		System.out.println("HERE");
+		System.out.println(am.numFlags());
 		
 		if (am.hasFlag("-index")) {
 			
