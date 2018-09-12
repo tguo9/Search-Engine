@@ -19,6 +19,13 @@ public class Driver {
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
 		
+		if (am.hasFlag("-index")) {
+			
+			
+		} else if (am.hasFlag("-path")) {
+			
+			
+		}
 	}
 
 }
