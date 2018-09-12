@@ -18,14 +18,15 @@ public class Driver {
 		
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
-		System.out.println("HERE");
-		System.out.println(am.numFlags());
 		
 		if (am.hasFlag("-index")) {
+
+			System.out.println(am.numFlags());
 			
-			
-		} else if (am.hasFlag("-path")) {
-			
+		} 
+		if (am.hasFlag("-path")) {
+
+			System.out.println(am.getPath(args[2]));
 			
 		}
 	}
