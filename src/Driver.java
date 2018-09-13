@@ -1,4 +1,7 @@
+import java.nio.file.Paths;
 import java.util.Arrays;
+
+import javafx.scene.shape.Path;
 
 /**
  * TODO Fill in your own comments!
@@ -20,9 +23,13 @@ public class Driver {
 		am.parse(args);
 		
 		if (am.hasFlag("-index")) {
+
+			System.out.println(am.numFlags());
 			
-			
-		} else if (am.hasFlag("-path")) {
+		} 
+		if (am.hasFlag("-path")) {
+
+			System.out.println(am.getPath(args[2]));
 			
 			
 		}
