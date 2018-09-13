@@ -30,7 +30,7 @@ public class Driver {
 		if (am.hasFlag("-path")) {
 
 			System.out.println(am.getPath(args[2]));
-			Path filePath = Paths.get(am.getPath(args[2]));
+			
 			
 		}
 	}
