@@ -1,8 +1,6 @@
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import javafx.scene.shape.Path;
-
 /**
  * TODO Fill in your own comments!
  */
