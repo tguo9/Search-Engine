@@ -108,8 +108,7 @@ public class InvertedIndex {
 	 */
 	public int count(String word) {
 
-		int num = map.get(word).size();
-		return num;
+		return map.get(word).size();
 	}
 
 	/**
@@ -119,8 +118,7 @@ public class InvertedIndex {
 	 */
 	public int words() {
 
-		int num = map.size();
-		return num;
+		return map.size();
 	}
 
 	/**
@@ -130,11 +128,8 @@ public class InvertedIndex {
 	 * @return true if the word is stored in the map
 	 */
 	public boolean contains(String word) {
-
-		if (map.containsKey(word)) {
-			return true;
-		}
-		return false;
+		
+		return map.containsKey(word);
 	}
 
 	/**
@@ -156,44 +151,41 @@ public class InvertedIndex {
 		return false;
 	}
 
-	/**
-	 * Returns a copy of the words in this map as a sorted list.
-	 *
-	 * @return sorted list of words
-	 *
-	 * @see ArrayList#ArrayList(java.util.Collection)
-	 * @see Collections#sort(List)
-	 */
-	public ArrayList<String> copyWords() {
-		/*
-		 * TODO: Create a copy of the words in the map as a list, and sort before
-		 * returning.
-		 */
-		var returnList = new ArrayList<String>();
-		Collections.sort(returnList);
-		return returnList;
-	}
+//	/**
+//	 * Returns a copy of the words in this map as a sorted list.
+//	 *
+//	 * @return sorted list of words
+//	 *
+//	 * @see ArrayList#ArrayList(java.util.Collection)
+//	 * @see Collections#sort(List)
+//	 */
+//	public ArrayList<String> copyWords() {
+//
+//		var returnList = new ArrayList<String>();
+//		Collections.sort(returnList);
+//		return returnList;
+//	}
 
-	/**
-	 * Returns a copy of the positions for a specific word.
-	 *
-	 * @param word to find in map
-	 * @return sorted list of positions for that word
-	 *
-	 * @see ArrayList#ArrayList(java.util.Collection)
-	 * @see Collections#sort(List)
-	 */
-	public ArrayList<Integer> copyPositions(String word) {
-
-		if (map.containsKey(word)) {
-			ArrayList<Integer> returnList = new ArrayList<Integer>(map.get(word));
-			Collections.sort(returnList);
-			return returnList;
-		} else {
-
-			return new ArrayList<Integer>();
-		}
-	}
+//	/**
+//	 * Returns a copy of the positions for a specific word.
+//	 *
+//	 * @param word to find in map
+//	 * @return sorted list of positions for that word
+//	 *
+//	 * @see ArrayList#ArrayList(java.util.Collection)
+//	 * @see Collections#sort(List)
+//	 */
+//	public ArrayList<Integer> copyPositions(String word) {
+//
+//		if (map.containsKey(word)) {
+//			ArrayList<Integer> returnList = new ArrayList<Integer>(map.get(word));
+//			Collections.sort(returnList);
+//			return returnList;
+//		} else {
+//
+//			return new ArrayList<Integer>();
+//		}
+//	}
 
 	/**
 	 * Returns a string representation of this map.
