@@ -17,7 +17,7 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<Path, TreeSet<Integer>> map;
+	private TreeMap<String, TreeMap<Path, TreeSet<Integer>>> map;
 
 	/**
 	 * Initializes the map.
@@ -33,7 +33,7 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public boolean add(Path words, int position) {
+	public boolean add(String words, int position) {
 
 		TreeSet<Integer> set = new TreeSet<Integer>();
 
@@ -44,6 +44,7 @@ public class InvertedIndex {
 			map.put(words, set);
 
 			return true;
+			
 		} else {
 
 			set = map.get(words);
