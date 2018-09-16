@@ -1,4 +1,5 @@
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
 
 public class InvertedIndex {
 
@@ -17,7 +17,7 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<String, TreeMap<Path, TreeSet<Integer>>> map;
+	private TreeMap<String, TreeMap<Paths, TreeSet<Integer>>> map;
 
 	/**
 	 * Initializes the map.
@@ -29,34 +29,38 @@ public class InvertedIndex {
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
-	 * @param words     word to clean and add to map
+	 * @param words    word to clean and add to map
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public boolean add(String words, int position) {
+	public boolean add(String words, Paths path, int position) {
 
-		TreeSet<Integer> set = new TreeSet<Integer>();
+		var pathMap = new TreeMap<Paths, TreeSet<Integer>>();
+		var set = new TreeSet<Integer>();
 
 		if (!map.containsKey(words)) {
 
 			set.add(position);
-
-			map.put(words, set);
+			pathMap.put(path, set);
+			map.put(words, pathMap);
 
 			return true;
-			
+
 		} else {
 
-			set = map.get(words);
+			set = pathMap.get(path);
+
 			if (set.contains(position)) {
 				return false;
 			}
 			set.add(position);
 
-			map.put(words, set);
+			pathMap.put(path, set);
+			map.put(words, pathMap);
 
 			return true;
 		}
+
 	}
 
 	/**
@@ -129,13 +133,12 @@ public class InvertedIndex {
 	 * @return true if the word is stored in the map
 	 */
 	public boolean contains(String word) {
-		
+
 		return map.containsKey(word);
 	}
 
 	/**
-	 * Tests whether the map contains the specified word at the specified
-	 * position.
+	 * Tests whether the map contains the specified word at the specified position.
 	 *
 	 * @param word     word to look for
 	 * @param position position to look for word
