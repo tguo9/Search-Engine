@@ -86,7 +86,7 @@ public class InvertedIndex {
 	 * @return true if this map is changed as a result of the call (i.e. if one or
 	 *         more words or positions were added to the map)
 	 */
-	public boolean addAll(Path[] words, int start) {
+	public boolean addAll(String[] words, int start) {
 
 		int count = start;
 
