@@ -17,7 +17,7 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<String, TreeMap<Paths, TreeSet<Integer>>> map;
+	private TreeMap<String, TreeMap<Path, TreeSet<Integer>>> map;
 
 	/**
 	 * Initializes the map.
@@ -33,9 +33,9 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public boolean add(String words, Paths path, int position) {
+	public boolean add(String words, Path path, int position) {
 
-		var pathMap = new TreeMap<Paths, TreeSet<Integer>>();
+		var pathMap = new TreeMap<Path, TreeSet<Integer>>();
 		var set = new TreeSet<Integer>();
 
 		if (!map.containsKey(words)) {
@@ -48,14 +48,23 @@ public class InvertedIndex {
 
 		} else {
 
-			set = pathMap.get(path);
+			pathMap = map.get(words);
+
+			if (pathMap.containsKey(path)) {
+
+				set = pathMap.get(path);
+				set.add(position);
+			} else {
+
+				set.add(position);
+				pathMap.put(path, set);
+
+			}
 
 			if (set.contains(position)) {
 				return false;
 			}
-			set.add(position);
 
-			pathMap.put(path, set);
 			map.put(words, pathMap);
 
 			return true;
@@ -73,8 +82,8 @@ public class InvertedIndex {
 	 *
 	 * @see #addAll(String[], int)
 	 */
-	public boolean addAll(Path[] words) {
-		return addAll(words, 1);
+	public boolean addAll(String[] words, Path path) {
+		return addAll(words, path, 1);
 	}
 
 	/**
@@ -86,13 +95,13 @@ public class InvertedIndex {
 	 * @return true if this map is changed as a result of the call (i.e. if one or
 	 *         more words or positions were added to the map)
 	 */
-	public boolean addAll(String[] words, int start) {
+	public boolean addAll(String[] words, Path path, int start) {
 
 		int count = start;
 
 		for (int i = 0; i < words.length; i++) {
 
-			if (add(words[i], i + start)) {
+			if (add(words[i], path, i + start)) {
 
 				count++;
 			}
@@ -137,58 +146,22 @@ public class InvertedIndex {
 		return map.containsKey(word);
 	}
 
-	/**
-	 * Tests whether the map contains the specified word at the specified position.
-	 *
-	 * @param word     word to look for
-	 * @param position position to look for word
-	 * @return true if the word is stored in the map at the specified position
-	 */
-	public boolean contains(String word, int position) {
-
-		if (map.containsKey(word)) {
-			if (map.get(word).contains(position)) {
-				return true;
-			}
-			return false;
-		}
-		return false;
-	}
-
 //	/**
-//	 * Returns a copy of the words in this map as a sorted list.
+//	 * Tests whether the map contains the specified word at the specified position.
 //	 *
-//	 * @return sorted list of words
-//	 *
-//	 * @see ArrayList#ArrayList(java.util.Collection)
-//	 * @see Collections#sort(List)
+//	 * @param word     word to look for
+//	 * @param position position to look for word
+//	 * @return true if the word is stored in the map at the specified position
 //	 */
-//	public ArrayList<String> copyWords() {
-//
-//		var returnList = new ArrayList<String>();
-//		Collections.sort(returnList);
-//		return returnList;
-//	}
-
-//	/**
-//	 * Returns a copy of the positions for a specific word.
-//	 *
-//	 * @param word to find in map
-//	 * @return sorted list of positions for that word
-//	 *
-//	 * @see ArrayList#ArrayList(java.util.Collection)
-//	 * @see Collections#sort(List)
-//	 */
-//	public ArrayList<Integer> copyPositions(String word) {
+//	public boolean contains(String word, Path path, int position) {
 //
 //		if (map.containsKey(word)) {
-//			ArrayList<Integer> returnList = new ArrayList<Integer>(map.get(word));
-//			Collections.sort(returnList);
-//			return returnList;
-//		} else {
-//
-//			return new ArrayList<Integer>();
+//			if (map.get(word).contains(position)) {
+//				return true;
+//			}
+//			return false;
 //		}
+//		return false;
 //	}
 
 	/**
