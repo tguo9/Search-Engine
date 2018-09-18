@@ -32,6 +32,8 @@ public class Driver {
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
 		
+		InvertedIndex ii = new InvertedIndex();
+		
 		Path path = null;
 		Path index = null;
 		
@@ -53,9 +55,9 @@ public class Driver {
 			while ((thisLine = reader.readLine()) != null) {
 				List<String> list = TextFileStemmer.stemLine(thisLine);
 				for (int i = 0; i < list.size(); i++) {
-					
+					ii.add(list.get(i), path, i);
 				}
-				writer.write(System.lineSeparator());
+				JSONWriter.asNestedObject(ii.getMap(), index);
 			}
 			
 			
