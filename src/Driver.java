@@ -19,17 +19,22 @@ public class Driver {
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
 		
+		InvertedIndex ii = new InvertedIndex();
+		TextFileStemmer tfs = new TextFileStemmer();
+		
 		if (am.hasFlag("-index")) {
 
-			System.out.println(am.numFlags());
+			Path path = am.getPath("-index");
+			Path p = Paths.get(path.toString());
 			
 		} 
 		if (am.hasFlag("-path")) {
 
-			System.out.println(am.getPath(args[2]));
+			Path path = am.getPath("-path");
 			
 			
 		}
+		
 	}
 
 }
