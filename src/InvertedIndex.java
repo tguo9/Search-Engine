@@ -145,6 +145,11 @@ public class InvertedIndex {
 
 		return map.containsKey(word);
 	}
+	
+	public TreeMap<String, TreeMap<Path, TreeSet<Integer>>> getMap() {
+		
+		return map;
+	}
 
 //	/**
 //	 * Tests whether the map contains the specified word at the specified position.

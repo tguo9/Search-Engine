@@ -205,7 +205,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static String asNestedObject(TreeMap<String, TreeSet<Integer>> elements) {
+	public static String asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements) {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try {
 			StringWriter writer = new StringWriter();
@@ -226,7 +226,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Path path) throws IOException {
+	public static void asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Path path) throws IOException {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asNestedObject(elements, writer, 0);
@@ -252,7 +252,7 @@ public class JSONWriter {
 	 *
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
-	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level)
+	public static void asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer, int level)
 			throws IOException {
 
 		writer.write('{');
@@ -264,34 +264,54 @@ public class JSONWriter {
 			writer.write('}');
 			return;
 		}
-		for (String element : (elements).headMap(elements.lastKey()).keySet()) {
-
+		for (String element : elements.keySet()) {
+			
 			indent(level + 1, writer);
 			quote(element, writer);
-			writer.write(": ");
-			asArray(elements.get(element), writer, level + 1);
-			writer.write(',');
-			writer.write(System.lineSeparator());
+			writer.write(": {");
+			
+			for (Path path: elements.get(element).keySet()) {
+				
+				indent(level + 1, writer);
+				quote(element, writer);
+				writer.write(": [");
+				asArray(elements.get(element).get(path), writer, level + 1);
+				if (path == elements.get(element).lastKey()) {
+					
+					writer.write(System.lineSeparator());
+				} else {
+					
+					writer.write(',');
+					writer.write(System.lineSeparator());
+					
+				}
+				
+				
+			}
+			
+			indent(level + 1, writer);
+			
+			if (element == elements.lastKey()) {
+				
+				writer.write(System.lineSeparator());
+			} else {
+				
+				writer.write(',');
+				writer.write(System.lineSeparator());
+			}
+			
 		}
-
-		indent(level + 1, writer);
-		quote(elements.lastKey(), writer);
-		writer.write(": ");
-		asArray(elements.get(elements.lastKey()), writer, level + 1);
-		writer.write(System.lineSeparator());
-		indent(level, writer);
-
 		writer.write('}');
 	}
 
-	public static void main(String[] args) {
-		// You can test your code here while developing!
-
-		TreeSet<Integer> test = new TreeSet<>();
-		test.add(3);
-		test.add(11);
-		test.add(-2);
-
-		System.out.println(asArray(test));
-	}
+//	public static void main(String[] args) {
+//		// You can test your code here while developing!
+//
+//		TreeSet<Integer> test = new TreeSet<>();
+//		test.add(3);
+//		test.add(11);
+//		test.add(-2);
+//
+//		System.out.println(asArray(test));
+//	}
 }
