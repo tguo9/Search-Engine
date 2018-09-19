@@ -5,6 +5,7 @@ import java.util.List;
 import opennlp.tools.stemmer.Stemmer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -40,6 +41,13 @@ public class Driver {
 		
 		Path index = null;
 		
+		File file = new File(path.toString());
+		
+		if (!file.exists()) {
+			
+			return;
+		}
+		
 		if (am.hasFlag("-index")) {
 
 			index = am.getPath("-index");
@@ -67,6 +75,7 @@ public class Driver {
 					ii.add(list.get(i), path, i);
 				}
 //				JSONWriter.write(ii.getMap(), index);
+				JSONWriter.asNestedObjectii.getMap());
 			}
 			
 			
