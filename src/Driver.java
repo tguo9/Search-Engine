@@ -45,7 +45,7 @@ public class Driver {
 		
 		if (!file.exists()) {
 			
-			return;
+			path = Paths.get("index.json");
 		}
 		
 		if (am.hasFlag("-index")) {
