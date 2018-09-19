@@ -157,6 +157,11 @@ public class JSONWriter {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public void write() {
+		
+		
+	}
 
 
 }

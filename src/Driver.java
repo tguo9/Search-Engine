@@ -46,6 +46,10 @@ public class Driver {
 		if (!file.exists()) {
 			
 			path = Paths.get("index.json");
+			
+		} else {
+			
+			path = index;
 		}
 		
 		if (am.hasFlag("-index")) {
@@ -69,13 +73,16 @@ public class Driver {
 			
 			String thisLine = null;
 			
+			//read line
+			
 			while ((thisLine = reader.readLine()) != null) {
 				List<String> list = TextFileStemmer.stemLine(thisLine);
 				for (int i = 0; i < list.size(); i++) {
 					ii.add(list.get(i), path, i);
 				}
 //				JSONWriter.write(ii.getMap(), index);
-				JSONWriter.asNestedObjectii.getMap());
+				JSONWriter.asNestedObject(ii.getMap());
+				
 			}
 			
 			
