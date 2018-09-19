@@ -24,7 +24,7 @@ public class Driver {
 	public static void main(String[] args) {
 //		System.out.println(Arrays.toString(args));
 		
-		if (args.length < 2) {
+		if (args.length < 3) {
 			
 			return;
 		}
@@ -32,20 +32,29 @@ public class Driver {
 		ArgumentMap am = new ArgumentMap();
 		am.parse(args);
 		
+		Path path = am.getPath("-path");
+		System.out.println("HERE");
+		System.out.println(path.toString());
+		
 		InvertedIndex ii = new InvertedIndex();
 		
-		Path path = null;
 		Path index = null;
 		
-		if (am.hasFlag("-index") && am.hasFlag("-path")) {
+		if (am.hasFlag("-index")) {
 
-			path = am.getPath("-index");
+			index = am.getPath("-index");
 			
-			Path p = Paths.get("index.json");
+			if (index == null) {
+				index = Paths.get("index.json");
+			}
+			
+//			Path p = Paths.get("index.json");
+			
+//			index = p;
 			
 		} else {
 			
-			
+			index = Paths.get("index.json");
 		}
 		
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)){
@@ -57,7 +66,7 @@ public class Driver {
 				for (int i = 0; i < list.size(); i++) {
 					ii.add(list.get(i), path, i);
 				}
-				JSONWriter.asNestedObject(ii.getMap(), index);
+//				JSONWriter.write(ii.getMap(), index);
 			}
 			
 			
