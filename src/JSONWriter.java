@@ -5,8 +5,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -47,7 +45,6 @@ public class JSONWriter {
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
 	public static String asArray(TreeSet<Integer> elements) {
-		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try {
 			StringWriter writer = new StringWriter();
 			asArray(elements, writer, 0);
@@ -66,7 +63,6 @@ public class JSONWriter {
 	 * @throws IOException if the writer encounters any issues
 	 */
 	public static void asArray(TreeSet<Integer> elements, Path path) throws IOException {
-		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asArray(elements, writer, 0);
 		}
@@ -144,7 +140,6 @@ public class JSONWriter {
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
 	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Path path) throws IOException {
-		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asNestedObject(elements, writer, 0);
 		}
