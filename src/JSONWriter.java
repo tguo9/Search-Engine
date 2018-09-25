@@ -25,12 +25,6 @@ public class JSONWriter {
 		}
 	}
 
-	private static String indent(int times) {
-		char[] tabs = new char[times];
-		Arrays.fill(tabs, '\t');
-		return String.valueOf(tabs);
-	}
-
 	/**
 	 * Writes the element surrounded by quotes using the provided {@link Writer}.
 	 *
@@ -45,6 +39,82 @@ public class JSONWriter {
 	}
 
 	/**
+	 * Returns the set of elements formatted as a pretty JSON array of numbers.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @return {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asArray(TreeSet, Writer, int)
+	 */
+	public static String asArray(TreeSet<Integer> elements) {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try {
+			StringWriter writer = new StringWriter();
+			asArray(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the set of elements formatted as a pretty JSON array of numbers to the
+	 * specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 */
+	public static void asArray(TreeSet<Integer> elements, Path path) throws IOException {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asArray(elements, writer, 0);
+		}
+	}
+
+	/**
+	 * Writes the set of elements formatted as a pretty JSON array of numbers using
+	 * the provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 */
+	public static void asArray(TreeSet<Integer> elements, Writer writer, int level) throws IOException {
+
+		writer.write('[');
+		writer.write(System.lineSeparator());
+
+		if (elements.isEmpty()) {
+			indent(level, writer);
+			writer.write(']');
+			return;
+		}
+		indent(level + 1, writer);
+		for (Integer element : elements.headSet(elements.last())) {
+
+			writer.write(element.toString());
+			writer.write(',');
+			writer.write(System.lineSeparator());
+			indent(level + 1, writer);
+
+		}
+		writer.write(elements.last().toString());
+		writer.write(System.lineSeparator());
+		indent(level, writer);
+		writer.write(']');
+
+	}
+
+	/**
 	 * Returns the nested map of elements formatted as a nested pretty JSON object.
 	 *
 	 * @param elements the elements to convert to JSON
@@ -52,7 +122,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static String asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements) {
+	public static String asNestedObject(TreeMap<String, TreeSet<Integer>> elements) {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try {
 			StringWriter writer = new StringWriter();
@@ -73,8 +143,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static void asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Path path)
-			throws IOException {
+	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Path path) throws IOException {
 		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			asNestedObject(elements, writer, 0);
@@ -100,8 +169,8 @@ public class JSONWriter {
 	 *
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
-	public static void asNestedObject(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer,
-			int level) throws IOException {
+	public static void asNestedObject(TreeMap<String, TreeSet<Integer>> elements, Writer writer, int level)
+			throws IOException {
 
 		writer.write('{');
 		writer.write(System.lineSeparator());
@@ -112,64 +181,36 @@ public class JSONWriter {
 			writer.write('}');
 			return;
 		}
-		for (String element : elements.keySet()) {
+		for (String element : (elements).headMap(elements.lastKey()).keySet()) {
 
 			indent(level + 1, writer);
 			quote(element, writer);
-			writer.write(": {");
+			writer.write(": ");
+			asArray(elements.get(element), writer, level + 1);
+			writer.write(',');
 			writer.write(System.lineSeparator());
-			indent(level + 1, writer);
-
-			for (Path path : elements.get(element).keySet()) {
-
-				indent(level + 1, writer);
-				quote(path.toString(), writer);
-				writer.write(": [");
-				asArray(writer, elements.get(element).get(path), level + 1);
-				if (path == elements.get(element).lastKey()) {
-
-					writer.write(System.lineSeparator());
-				} else {
-
-					writer.write(',');
-					writer.write(System.lineSeparator());
-
-				}
-
-			}
-
-			indent(level + 1, writer);
-
-			if (element == elements.lastKey()) {
-
-				writer.write(System.lineSeparator());
-			} else {
-
-				writer.write(',');
-				writer.write(System.lineSeparator());
-			}
-
 		}
-		writer.write('}');
-	}
 
-	private static void asArray(Writer writer, TreeSet<Integer> treeSet, int i) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public static void asEmpty(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer, int level)
-			throws IOException {
-
-		writer.write('{');
+		indent(level + 1, writer);
+		quote(elements.lastKey(), writer);
+		writer.write(": ");
+		asArray(elements.get(elements.lastKey()), writer, level + 1);
 		writer.write(System.lineSeparator());
-
 		indent(level, writer);
+
 		writer.write('}');
 	}
 
-	public static String writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements) {
-		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+	/**
+	 * Returns the nested map of elements formatted as a nested pretty JSON object.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @return {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
+	public static String writes(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
+
 		try {
 			StringWriter writer = new StringWriter();
 			writes(elements, writer, 0);
@@ -187,59 +228,124 @@ public class JSONWriter {
 	 * @param path     the path to the file write to output
 	 * @throws IOException if the writer encounters any issues
 	 *
-	 * @see #writes(TreeMap, Writer, int)
+	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Path path)
+	public static void writes(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path path)
 			throws IOException {
+
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			writes(elements, writer, 0);
 		}
 	}
-	
-	public static void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer, int level) throws IOException {
-		
+
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)
+	 *
+	 * @see #asArray(TreeSet, Writer, int)
+	 */
+	public static void writes(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer, int level)
+			throws IOException {
+
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
-		for (String element : elements.keySet()) {
+		for (String key : elements.keySet()) {
 
 			indent(level + 1, writer);
-			quote(element, writer);
-			writer.write(": {");
+
+			quote(key.toString(), writer);
+
+			writer.write(": ");
+
+			asNestedObject(elements.get(key), writer, level);
+
+			if (!key.equals(elements.lastKey())) {
+				writer.write(",");
+			}
 			writer.write(System.lineSeparator());
-			indent(level + 1, writer);
-
-			for (Path path : elements.get(element).keySet()) {
-
-				indent(level + 1, writer);
-				quote(path.toString(), writer);
-				writer.write(": [");
-				asArray(writer, elements.get(element).get(path), level + 1);
-				if (path == elements.get(element).lastKey()) {
-
-					writer.write(System.lineSeparator());
-				} else {
-
-					writer.write(',');
-					writer.write(System.lineSeparator());
-
-				}
-
-			}
-
-			indent(level + 1, writer);
-
-			if (element == elements.lastKey()) {
-
-				writer.write(System.lineSeparator());
-			} else {
-
-				writer.write(',');
-				writer.write(System.lineSeparator());
-			}
 
 		}
+
+		indent(level, writer);
 		writer.write('}');
 	}
 
+	/**
+	 * Returns the nested map of elements formatted as a nested pretty JSON object.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @return {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
+	public static String writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
+		try {
+			StringWriter writer = new StringWriter();
+			writesEmpty(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
+	public static void writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path indexPath)
+			throws IOException {
+
+		try (BufferedWriter writer = Files.newBufferedWriter(indexPath, StandardCharsets.UTF_8)) {
+			writesEmpty(elements, writer, 0);
+		}
+
+	}
+
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)
+	 *
+	 * @see #asArray(TreeSet, Writer, int)
+	 */
+	public static void writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
+			int level) throws IOException {
+		writer.write('{');
+		writer.write(System.lineSeparator());
+		indent(level, writer);
+		writer.write('}');
+
+	}
 }
