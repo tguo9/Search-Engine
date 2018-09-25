@@ -155,23 +155,91 @@ public class JSONWriter {
 
 	private static void asArray(Writer writer, TreeSet<Integer> treeSet, int i) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	public static void asEmpty(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer,
-			int level) throws IOException {
+
+	public static void asEmpty(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer, int level)
+			throws IOException {
 
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
-			indent(level, writer);
-			writer.write('}');
-	}
-	
-	public void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, int level) throws IOException {
-		
-		
+		indent(level, writer);
+		writer.write('}');
 	}
 
+	public static String writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements) {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try {
+			StringWriter writer = new StringWriter();
+			writes(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #writes(TreeMap, Writer, int)
+	 */
+	public static void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Path path)
+			throws IOException {
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			writes(elements, writer, 0);
+		}
+	}
+	
+	public static void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer, int level) throws IOException {
+		
+		writer.write('{');
+		writer.write(System.lineSeparator());
+
+		for (String element : elements.keySet()) {
+
+			indent(level + 1, writer);
+			quote(element, writer);
+			writer.write(": {");
+			writer.write(System.lineSeparator());
+			indent(level + 1, writer);
+
+			for (Path path : elements.get(element).keySet()) {
+
+				indent(level + 1, writer);
+				quote(path.toString(), writer);
+				writer.write(": [");
+				asArray(writer, elements.get(element).get(path), level + 1);
+				if (path == elements.get(element).lastKey()) {
+
+					writer.write(System.lineSeparator());
+				} else {
+
+					writer.write(',');
+					writer.write(System.lineSeparator());
+
+				}
+
+			}
+
+			indent(level + 1, writer);
+
+			if (element == elements.lastKey()) {
+
+				writer.write(System.lineSeparator());
+			} else {
+
+				writer.write(',');
+				writer.write(System.lineSeparator());
+			}
+
+		}
+		writer.write('}');
+	}
 
 }

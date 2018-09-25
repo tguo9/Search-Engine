@@ -34,23 +34,12 @@ public class Driver {
 		am.parse(args);
 		
 		Path path = am.getPath("-path");
-		System.out.println("HERE");
 		System.out.println(path.toString());
 		
 		InvertedIndex ii = new InvertedIndex();
 		
-		Path index = null;
+		Path index = null;		
 		
-		File file = new File(path.toString());
-		
-		if (!file.exists()) {
-			
-			path = Paths.get("index.json");
-			
-		} else {
-			
-			path = index;
-		}
 		
 		if (am.hasFlag("-index")) {
 
@@ -60,13 +49,6 @@ public class Driver {
 				index = Paths.get("index.json");
 			}
 			
-//			Path p = Paths.get("index.json");
-			
-//			index = p;
-			
-		} else {
-			
-			index = Paths.get("index.json");
 		}
 		
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)){
@@ -82,7 +64,7 @@ public class Driver {
 //				JSONWriter.write(ii.getMap(), index);
 				
 			}
-			JSONWriter.asNestedObject(ii.getMap());
+			JSONWriter.writes(ii.getMap(), index);
 			
 			
 			
