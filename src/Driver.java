@@ -1,12 +1,10 @@
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
-import opennlp.tools.stemmer.Stemmer;
-
+import java.util.ArrayList;
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -14,69 +12,99 @@ import java.nio.file.Path;
  * TODO Fill in your own comments!
  */
 public class Driver {
-	
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search
-	 * engine from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 */
-	public static void main(String[] args) {
-//		System.out.println(Arrays.toString(args));
-		
-		if (args.length < 3) {
-			
-			return;
-		}
-		
-		ArgumentMap am = new ArgumentMap();
-		am.parse(args);
-		
-		Path path = am.getPath("-path");
-		System.out.println("HERE");
-		System.out.println(path.toString());
-		
-		InvertedIndex ii = new InvertedIndex();
-		
-		Path index = null;
-		
-		if (am.hasFlag("-index")) {
 
-			index = am.getPath("-index");
-			
-			if (index == null) {
-				index = Paths.get("index.json");
+	/**
+	 * Find the files. Adapted from a FileFinder
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 */
+	public static void findFiles(String path, ArrayList<String> result) throws IOException {
+
+		File input = new File(path);
+		File[] children = input.listFiles();
+
+		for (File file : children) {
+
+			if (file.isFile() && (((file.getName()).toLowerCase()).endsWith("txt"))
+					|| ((file.getName()).toLowerCase()).endsWith("text")) {
+
+				result.add(file.toString());
+
+			} else if (file.isDirectory()) {
+
+				findFiles(file.getPath(), result);
 			}
-			
-//			Path p = Paths.get("index.json");
-			
-//			index = p;
-			
-		} else {
-			
-			index = Paths.get("index.json");
 		}
-		
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)){
-			
-			String thisLine = null;
-			
-			while ((thisLine = reader.readLine()) != null) {
-				List<String> list = TextFileStemmer.stemLine(thisLine);
-				for (int i = 0; i < list.size(); i++) {
-					ii.add(list.get(i), path, i);
-				}
-//				JSONWriter.write(ii.getMap(), index);
-			}
-			
-			
-			
-		} catch (IOException e) {
-			e.getMessage();
-		}
-		
-		
-		
 	}
 
+	public static void main(String[] args) throws IOException {
+		ArgumentMap map = new ArgumentMap(args);
+
+		InvertedIndex ii = new InvertedIndex();
+
+		ArrayList<String> filenames = new ArrayList<>();
+
+		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+
+		Path index = null;
+
+		// Empty check
+		if (map.hasFlag("-index")) {
+			index = map.getPath("-index");
+
+			if (index == null) {
+
+				index = Paths.get("index.json");
+			}
+
+			InvertedIndex empty = new InvertedIndex();
+
+			JSONWriter.writesEmpty(empty.getMap(), index);
+
+		} else if (!map.hasFlag("-index")) {
+			return;
+		}
+
+		// Bad argument check
+		if (args.length < 2) {
+			return;
+		}
+
+		Path path = map.getPath("-path");
+
+		if (path != null && Files.isDirectory(path)) {
+			findFiles(path.toString(), filenames);
+
+		} else if (Files.isRegularFile(path)) {
+
+			filenames.add(path.toString());
+		}
+
+		for (String files : filenames) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(files))) {
+
+				String thisLine = null;
+				
+				// Not sure why 0 is not woring
+				int indexCount = 1;
+
+				while ((thisLine = reader.readLine()) != null) {
+
+					String[] thatLine = TextParser.parse(thisLine);
+
+					for (String word : thatLine) {
+
+						String newWord = stemmer.stem(word).toString();
+						ii.add(newWord, files.toString(), indexCount);
+						indexCount++;
+					}
+				}
+			} catch (IOException e) {
+				e.getMessage();
+			}
+		}
+
+		JSONWriter.writes(ii.getMap(), index);
+	}
 }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ArgumentMap {
-
+	
 	private final Map<String, String> map;
 
 	/**
