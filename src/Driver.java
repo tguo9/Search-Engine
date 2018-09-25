@@ -72,7 +72,6 @@ public class Driver {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)){
 			
 			String thisLine = null;
-			
 			//read line
 			
 			while ((thisLine = reader.readLine()) != null) {
@@ -81,9 +80,9 @@ public class Driver {
 					ii.add(list.get(i), path, i);
 				}
 //				JSONWriter.write(ii.getMap(), index);
-				JSONWriter.asNestedObject(ii.getMap());
 				
 			}
+			JSONWriter.asNestedObject(ii.getMap());
 			
 			
 			

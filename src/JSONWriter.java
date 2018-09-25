@@ -158,7 +158,17 @@ public class JSONWriter {
 		
 	}
 	
-	public void write() {
+	public static void asEmpty(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, Writer writer,
+			int level) throws IOException {
+
+		writer.write('{');
+		writer.write(System.lineSeparator());
+
+			indent(level, writer);
+			writer.write('}');
+	}
+	
+	public void writes(TreeMap<String, TreeMap<Path, TreeSet<Integer>>> elements, int level) throws IOException {
 		
 		
 	}
