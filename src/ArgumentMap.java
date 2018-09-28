@@ -40,7 +40,7 @@ public class ArgumentMap {
 			if (isFlag(args[i])) {
 				if ((i < length - 1) && isValue(args[i + 1])) {
 					map.put(args[i], args[i + 1]);
-
+					// TODO i++ so you skip the next element
 				} else {
 
 					map.put(args[i], null);
@@ -153,7 +153,7 @@ public class ArgumentMap {
 	 *         if there is no mapping for the flag
 	 */
 	public String getString(String flag, String defaultValue) {
-
+		// TODO map.getOrDefault(flag, ...);
 		// Not sure if this one works
 		String returnVal = map.get(flag);
 		if (returnVal != null) {
@@ -186,6 +186,7 @@ public class ArgumentMap {
 			return returnVal;
 
 		} catch (Exception e) {
+			// TODO Remove the output and return null inside the catch.
 			e.getMessage();
 			System.out.println("Invaild flag");
 			
@@ -220,6 +221,7 @@ public class ArgumentMap {
 				return returnValue;
 
 			} catch (Exception e) {
+				// TODO Same
 				e.getMessage();
 				System.out.println("Invaild flag, use default value");
 
