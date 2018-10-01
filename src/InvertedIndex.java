@@ -1,6 +1,19 @@
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/*
+ * TODO
+ * Barebones version of this data structure...
+ * 
+ * boolean contains(String word)
+ * boolean contains(String word, String location)
+ * boolean contains(String word, String location, int position)
+ * 
+ * int words() 
+ * int locations(String word)
+ * int positions(String word, String location)
+ */
+
 public class InvertedIndex {
 	
 	/**
@@ -56,6 +69,7 @@ public class InvertedIndex {
 		}
 	}
 	
+	// TODO Breaking encapsulation because this object is mutable (remove this method)
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -68,6 +82,12 @@ public class InvertedIndex {
 		return map;
 	}
 
+	/* TODO 
+	public void toJSON(Path path) {
+		JSONWriter.writes(map, path);
+	}
+	*/
+	
 	/**
 	 * Returns a string representation of this map.
 	 */
