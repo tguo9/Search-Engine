@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -18,7 +19,7 @@ import java.nio.file.Path;
 
 
 /**
- * TODO Fill in your own comments!
+ * Fill in your own comments!
  */
 public class Driver {
 
@@ -29,30 +30,43 @@ public class Driver {
 	 * @param words    word to clean and add to map
 	 * @param position position word was found
 	 */
-	public static void findFiles(String path, ArrayList<String> result) throws IOException {
+	public static void traverse(Path path, ArrayList<Path> result) throws IOException {
 		// TODO Can't use the File class!
 		// TODO Have to use the Path, Paths, and Files classes instead
-		
-		File input = new File(path);
-		File[] children = input.listFiles();
 
 		// TODO Can't do listFiles anymore...
 		// TODO Either use a DirectoryStream (see: https://github.com/usf-cs212-fall2018/lectures/blob/master/Files%20and%20Exceptions/src/DirectoryStreamDemo.java)
 		// TODO Or use Files.walk(...) but make sure to turn on the symbolic link option (see Piazza)
 		
-		for (File file : children) {
+		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
+			// Efficiently iterate through the files and subdirectories.
+			for (Path file : listing) {
+				// Print the name with the proper padding/prefix.
+				System.out.print(file.getFileName());
 
-			if (file.isFile() && (((file.getName()).toLowerCase()).endsWith("txt"))
-					|| ((file.getName()).toLowerCase()).endsWith("text")) {
+				// Check if this is a subdirectory
+				if (Files.isDirectory(file)) {
+					// Add a slash so we can tell it is a directory
 
-				result.add(file.toString());
-
-			} else if (file.isDirectory()) {
-
-				findFiles(file.getPath(), result);
+					// Recursively traverse the subdirectory.
+					// Add a little bit of padding so files in subdirectory
+					// are indented under that directory.
+					traverse(file);
+				} else {
+					// Add the file size next to the name
+					result.add(file);
+				}
 			}
-		}
+}
+		
+
 	}
+	
+	public static void traverse(Path directory) throws IOException {
+		if (Files.isDirectory(directory)) {
+			traverse(directory);
+		}
+}
 
 	/*
 	 * TODO
@@ -68,11 +82,11 @@ public class Driver {
 	 */
 	
 	// TODO https://github.com/usf-cs212-fall2018/template-project/blob/master/src/Driver.java#L8
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 
 		// TODO Refactor this to "index"
-		InvertedIndex ii = new InvertedIndex();
+		InvertedIndex index = new InvertedIndex();
 		
 		
 		/*
@@ -94,26 +108,32 @@ public class Driver {
 		
 		
 		
+		
 
 		// TODO ArrayList<Path>
-		ArrayList<String> filenames = new ArrayList<>();
+		ArrayList<Path> filenames = new ArrayList<>();
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		Path index = null;
+		Path indexFlag = null;
 
 		// Empty check
 		if (map.hasFlag("-index")) {
-			index = map.getPath("-index");
+			indexFlag = map.getPath("-index");
 
-			if (index == null) {
+			if (indexFlag == null) {
 
-				index = Paths.get("index.json");
+				indexFlag = Paths.get("index.json");
 			}
 
 			InvertedIndex empty = new InvertedIndex();
 
-			JSONWriter.writesEmpty(empty.getMap(), index);
+			try {
+				JSONWriter.writesEmpty(empty.getMap(), indexFlag);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} else if (!map.hasFlag("-index")) {
 			return;
@@ -127,22 +147,27 @@ public class Driver {
 		Path path = map.getPath("-path");
 
 		if (path != null && Files.isDirectory(path)) {
-			findFiles(path.toString(), filenames);
+			try {
+				traverse(path, filenames);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		} else if (Files.isRegularFile(path)) {
 
-			filenames.add(path.toString());
+			filenames.add(path);
 		}
 
-		for (String files : filenames) {
+		for (Path files : filenames) {
 			// TODO Move this logic to a separate method and separate class
 			// TODO Also create a buffered reader 
 			// TODO try (BufferedReader reader = Files.newBufferedReader(path, StandardCharset.UTF8))
-			try (BufferedReader reader = new BufferedReader(new FileReader(files))) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(files.toString()))) {
 
 				String thisLine = null;
 				
-				// Not sure why 0 is not woring
+				// Not sure why 0 is not working
 				int indexCount = 1;
 
 				while ((thisLine = reader.readLine()) != null) {
@@ -152,7 +177,7 @@ public class Driver {
 					for (String word : thatLine) {
 
 						String newWord = stemmer.stem(word).toString();
-						ii.add(newWord, files.toString(), indexCount);
+						index.add(newWord, files.toString(), indexCount);
 						indexCount++;
 					}
 				}
@@ -162,6 +187,11 @@ public class Driver {
 			}
 		}
 
-		JSONWriter.writes(ii.getMap(), index);
+		try {
+			JSONWriter.writes(index.getMap(), indexFlag);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
