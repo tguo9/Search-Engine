@@ -46,11 +46,10 @@ public class Driver {
 				// Check if this is a subdirectory
 				if (Files.isDirectory(file)) {
 					// Add a slash so we can tell it is a directory
-
 					// Recursively traverse the subdirectory.
 					// Add a little bit of padding so files in subdirectory
 					// are indented under that directory.
-					traverse(file);
+					traverse(file, result);
 				} else {
 					// Add the file size next to the name
 					result.add(file);
@@ -60,12 +59,6 @@ public class Driver {
 		
 
 	}
-	
-	public static void traverse(Path directory) throws IOException {
-		if (Files.isDirectory(directory)) {
-			traverse(directory);
-		}
-}
 
 	/*
 	 * TODO
