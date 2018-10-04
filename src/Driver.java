@@ -32,8 +32,6 @@ public class Driver {
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 			// Efficiently iterate through the files and subdirectories.
 			for (Path file : listing) {
-				// Print the name with the proper padding/prefix.
-				System.out.print(file.getFileName());
 
 				// Check if this is a subdirectory
 				if (Files.isDirectory(file)) {
