@@ -4,14 +4,6 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-/*
- * TODO
- * 
- * int words() 
- * int locations(String word)
- * int positions(String word, String location)
- */
-
 public class InvertedIndex {
 
 	/**
@@ -113,7 +105,20 @@ public class InvertedIndex {
 		return null;
 	}
 	
+	public int words() {
+		
+		return index.size();
+	}
 	
+	public TreeMap<String, TreeSet<Integer>> locations(String word) {
+		
+		return index.get(word);
+	}
+	
+	public TreeSet<Integer> positions(String word, String location) {
+		
+		return index.get(word).get(location);
+	}
 
 	/**
 	 * Returns a string representation of this map.
