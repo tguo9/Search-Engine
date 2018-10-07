@@ -1,3 +1,5 @@
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -95,14 +97,23 @@ public class InvertedIndex {
 		return index;
 	}
 
-	/*
-	 * TODO public void toJSON(Path path) { JSONWriter.writes(map, path); }
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
 	 */
+	public void toJSON(Path path) throws IOException {
+		JSONWriter.writes(index, path);
+	}
 
 	public static ArrayList<String> partialSearch(String[] arr) {
 
 		return null;
 	}
+	
+	
 
 	/**
 	 * Returns a string representation of this map.
