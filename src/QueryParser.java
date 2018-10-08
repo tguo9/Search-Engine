@@ -8,6 +8,8 @@ public class QueryParser {
 		
 		String[] result = new String[10];
 		
+		
+		
 		return result;
 	}
 	
@@ -18,10 +20,5 @@ public class QueryParser {
 		Collections.addAll(result, parser(word));
 		
 		return result;
-	}
-	
-	public static void sorter() {
-		
-		
 	}
 }
