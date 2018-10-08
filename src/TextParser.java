@@ -1,4 +1,6 @@
 import java.text.Normalizer;
+import java.util.Collections;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 /**
@@ -48,5 +50,14 @@ public class TextParser {
 	 */
 	public static String[] parse(String text) {
 		return split(clean(text));
+	}
+	
+public static TreeSet<String> uniquer(String word) {
+		
+		TreeSet<String> result = new TreeSet<>();
+		
+		Collections.addAll(result, parse(word));
+		
+		return result;
 	}
 }

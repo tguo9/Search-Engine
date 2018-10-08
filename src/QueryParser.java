@@ -12,12 +12,5 @@ public class QueryParser {
 		return result;
 	}
 	
-	public static TreeSet<String> uniquer(String word) {
-		
-		TreeSet<String> result = new TreeSet<>();
-		
-		Collections.addAll(result, parser(word));
-		
-		return result;
-	}
+	
 }
