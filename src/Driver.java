@@ -36,10 +36,9 @@ public class Driver {
 	 * from files or the web.
 	 *
 	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 * @throws IOException 
+	 * @return 0 if everything went well 
 	 */
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
@@ -59,7 +58,13 @@ public class Driver {
 		
 		if (map.hasFlag("-index")) {
 			indexFlag = map.getPath("-index", Paths.get("index.json"));
-			index.toJSONEmpty(indexFlag);
+			try {
+				index.toJSONEmpty(indexFlag);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		} else if (!map.hasFlag("-index")) {
 			return;
 		}
@@ -71,7 +76,6 @@ public class Driver {
 
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
-			SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 			Path path = map.getPath("-path");
 
@@ -87,35 +91,10 @@ public class Driver {
 
 				filenames.add(path);
 			}
-
-			for (Path files : filenames) {
-				// TODO Move this logic to a separate method and separate class
-				try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-
-					String thisLine = null;
-
-					// Not sure why 0 is not working
-					int indexCount = 1;
-
-					while ((thisLine = reader.readLine()) != null) {
-
-						String[] thatLine = TextParser.parse(thisLine);
-
-						for (String word : thatLine) {
-
-							String newWord = stemmer.stem(word).toString();
-							index.add(newWord, files.toString(), indexCount);
-							indexCount++;
-						}
-					}
-				} catch (IOException e) {
-					// TODO Improve
-					e.getMessage();
-				}
-			}
-
-//			try {
-				index.toJSON(indexFlag);
+			
+			//TODO
+			
+			
 //			} catch (IOException e) {
 				// TODO Auto-generated catch block
 //				e.printStackTrace();
