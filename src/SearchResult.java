@@ -7,10 +7,14 @@ public class SearchResult implements Comparable<SearchResult> {
 	private int locations; 
 	private int frequency;
 	
-	public SearchResult() {
+	public SearchResult(Path location, int words, int locations, int frequency) {
 		
-		
+		this.frequency = frequency;
+		this.locations = locations;
+		this.frequency = frequency;
 	}
+	
+	
 	
 	@Override
 	public int compareTo(SearchResult o) {

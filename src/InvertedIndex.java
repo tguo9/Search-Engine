@@ -59,16 +59,37 @@ public class InvertedIndex {
 		}
 	}
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public boolean contains(String word) {
 
 		return index.containsKey(word);
 	}
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public boolean contains(String word, String location) {
 
 		return contains(word) ? index.get(word).containsKey(location) : false;
 	}
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public boolean contains(String word, String location, int position) {
 
 		return contains(word, location) ? index.get(word).get(location).contains(position) : false;
@@ -85,31 +106,78 @@ public class InvertedIndex {
 	public void toJSON(Path path) throws IOException {
 		JSONWriter.writes(index, path);
 	}
-	
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public void toJSONEmpty(Path path) throws IOException {
-		
+
 		TreeMap<String, TreeMap<String, TreeSet<Integer>>> empty = new TreeMap<>();
-		
+
 		JSONWriter.writesEmpty(empty, path);
 	}
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public static ArrayList<String> partialSearch(String[] arr) {
 
 		return null;
 	}
-	
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
+	public static ArrayList<String> exactSearch(String[] arr) {
+
+		return null;
+	}
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public int words() {
-		
+
 		return index.size();
 	}
-	
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public TreeMap<String, TreeSet<Integer>> locations(String word) {
-		
+
 		return index.get(word);
 	}
-	
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public TreeSet<Integer> positions(String word, String location) {
-		
+
 		return index.get(word).get(location);
 	}
 
