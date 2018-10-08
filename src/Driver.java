@@ -4,7 +4,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.DirectoryStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -21,38 +21,7 @@ import java.nio.file.Path;
 public class Driver {
 
 	// TODO Path objects instead of String objects
-	/**
-	 * Find the files. Adapted from a FileFinder
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 */
-	public static void traverse(Path path, ArrayList<Path> result) throws IOException {
-
-		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
-			// Efficiently iterate through the files and subdirectories.
-			for (Path file : listing) {
-
-				// Check if this is a subdirectory
-				if (Files.isDirectory(file)) {
-					// Add a slash so we can tell it is a directory
-					// Recursively traverse the subdirectory.
-					// Add a little bit of padding so files in subdirectory
-					// are indented under that directory.
-					traverse(file, result);
-				} else {
-					// Add the file size next to the name
-					if (file.getFileName().toString().toLowerCase().endsWith("txt")
-							|| file.getFileName().toString().toLowerCase().endsWith("text")) {
-
-						result.add(file);
-					}
-
-				}
-			}
-		}
-
-	}
+	
 
 	/*
 	 * TODO Driver.main should not throw any exceptions in your production ready
@@ -124,7 +93,7 @@ public class Driver {
 
 		if (path != null && Files.isDirectory(path)) {
 			try {
-				traverse(path, filenames);
+				FileFinder.traverse(path, filenames);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -137,10 +106,7 @@ public class Driver {
 
 		for (Path files : filenames) {
 			// TODO Move this logic to a separate method and separate class
-			// TODO Also create a buffered reader
-			// TODO try (BufferedReader reader = Files.newBufferedReader(path,
-			// StandardCharset.UTF8))
-			try (BufferedReader reader = new BufferedReader(new FileReader(files.toString()))) {
+			try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 
 				String thisLine = null;
 
