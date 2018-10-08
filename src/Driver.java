@@ -10,8 +10,6 @@ import java.nio.file.Path;
 // TODO Delete the old TODO comment!
 // TODO Check the warnings before code review.
 
-// TODO In Eclipse there is a "Organize Imports" feature that removes unused imports
-// TODO Can configrue Eclipse to do this every time you save a file
 // TODO Add Javadoc comments for all classes and methods
 
 /**
