@@ -2,7 +2,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -21,7 +20,6 @@ import java.nio.file.Path;
 public class Driver {
 
 	// TODO Path objects instead of String objects
-	
 
 	/*
 	 * TODO Driver.main should not throw any exceptions in your production ready
@@ -35,12 +33,17 @@ public class Driver {
 	 * reuse.
 	 */
 
-	// TODO
-	// https://github.com/usf-cs212-fall2018/template-project/blob/master/src/Driver.java#L8
-	public static void main(String[] args) {
+	/**
+	 * Parses the command-line arguments to build and use an in-memory search engine
+	 * from files or the web.
+	 *
+	 * @param args the command-line arguments to parse
+	 * @return 0 if everything went well
+	 * @throws IOException 
+	 */
+	public static void main(String[] args) throws IOException {
 		ArgumentMap map = new ArgumentMap(args);
 
-		// TODO Refactor this to "index"
 		InvertedIndex index = new InvertedIndex();
 
 		/*
@@ -54,32 +57,11 @@ public class Driver {
 		 * JSONWriter.writes(ii.getMap(), index); }
 		 * 
 		 */
-
-		// TODO ArrayList<Path>
-		ArrayList<Path> filenames = new ArrayList<>();
-
-		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
-
 		Path indexFlag = null;
-
-		// Empty check
+		
 		if (map.hasFlag("-index")) {
-			indexFlag = map.getPath("-index");
-
-			if (indexFlag == null) {
-
-				indexFlag = Paths.get("index.json");
-			}
-
-			InvertedIndex empty = new InvertedIndex();
-
-			try {
-				JSONWriter.writesEmpty(empty.getMap(), indexFlag);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
+			indexFlag = map.getPath("-index", Paths.get("index.json"));
+			index.toJSONEmpty(indexFlag);
 		} else if (!map.hasFlag("-index")) {
 			return;
 		}
@@ -89,52 +71,57 @@ public class Driver {
 			return;
 		}
 
-		Path path = map.getPath("-path");
+		if (map.hasFlag("-path")) {
+			ArrayList<Path> filenames = new ArrayList<>();
+			SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		if (path != null && Files.isDirectory(path)) {
-			try {
-				FileFinder.traverse(path, filenames);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			Path path = map.getPath("-path");
 
-		} else if (Files.isRegularFile(path)) {
-
-			filenames.add(path);
-		}
-
-		for (Path files : filenames) {
-			// TODO Move this logic to a separate method and separate class
-			try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-
-				String thisLine = null;
-
-				// Not sure why 0 is not working
-				int indexCount = 1;
-
-				while ((thisLine = reader.readLine()) != null) {
-
-					String[] thatLine = TextParser.parse(thisLine);
-
-					for (String word : thatLine) {
-
-						String newWord = stemmer.stem(word).toString();
-						index.add(newWord, files.toString(), indexCount);
-						indexCount++;
-					}
+			if (path != null && Files.isDirectory(path)) {
+				try {
+					FileFinder.traverse(path, filenames);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			} catch (IOException e) {
-				// TODO Improve
-				e.getMessage();
-			}
-		}
 
-		try {
-			JSONWriter.writes(index.getMap(), indexFlag);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			} else if (Files.isRegularFile(path)) {
+
+				filenames.add(path);
+			}
+
+			for (Path files : filenames) {
+				// TODO Move this logic to a separate method and separate class
+				try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+
+					String thisLine = null;
+
+					// Not sure why 0 is not working
+					int indexCount = 1;
+
+					while ((thisLine = reader.readLine()) != null) {
+
+						String[] thatLine = TextParser.parse(thisLine);
+
+						for (String word : thatLine) {
+
+							String newWord = stemmer.stem(word).toString();
+							index.add(newWord, files.toString(), indexCount);
+							indexCount++;
+						}
+					}
+				} catch (IOException e) {
+					// TODO Improve
+					e.getMessage();
+				}
+			}
+
+//			try {
+				index.toJSON(indexFlag);
+//			} catch (IOException e) {
+				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 		}
 	}
 }

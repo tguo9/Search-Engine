@@ -40,7 +40,7 @@ public class ArgumentMap {
 			if (isFlag(args[i])) {
 				if ((i < length - 1) && isValue(args[i + 1])) {
 					map.put(args[i], args[i + 1]);
-					// TODO i++ so you skip the next element
+					i++;
 				} else {
 
 					map.put(args[i], null);
@@ -186,13 +186,9 @@ public class ArgumentMap {
 			return returnVal;
 
 		} catch (Exception e) {
-			// TODO Remove the output and return null inside the catch.
 			e.getMessage();
-			System.out.println("Invaild flag");
-			
+			return null;
 		}
-
-		return null;
 
 	}
 
@@ -221,9 +217,8 @@ public class ArgumentMap {
 				return returnValue;
 
 			} catch (Exception e) {
-				// TODO Same
 				e.getMessage();
-				System.out.println("Invaild flag, use default value");
+				return defaultValue;
 
 			}
 		}

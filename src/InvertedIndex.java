@@ -75,20 +75,6 @@ public class InvertedIndex {
 
 	}
 
-	// TODO Breaking encapsulation because this object is mutable (remove this
-	// method)
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public TreeMap<String, TreeMap<String, TreeSet<Integer>>> getMap() {
-
-		return index;
-	}
-
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -98,6 +84,13 @@ public class InvertedIndex {
 	 */
 	public void toJSON(Path path) throws IOException {
 		JSONWriter.writes(index, path);
+	}
+	
+	public void toJSONEmpty(Path path) throws IOException {
+		
+		TreeMap<String, TreeMap<String, TreeSet<Integer>>> empty = new TreeMap<>();
+		
+		JSONWriter.writesEmpty(empty, path);
 	}
 
 	public static ArrayList<String> partialSearch(String[] arr) {
