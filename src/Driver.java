@@ -92,8 +92,15 @@ public class Driver {
 				filenames.add(path);
 			}
 			
-			//TODO
+			index = InvertedIndexBuilder.buildMap(filenames, path);
 			
+			//TODO
+			try {
+				index.toJSON(indexFlag);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 //			} catch (IOException e) {
 				// TODO Auto-generated catch block

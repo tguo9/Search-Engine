@@ -9,7 +9,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
-	public static void buildMap(ArrayList<Path> filenames, Path path) {
+	public static InvertedIndex buildMap(ArrayList<Path> filenames, Path path) {
 
 		InvertedIndex index = new InvertedIndex();
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
@@ -19,7 +19,6 @@ public class InvertedIndexBuilder {
 
 				String thisLine = null;
 
-				// Not sure why 0 is not working
 				int indexCount = 1;
 
 				while ((thisLine = reader.readLine()) != null) {
@@ -38,7 +37,8 @@ public class InvertedIndexBuilder {
 				e.getMessage();
 			}
 		}
-		index.toJSON(indexFlag);
+		
+		return index;
 	}
 
 }
