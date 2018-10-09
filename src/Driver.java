@@ -92,10 +92,14 @@ public class Driver {
 			Path searchPath = map.getPath("-search");
 			
 			
-		}
-
-		if (map.hasFlag("-exact")) {
 			
+			if (map.hasFlag("-exact")) {
+				
+//				index.exactSearch(arr);
+			} else {
+				
+//				index.partialSearch(arr);
+			}
 			
 		}
 
@@ -106,7 +110,14 @@ public class Driver {
 
 		if (map.hasFlag("-locations")) {
 			
-			Path resultFlag = map.getPath("-locations", Paths.get("locations.json"));
+			Path locationsFlag = map.getPath("-locations", Paths.get("locations.json"));
+			
+			try {
+				index.toJSON(locationsFlag);
+			} catch (IOException e) {
+
+				System.out.println("There is an error when writing JSON file");
+			}
 		}
 
 	}
