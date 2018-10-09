@@ -3,19 +3,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
-	public static InvertedIndex buildMap(ArrayList<Path> filenames, Path path) {
+	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) {
 
-		InvertedIndex index = new InvertedIndex();
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		for (Path files : filenames) {
-			try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
 
 				String thisLine = null;
 
@@ -37,8 +37,6 @@ public class InvertedIndexBuilder {
 				e.getMessage();
 			}
 		}
-		
-		return index;
 	}
 
 }

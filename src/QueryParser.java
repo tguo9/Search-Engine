@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.TreeSet;
 
 public class QueryParser {
 	
@@ -8,10 +6,9 @@ public class QueryParser {
 		
 		ArrayList<String[]> result = new ArrayList<>();
 		
-		
-		
 		return result;
 	}
+	
 	
 	
 }

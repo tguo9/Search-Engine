@@ -1,11 +1,8 @@
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import opennlp.tools.stemmer.snowball.SnowballStemmer;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 
 // TODO Delete the old TODO comment!
 // TODO Check the warnings before code review.
@@ -55,14 +52,14 @@ public class Driver {
 		 * 
 		 */
 		Path indexFlag = null;
-		
+
 		if (map.hasFlag("-index")) {
 			indexFlag = map.getPath("-index", Paths.get("index.json"));
 			try {
 				index.toJSONEmpty(indexFlag);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e.getMessage();
 			}
 			
 		} else if (!map.hasFlag("-index")) {
@@ -73,7 +70,7 @@ public class Driver {
 		if (args.length < 2) {
 			return;
 		}
-
+		
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
 
@@ -84,28 +81,26 @@ public class Driver {
 					FileFinder.traverse(path, filenames);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					e.getMessage();
 				}
 
 			} else if (Files.isRegularFile(path)) {
 
 				filenames.add(path);
 			}
-			
-			index = InvertedIndexBuilder.buildMap(filenames, path);
-			
+
+			InvertedIndexBuilder.buildMap(filenames, index);
 			//TODO
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				e.getMessage();
 			}
 			
-//			} catch (IOException e) {
-				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			
 		}
+
+		
 	}
 }
