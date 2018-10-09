@@ -184,7 +184,6 @@ public class InvertedIndex {
 	 */
 	private void search(String query, HashMap<String, SearchResult> results) {
 		for (String path : index.get(query).keySet()) {
-//			search(query, path, results);
 			
 			TreeSet<Integer> intSet = index.get(query).get(path);
 			SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
@@ -199,19 +198,6 @@ public class InvertedIndex {
 
 	}
 
-//	private void search(String query, String path, HashMap<String, SearchResult> results) {
-//		TreeSet<Integer> intSet = index.get(query).get(path);
-//		SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
-//		SearchResult finalResult;
-//		if (results.containsKey(path)) {
-//			finalResult = combineResult(results.get(path), newResult);
-//		} else {
-//			finalResult = newResult;
-//		}
-//		results.put(path, finalResult);
-//
-//	}
-	
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
