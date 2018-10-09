@@ -2,13 +2,13 @@ import java.nio.file.Path;
 
 public class SearchResult implements Comparable<SearchResult> {
 
-	private Path path; //where
+	private String path; //where
 	private int position; //word position
 	private int words; //count
 	private int locations; 
 	private int frequency; // frequency
 	
-	public SearchResult(Path path, int position, int frequency) {
+	public SearchResult(String path, int position, int frequency) {
 		
 		this.frequency = frequency;
 		this.position = position;
@@ -32,7 +32,7 @@ public class SearchResult implements Comparable<SearchResult> {
 		return position;
 	}
 
-	public Path getPath(){
+	public String getPath(){
 		return path;
 	}
 	

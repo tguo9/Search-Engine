@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -13,7 +15,7 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 
 	/**
 	 * Initializes the map.
@@ -128,11 +130,26 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public static ArrayList<String> partialSearch(String[] arr) {
+	public ArrayList<SearchResult> partialSearch(String[] arr) {
 
-		return null;
+		HashMap<String, SearchResult> tempResults = new HashMap<>();
+		ArrayList<SearchResult> returnResults = new ArrayList<>();
+
+		for (String query : arr) {
+			for (String word : index.keySet()) {
+				if (word.startsWith(query)) {
+					search(word, tempResults);
+				}
+			}
+		}
+		for (String s : tempResults.keySet()) {
+			returnResults.add(tempResults.get(s));
+		}
+
+		Collections.sort(returnResults);
+		return returnResults;
 	}
-
+	
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -140,10 +157,75 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public static ArrayList<String> exactSearch(String[] arr) {
+	public ArrayList<SearchResult> exactSearch(String[] arr) {
 
-		return null;
+		HashMap<String, SearchResult> tempResults = new HashMap<>();
+		ArrayList<SearchResult> returnResults = new ArrayList<>();
+
+		for (String query : arr) {
+			if (this.contains(query)) {
+				search(query, tempResults);
+			}
+		}
+		for (String s : tempResults.keySet()) {
+			returnResults.add(tempResults.get(s));
+		}
+
+		Collections.sort(returnResults);
+		return returnResults;
 	}
+	
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
+	private void search(String query, HashMap<String, SearchResult> results) {
+		for (String path : index.get(query).keySet()) {
+//			search(query, path, results);
+			
+			TreeSet<Integer> intSet = index.get(query).get(path);
+			SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
+			SearchResult finalResult;
+			if (results.containsKey(path)) {
+				finalResult = combineResult(results.get(path), newResult);
+			} else {
+				finalResult = newResult;
+			}
+			results.put(path, finalResult);
+		}
+
+	}
+
+//	private void search(String query, String path, HashMap<String, SearchResult> results) {
+//		TreeSet<Integer> intSet = index.get(query).get(path);
+//		SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
+//		SearchResult finalResult;
+//		if (results.containsKey(path)) {
+//			finalResult = combineResult(results.get(path), newResult);
+//		} else {
+//			finalResult = newResult;
+//		}
+//		results.put(path, finalResult);
+//
+//	}
+	
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
+	private SearchResult combineResult(SearchResult thisResult, SearchResult otherResult) {
+		thisResult.addFrequency(otherResult.getFrequency());
+		thisResult.setPosition(Math.min(thisResult.getPosition(), otherResult.getPosition()));
+		return thisResult;
+	}
+
+	
 
 	/**
 	 * Adds the word and the position it was found to the map.
