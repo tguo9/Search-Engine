@@ -39,17 +39,16 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
-		
+
 		InvertedIndex locatation = new InvertedIndex();
-		
-		
+
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
 
 			Path path = map.getPath("-path");
-			
+
 			if (path == null) {
-				
+
 				return;
 			}
 
@@ -67,7 +66,7 @@ public class Driver {
 			}
 
 			InvertedIndexBuilder.buildMap(filenames, index);
-}
+		}
 
 		Path indexFlag = null;
 		if (map.hasFlag("-index")) {
@@ -79,46 +78,39 @@ public class Driver {
 				System.out.println("There is an error when writing JSON file");
 				return;
 			}
-		} 
-				
+		}
+
 		if (map.hasFlag("-locations")) {
-			System.out.println(map.getPath("-locations"));
-			
+
 			Path locationsFlag = map.getPath("-locations", Paths.get("locations.json"));
-			
-			InvertedIndexBuilder.buildMap(locationsFlag, locatation);
-			
+
 			try {
-				locatation.toJSONLoc(locationsFlag);
+
+				index.toJSONLoc(locationsFlag);
 			} catch (IOException e) {
 
 				System.out.println("There is an error when writing JSON file");
 			}
 		}
-		
-		
 
-		
-//		if (map.hasFlag("-search")) {
-//			
-//			Path searchPath = map.getPath("-search");
-//			
-//			
-//			
-//			if (map.hasFlag("-exact")) {
-//				
-////				index.exactSearch(arr);
-//			} else {
-//				
-////				index.partialSearch(arr);
-//			}
-//			
-//		}
-//
-//		if (map.hasFlag("-results")) {
-//			
-//			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
-//		}		
+		if (map.hasFlag("-search")) {
+
+			Path searchPath = map.getPath("-search");
+
+			if (map.hasFlag("-exact")) {
+
+//				index.exactSearch(arr);
+			} else {
+
+//				index.partialSearch(arr);
+			}
+
+		}
+
+		if (map.hasFlag("-results")) {
+
+			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
+		}
 
 	}
 }

@@ -15,8 +15,9 @@ public class InvertedIndex {
 	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
-	private TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> location;
+	private final TreeMap<String, ArrayList<SearchResult>> result;
 
 	/**
 	 * Initializes the map.
@@ -24,6 +25,7 @@ public class InvertedIndex {
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
 		this.location = new TreeMap<>();
+		this.result = new TreeMap<>();
 	}
 
 	/**
@@ -61,6 +63,11 @@ public class InvertedIndex {
 			paths.put(path, indices);
 			index.put(word, paths);
 		}
+	}
+
+	public void add(String path, int count) {
+
+		location.put(path, count);
 	}
 
 	/**
@@ -124,7 +131,7 @@ public class InvertedIndex {
 
 		JSONWriter.writesEmpty(empty, path);
 	}
-	
+
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -134,6 +141,18 @@ public class InvertedIndex {
 	 */
 	public void toJSONLoc(Path path) throws IOException {
 		JSONWriter.asObject(location, path);
+	}
+
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
+	public void toJSONResult(Path path) throws IOException {
+
+		JSONWriter.writesResult(result, path);
 	}
 
 	/**
@@ -162,7 +181,7 @@ public class InvertedIndex {
 		Collections.sort(returnResults);
 		return returnResults;
 	}
-	
+
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -187,7 +206,7 @@ public class InvertedIndex {
 		Collections.sort(returnResults);
 		return returnResults;
 	}
-	
+
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -197,7 +216,7 @@ public class InvertedIndex {
 	 */
 	private void search(String query, HashMap<String, SearchResult> results) {
 		for (String path : index.get(query).keySet()) {
-			
+
 			TreeSet<Integer> intSet = index.get(query).get(path);
 			SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
 			SearchResult finalResult;
@@ -223,8 +242,6 @@ public class InvertedIndex {
 		thisResult.setPosition(Math.min(thisResult.getPosition(), otherResult.getPosition()));
 		return thisResult;
 	}
-
-	
 
 	/**
 	 * Adds the word and the position it was found to the map.

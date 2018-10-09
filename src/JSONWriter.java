@@ -5,6 +5,8 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -35,7 +37,7 @@ public class JSONWriter {
 		writer.write(element);
 		writer.write('"');
 	}
-	
+
 	/**
 	 * Returns the map of elements formatted as a pretty JSON object.
 	 *
@@ -120,7 +122,6 @@ public class JSONWriter {
 		writer.write("}");
 
 	}
-
 
 	/**
 	 * Returns the set of elements formatted as a pretty JSON array of numbers.
@@ -429,4 +430,96 @@ public class JSONWriter {
 		writer.write('}');
 
 	}
+
+	/**
+	 * Returns the nested map of elements formatted as a nested pretty JSON object.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @return {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
+	public static String writesResult(TreeMap<String, ArrayList<SearchResult>> elements) {
+		try {
+			StringWriter writer = new StringWriter();
+			writesResult(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
+	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> index, Path path)
+			throws IOException {
+
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			writesResult(index, writer, 0);
+		}
+
+	}
+
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)
+	 *
+	 * @see #asArray(TreeSet, Writer, int)
+	 */
+	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
+			int level) throws IOException {
+		
+		writer.write('[');
+		writer.write(System.lineSeparator());
+
+		if (elements.isEmpty()) {
+			indent(level, writer);
+			writer.write(']');
+			return;
+		}
+		indent(level + 1, writer);
+		
+		for () {
+			
+		}
+		
+//		for (Integer element : elements.headSet(elements.lastKey())) {
+//
+//			writer.write(element.toString());
+//			writer.write(',');
+//			writer.write(System.lineSeparator());
+//			indent(level + 1, writer);
+//
+//		}
+		writer.write(elements.lastKey().toString());
+		writer.write(System.lineSeparator());
+		indent(level, writer);
+		writer.write(']');
+
+	}
+	
+	
+	
+	
 }
