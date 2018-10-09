@@ -39,6 +39,8 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
+		
+		InvertedIndex locatation = new InvertedIndex();
 
 		Path indexFlag = null;
 
@@ -112,8 +114,11 @@ public class Driver {
 			
 			Path locationsFlag = map.getPath("-locations", Paths.get("locations.json"));
 			
+			InvertedIndexBuilder.buildMap(locationsFlag, locatation);
+			
 			try {
-				index.toJSON(locationsFlag);
+				index.toJSONLoc(locationsFlag);
+				
 			} catch (IOException e) {
 
 				System.out.println("There is an error when writing JSON file");

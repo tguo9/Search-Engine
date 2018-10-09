@@ -16,12 +16,14 @@ public class InvertedIndex {
 	 * Stores a mapping of words to the positions the words were found.
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	private final TreeMap<String, Integer> location;
 
 	/**
 	 * Initializes the map.
 	 */
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
+		this.location = new TreeMap<>();
 	}
 
 	/**
@@ -121,6 +123,17 @@ public class InvertedIndex {
 		TreeMap<String, TreeMap<String, TreeSet<Integer>>> empty = new TreeMap<>();
 
 		JSONWriter.writesEmpty(empty, path);
+	}
+	
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
+	public void toJSONLoc(Path path) throws IOException {
+		JSONWriter.asObject(location, path);
 	}
 
 	/**

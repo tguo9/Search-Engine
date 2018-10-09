@@ -35,6 +35,92 @@ public class JSONWriter {
 		writer.write(element);
 		writer.write('"');
 	}
+	
+	/**
+	 * Returns the map of elements formatted as a pretty JSON object.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @return {@link String} containing the elements in pretty JSON format
+	 *
+	 * @see #asObject(TreeMap, Writer, int)
+	 */
+	public static String asObject(TreeMap<String, Integer> elements) {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try {
+			StringWriter writer = new StringWriter();
+			asObject(elements, writer, 0);
+			return writer.toString();
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Writes the map of elements formatted as a pretty JSON object to the specified
+	 * file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asObject(TreeMap, Writer, int)
+	 */
+	public static void asObject(TreeMap<String, Integer> elements, Path path) throws IOException {
+		// THIS METHOD IS PROVIDED FOR YOU. DO NOT MODIFY.
+		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+			asObject(elements, writer, 0);
+		}
+	}
+
+	/**
+	 * Writes the map of elements as a pretty JSON object using the provided
+	 * {@link Writer} and indentation level.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param writer   the writer to use
+	 * @param level    the initial indentation level
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see Writer#write(String)
+	 * @see Writer#append(CharSequence)
+	 *
+	 * @see System#lineSeparator()
+	 *
+	 * @see #indent(int, Writer)
+	 * @see #quote(String, Writer)
+	 */
+	public static void asObject(TreeMap<String, Integer> elements, Writer writer, int level) throws IOException {
+
+		writer.write("{");
+		writer.write(System.lineSeparator());
+
+		if (elements.values().isEmpty()) {
+
+			indent(level, writer);
+			writer.write("}");
+			return;
+		}
+		for (String element : (elements).headMap(elements.lastKey()).keySet()) {
+
+			indent(level + 1, writer);
+			quote(element, writer);
+			writer.write(": ");
+			writer.write(elements.get(element).toString());
+			writer.write(',');
+			writer.write(System.lineSeparator());
+		}
+
+		indent(level + 1, writer);
+		quote(elements.lastKey(), writer);
+		writer.write(": ");
+		writer.write(elements.get(elements.lastKey()).toString());
+		writer.write(System.lineSeparator());
+		indent(level, writer);
+
+		writer.write("}");
+
+	}
+
 
 	/**
 	 * Returns the set of elements formatted as a pretty JSON array of numbers.
