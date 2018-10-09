@@ -33,24 +33,13 @@ public class Driver {
 	 * from files or the web.
 	 *
 	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well 
+	 * @return 0 if everything went well
 	 */
 	public static void main(String[] args) {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
 
-		/*
-		 * TODO Try to simplify Driver to make future projects easier
-		 * 
-		 * if (map.hasFlag(-path)) { ArrayList<String> filenames = new ArrayList<>();
-		 * etc. to build your index }
-		 * 
-		 * 
-		 * if (map.hasFlag(-index)) { Path output = map.get(...)
-		 * JSONWriter.writes(ii.getMap(), index); }
-		 * 
-		 */
 		Path indexFlag = null;
 
 		if (map.hasFlag("-index")) {
@@ -58,19 +47,18 @@ public class Driver {
 			try {
 				index.toJSONEmpty(indexFlag);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.getMessage();
+
+				System.out.println("There is an error when writing JSON file");
 			}
-			
+
 		} else if (!map.hasFlag("-index")) {
 			return;
 		}
 
-		// Bad argument check
 		if (args.length < 2) {
 			return;
 		}
-		
+
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
 
@@ -80,8 +68,7 @@ public class Driver {
 				try {
 					FileFinder.traverse(path, filenames);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.getMessage();
+					System.out.println("There is an error when finding the file");
 				}
 
 			} else if (Files.isRegularFile(path)) {
@@ -90,17 +77,37 @@ public class Driver {
 			}
 
 			InvertedIndexBuilder.buildMap(filenames, index);
-			//TODO
+
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.getMessage();
+
+				System.out.println("There is an error when writing JSON file");
 			}
+
+		}
+
+		if (map.hasFlag("-search")) {
+			
+			Path searchPath = map.getPath("-search");
 			
 			
 		}
 
-		
+		if (map.hasFlag("-exact")) {
+			
+			
+		}
+
+		if (map.hasFlag("-results")) {
+			
+			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
+		}
+
+		if (map.hasFlag("-locations")) {
+			
+			Path resultFlag = map.getPath("-locations", Paths.get("locations.json"));
+		}
+
 	}
 }
