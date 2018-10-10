@@ -41,8 +41,16 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	@Override
 	public int compareTo(SearchResult o) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		if (this.frequency == o.frequency) {
+			if (this.position == o.position) {
+				return path.compareTo(o.getPath());
+			} else {
+				return Integer.compare(position, o.position);
+			}
+		} else {
+			return (-1) * Integer.compare(frequency, o.frequency);
+		}
 	}
 
 }

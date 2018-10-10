@@ -3,6 +3,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeMap;
 
 /**
  * Driver for the project.
@@ -22,7 +24,9 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
-		
+
+		TreeMap<String, List<SearchResult>> result = new TreeMap<>();
+
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
 

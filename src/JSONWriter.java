@@ -6,6 +6,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -443,7 +444,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static String writesResult(TreeMap<String, ArrayList<SearchResult>> elements) {
+	public static String writesResult(TreeMap<String, List<SearchResult>> elements) {
 		try {
 			StringWriter writer = new StringWriter();
 			writesResult(elements, writer, 0);
@@ -463,7 +464,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> index, Path path) throws IOException {
+	public static void writesResult(TreeMap<String, List<SearchResult>> index, Path path) throws IOException {
 
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			writesResult(index, writer, 0);
@@ -490,61 +491,86 @@ public class JSONWriter {
 	 *
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
-	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+	public static void writesResult(TreeMap<String, List<SearchResult>> elements, Writer writer, int level)
 			throws IOException {
 
-		writer.write('[');
+		writer.write("[");
 		writer.write(System.lineSeparator());
 
-		if (elements.isEmpty()) {
-			indent(level, writer);
-			writer.write(']');
-			return;
+		for (String q : elements.keySet()) {
+
+			indent(1, writer);
+			writer.write("{");
+			writer.write(System.lineSeparator());
+
+			indent(2, writer);
+			quote("queries", writer);
+			writer.write(": ");
+			quote(q, writer);
+			
+			writer.write(System.lineSeparator());
+			
+			asInner(q, elements.get(q), writer, 1);
+			
+			if (q.equals(elements.lastKey())) {
+
+				writer.write(System.lineSeparator());
+			} else {
+
+				writer.write(",");
+				writer.write(System.lineSeparator());
+			}
+			indent(1, writer);
+			writer.write("}");
+			writer.write(",");
+			writer.write(System.lineSeparator());
+			
 		}
-		indent(level + 1, writer);
-
-//		for () {
-//			
-//		}
-
-//		for (Integer element : elements.headSet(elements.lastKey())) {
-//
-//			writer.write(element.toString());
-//			writer.write(',');
-//			writer.write(System.lineSeparator());
-//			indent(level + 1, writer);
-//
-//		}
-		writer.write(elements.lastKey().toString());
-		writer.write(System.lineSeparator());
-		indent(level, writer);
-		writer.write(']');
-
+		writer.write("]");
 	}
 
-	public static void asOutter(String[] queries, Writer writer) throws IOException {
-
-		for (String q : queries) {
-
-		}
-	}
-
-	public static void asInner(ArrayList<SearchResult> results, Writer writer) throws IOException {
-
+	public static void asInner(String q, List<SearchResult> results, Writer writer, int level) throws IOException {
+		
+		indent(2, writer);
 		quote("result", writer);
 		writer.write(": [");
 		writer.write(System.lineSeparator());
 
 		for (SearchResult r : results) {
-
+			
+			asResult(r, writer, level + 1);
 		}
+		indent(2, writer);
+		writer.write("]");
+		
 	}
 
-	public static void asResult(SearchResult result, Writer writer) throws IOException {
+	public static void asResult(SearchResult result, Writer writer, int level) throws IOException {
 
+		indent(3, writer);
 		writer.write("{");
 		writer.write(System.lineSeparator());
-
+		
+		indent(4, writer);
+		quote("where", writer);
+		writer.write(": ");
+		quote(result.getPath(), writer);
+		writer.write(",");
+		writer.write(System.lineSeparator());
+		
+		indent(4, writer);
+		quote("count", writer);
+		writer.write(": ");
+		quote(result.getPath(), writer);
+		writer.write(",");
+		writer.write(System.lineSeparator());
+		
+		indent(4, writer);
+		quote("score", writer);
+		writer.write(": ");
+		quote(result.getPath(), writer);
+		writer.write(System.lineSeparator());
+		
 	}
 
 }

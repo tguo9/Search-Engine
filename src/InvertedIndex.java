@@ -23,7 +23,7 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> location;
-	private final TreeMap<String, ArrayList<SearchResult>> result;
+//	private final TreeMap<String, ArrayList<SearchResult>> result;
 
 	/**
 	 * Initializes the map.
@@ -31,7 +31,7 @@ public class InvertedIndex {
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
 		this.location = new TreeMap<>();
-		this.result = new TreeMap<>();
+//		this.result = new TreeMap<>();
 	}
 
 	/**
@@ -157,8 +157,12 @@ public class InvertedIndex {
 	 * @return true if this map did not already contain this word and position
 	 */
 	public void toJSONResult(Path path) throws IOException {
+		
+		if (QueryParser.getMap().isEmpty()) {
+			return;
+		}
 
-		JSONWriter.writesResult(result, path);
+		JSONWriter.writesResult(QueryParser.getMap(), path);
 	}
 
 	/**

@@ -48,5 +48,10 @@ public class QueryParser {
 			}
 		}
 	}
+	
+	public static TreeMap<String, List<SearchResult>> getMap() {
+		
+		return results;
+	}
 
 }
