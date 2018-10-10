@@ -97,12 +97,19 @@ public class Driver {
 
 			Path searchPath = map.getPath("-search");
 
+			String mode = "partial";
+			
 			if (map.hasFlag("-exact")) {
+				
+				mode = "exact";
 
-//				index.exactSearch(arr);
-			} else {
-
-//				index.partialSearch(arr);
+			} 
+			
+			try {
+				QueryParser.searcher(searchPath, index, mode);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
