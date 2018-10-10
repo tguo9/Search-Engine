@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,21 +90,4 @@ public class TextFileStemmer {
 		}
 
 	}
-
-	/**
-	 * Uses {@link #stemFile(Path, Path)} to stem a single hard-coded file. Useful
-	 * for development.
-	 *
-	 * @param args unused
-	 * @throws IOException
-	 */
-//	public static void main(String[] args) throws IOException {
-//		Path inputPath = Paths.get("test", "words.tExT");
-//		Path outputPath = Paths.get("out", "words.tExT");
-//
-//		Files.createDirectories(Paths.get("out"));
-//
-//		System.out.println(inputPath);
-//		stemFile(inputPath, outputPath);
-//	}
 }
