@@ -500,9 +500,9 @@ public class JSONWriter {
 		}
 		indent(level + 1, writer);
 		
-		for () {
-			
-		}
+//		for () {
+//			
+//		}
 		
 //		for (Integer element : elements.headSet(elements.lastKey())) {
 //
@@ -519,7 +519,34 @@ public class JSONWriter {
 
 	}
 	
+public static void asOutter(String[] queries, Writer writer) throws IOException {
+		
+		
+		
+		for (String q: queries) {
+			
+			
+		}
+	}
 	
+	public static void asInner(ArrayList<SearchResult> results, Writer writer) throws IOException {
+		
+		quote("result", writer);
+		writer.write(": [");
+		writer.write(System.lineSeparator());
+		
+		for (SearchResult r: results) {
+			
+			
+		}
+	}
+	
+public static void asResult(SearchResult result, Writer writer) throws IOException {
+		
+		writer.write("{");
+		writer.write(System.lineSeparator());
+		
+	}
 	
 	
 }
