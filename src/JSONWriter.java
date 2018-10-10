@@ -8,6 +8,11 @@ import java.nio.file.Path;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Class for wrting the JSON
+ * 
+ * @author Tao Guo
+ */
 public class JSONWriter {
 
 	/**
