@@ -4,29 +4,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-// TODO Delete the old TODO comment!
-// TODO Check the warnings before code review.
-
-// TODO Add Javadoc comments for all classes and methods
-
 /**
- * Fill in your own comments!
+ * Driver for the project.
+ * 
+ * @author Tao Guo
  */
 public class Driver {
-
-	// TODO Path objects instead of String objects
-
-	/*
-	 * TODO Driver.main should not throw any exceptions in your production ready
-	 * release. Instead of a stack trace, make sure the user sees user-friendly
-	 * error messages.
-	 */
-
-	/*
-	 * TODO Driver should have only project-specific command-line argument code All
-	 * generally useful code should be in another class that another developer could
-	 * reuse.
-	 */
 
 	/**
 	 * Parses the command-line arguments to build and use an in-memory search engine
@@ -39,9 +22,7 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
-
-		InvertedIndex locatation = new InvertedIndex();
-
+		
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
 
@@ -108,8 +89,8 @@ public class Driver {
 			try {
 				QueryParser.searcher(searchPath, index, mode);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println("There is an error when writing JSON file");
+				return;
 			}
 
 		}
@@ -117,6 +98,8 @@ public class Driver {
 		if (map.hasFlag("-results")) {
 
 			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
+			
+			
 		}
 
 	}
