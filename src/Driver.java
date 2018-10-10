@@ -86,7 +86,7 @@ public class Driver {
 			}
 
 			try {
-				QueryParser.searcher(searchPath, index, mode);
+				QueryParser.parseAndSearch(searchPath, index, mode);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;
