@@ -1,4 +1,9 @@
 
+/**
+ * Object for the search result.
+ * 
+ * @author Tao Guo
+ */
 public class SearchResult implements Comparable<SearchResult> {
 
 	private String path; // where

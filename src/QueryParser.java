@@ -3,12 +3,23 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Parser for Query Parsing
+ * 
+ * @author Tao Guo
+ */
 public class QueryParser {
-
+	
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public static void searcher(Path searchPath, InvertedIndex index, String mode) throws IOException {
 
 		var result = parser(searchPath);
@@ -26,6 +37,13 @@ public class QueryParser {
 
 	}
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public static ArrayList<String[]> parser(Path path) throws IOException {
 
 		ArrayList<String[]> result = new ArrayList<>();

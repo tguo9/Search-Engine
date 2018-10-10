@@ -37,7 +37,6 @@ public class Driver {
 				try {
 					FileFinder.traverse(path, filenames);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.getMessage();
 				}
 
@@ -99,7 +98,11 @@ public class Driver {
 
 			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
 			
-			
+			try {
+				index.toJSON(resultFlag);
+			} catch (IOException e) {
+				System.out.println("There is an error when writing JSON file");
+			}
 		}
 
 	}

@@ -6,10 +6,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.NavigableSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Writer for the JSON output file.
+ * 
+ * @author Tao Guo
+ */
 public class JSONWriter {
 
 	/**

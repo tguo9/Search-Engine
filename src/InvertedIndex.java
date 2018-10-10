@@ -6,6 +6,12 @@ import java.util.HashMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+/**
+ * Data straturce for the project.
+ * Store all the data.
+ * 
+ * @author Tao Guo
+ */
 public class InvertedIndex {
 
 	/**
