@@ -459,8 +459,7 @@ public class JSONWriter {
 	 *
 	 * @see #asNestedObject(TreeMap, Writer, int)
 	 */
-	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> index, Path path)
-			throws IOException {
+	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> index, Path path) throws IOException {
 
 		try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
 			writesResult(index, writer, 0);
@@ -487,9 +486,9 @@ public class JSONWriter {
 	 *
 	 * @see #asArray(TreeSet, Writer, int)
 	 */
-	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer,
-			int level) throws IOException {
-		
+	public static void writesResult(TreeMap<String, ArrayList<SearchResult>> elements, Writer writer, int level)
+			throws IOException {
+
 		writer.write('[');
 		writer.write(System.lineSeparator());
 
@@ -499,11 +498,11 @@ public class JSONWriter {
 			return;
 		}
 		indent(level + 1, writer);
-		
+
 //		for () {
 //			
 //		}
-		
+
 //		for (Integer element : elements.headSet(elements.lastKey())) {
 //
 //			writer.write(element.toString());
@@ -518,35 +517,30 @@ public class JSONWriter {
 		writer.write(']');
 
 	}
-	
-public static void asOutter(String[] queries, Writer writer) throws IOException {
-		
-		
-		
-		for (String q: queries) {
-			
-			
+
+	public static void asOutter(String[] queries, Writer writer) throws IOException {
+
+		for (String q : queries) {
+
 		}
 	}
-	
+
 	public static void asInner(ArrayList<SearchResult> results, Writer writer) throws IOException {
-		
+
 		quote("result", writer);
 		writer.write(": [");
 		writer.write(System.lineSeparator());
-		
-		for (SearchResult r: results) {
-			
-			
+
+		for (SearchResult r : results) {
+
 		}
 	}
-	
-public static void asResult(SearchResult result, Writer writer) throws IOException {
-		
+
+	public static void asResult(SearchResult result, Writer writer) throws IOException {
+
 		writer.write("{");
 		writer.write(System.lineSeparator());
-		
+
 	}
-	
-	
+
 }

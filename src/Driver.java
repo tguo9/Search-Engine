@@ -98,13 +98,13 @@ public class Driver {
 			Path searchPath = map.getPath("-search");
 
 			String mode = "partial";
-			
+
 			if (map.hasFlag("-exact")) {
-				
+
 				mode = "exact";
 
-			} 
-			
+			}
+
 			try {
 				QueryParser.searcher(searchPath, index, mode);
 			} catch (IOException e) {
