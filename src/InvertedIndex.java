@@ -1,8 +1,10 @@
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -23,7 +25,6 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> location;
-//	private final TreeMap<String, ArrayList<SearchResult>> result;
 
 	/**
 	 * Initializes the map.
@@ -31,7 +32,6 @@ public class InvertedIndex {
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
 		this.location = new TreeMap<>();
-//		this.result = new TreeMap<>();
 	}
 
 	/**
@@ -70,7 +70,17 @@ public class InvertedIndex {
 			index.put(word, paths);
 		}
 	}
-
+	
+	/**
+	 * Writes the nested map of elements formatted as a nested pretty JSON object to
+	 * the specified file.
+	 *
+	 * @param elements the elements to convert to JSON
+	 * @param path     the path to the file write to output
+	 * @throws IOException if the writer encounters any issues
+	 *
+	 * @see #asNestedObject(TreeMap, Writer, int)
+	 */
 	public void add(String path, int count) {
 
 		location.put(path, count);
@@ -172,7 +182,7 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public ArrayList<SearchResult> partialSearch(String[] arr) {
+	public List<SearchResult> partialSearch(String[] arr) {
 
 		HashMap<String, SearchResult> tempResults = new HashMap<>();
 		ArrayList<SearchResult> returnResults = new ArrayList<>();
@@ -199,7 +209,7 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public ArrayList<SearchResult> exactSearch(String[] arr) {
+	public List<SearchResult> exactSearch(String[] arr) {
 
 		HashMap<String, SearchResult> tempResults = new HashMap<>();
 		ArrayList<SearchResult> returnResults = new ArrayList<>();
@@ -217,40 +227,51 @@ public class InvertedIndex {
 		return returnResults;
 	}
 
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	private void search(String query, HashMap<String, SearchResult> results) {
-		for (String path : index.get(query).keySet()) {
+//	/**
+//	 * Adds the word and the position it was found to the map.
+//	 *
+//	 * @param words    word to clean and add to map
+//	 * @param position position word was found
+//	 * @return true if this map did not already contain this word and position
+//	 */
+//	private void search(String query, HashMap<String, SearchResult> results) {
+//		for (String path : index.get(query).keySet()) {
+//
+//			TreeSet<Integer> intSet = index.get(query).get(path);
+//			SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
+//			SearchResult finalResult;
+//			if (results.containsKey(path)) {
+//				finalResult = combineResult(results.get(path), newResult);
+//			} else {
+//				finalResult = newResult;
+//			}
+//			results.put(path, finalResult);
+//		}
+//
+//	}
+//
+//	/**
+//	 * Adds the word and the position it was found to the map.
+//	 *
+//	 * @param words    word to clean and add to map
+//	 * @param position position word was found
+//	 * @return true if this map did not already contain this word and position
+//	 */
+//	private SearchResult combineResult(SearchResult thisResult, SearchResult otherResult) {
+//		thisResult.addFrequency(otherResult.getFrequency());
+//		thisResult.setPosition(Math.min(thisResult.getPosition(), otherResult.getPosition()));
+//		return thisResult;
+//	}
 
-			TreeSet<Integer> intSet = index.get(query).get(path);
-			SearchResult newResult = new SearchResult(path, intSet.size(), intSet.iterator().next());
-			SearchResult finalResult;
-			if (results.containsKey(path)) {
-				finalResult = combineResult(results.get(path), newResult);
-			} else {
-				finalResult = newResult;
+	private void search(String query, HashMap<String, SearchResult> tempResults) {
+		for (String s: index.get(query).keySet()) {
+			
+			if (query.startsWith(s)) {
+				
+				tempResults.put(s, new SearchResult("path", 1, 1));
 			}
-			results.put(path, finalResult);
 		}
-
-	}
-
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	private SearchResult combineResult(SearchResult thisResult, SearchResult otherResult) {
-		thisResult.addFrequency(otherResult.getFrequency());
-		thisResult.setPosition(Math.min(thisResult.getPosition(), otherResult.getPosition()));
-		return thisResult;
+		
 	}
 
 	/**
