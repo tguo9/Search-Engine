@@ -65,6 +65,26 @@ public class InvertedIndex {
 			paths.put(path, indices);
 			index.put(word, paths);
 		}
+		
+		
+		
+		/* TODO
+		Version 1
+		if (index.get(word) == null) {
+			index.put(word, new TreeMap<>());
+		}
+		
+		if (index.get(word).get(path) == null) {
+			index.get(word).put(path, new TreeSet<>());
+		}
+		
+		index.get(word).get(path).add(position);
+		
+		Version 2:
+		index.putIfAbsent(word, new TreeMap<>());
+		index.get(word).putIfAbsent(path, new TreeSet<>());
+		index.get(word).get(path).add(position);
+		*/
 	}
 	
 	/**
@@ -130,6 +150,7 @@ public class InvertedIndex {
 		JSONWriter.writes(index, path);
 	}
 
+	// TODO Remove?
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -156,6 +177,7 @@ public class InvertedIndex {
 		return index.size();
 	}
 
+	// TODO Remove for project 1.
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -168,6 +190,7 @@ public class InvertedIndex {
 		return index.get(word);
 	}
 
+	// TODO Remove for project 1.
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *

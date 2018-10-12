@@ -175,12 +175,13 @@ public class JSONWriter {
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
-		if (elements.values().isEmpty()) {
+		if (elements.values().isEmpty()) { // TODO if (elements.isEmpty());
 
 			indent(level, writer);
 			writer.write('}');
 			return;
 		}
+		
 		for (String element : (elements).headMap(elements.lastKey()).keySet()) {
 
 			indent(level + 1, writer);
@@ -263,6 +264,16 @@ public class JSONWriter {
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
+		/*
+		 * TODO
+		 * Avoid the if inside the for... 
+		 * for (String key : elements.headMap(....).keySet())
+		 * 
+		 * if (!elements.isEmpty()) {
+		 * 		for inside of here
+		 * }
+		 */
+		
 		for (String key : elements.keySet()) {
 
 			indent(level + 1, writer);
@@ -302,6 +313,7 @@ public class JSONWriter {
 		}
 	}
 
+	// TODO See if you can remove this?
 	/**
 	 * Writes the nested map of elements formatted as a nested pretty JSON object to
 	 * the specified file.

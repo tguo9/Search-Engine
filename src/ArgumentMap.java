@@ -153,8 +153,7 @@ public class ArgumentMap {
 	 *         if there is no mapping for the flag
 	 */
 	public String getString(String flag, String defaultValue) {
-		// TODO map.getOrDefault(flag, ...);
-		// Not sure if this one works
+
 		String returnVal = map.get(flag);
 		if (returnVal != null) {
 
@@ -186,7 +185,7 @@ public class ArgumentMap {
 			return returnVal;
 
 		} catch (Exception e) {
-			e.getMessage();
+			e.getMessage(); // TODO Remove
 			return null;
 		}
 

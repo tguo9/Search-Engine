@@ -23,9 +23,13 @@ public class InvertedIndexBuilder {
 	 */
 	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) {
 
+		// TODO Move the stemmer into your new buildMap(...) method.
+		// TODO (One stemmer per file.)
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		for (Path files : filenames) {
+			// TODO Move this code into a separate method.
+			// TODO buildMap(Path filename, InvertedIndex index)
 			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
 
 				String thisLine = null;
@@ -44,7 +48,7 @@ public class InvertedIndexBuilder {
 					}
 				}
 
-			} catch (IOException e) {
+			} catch (IOException e) { // TODO Remove catch block, throw to Driver, catch there.
 				System.out.println("There is an error when build the map");;
 			}
 		}
