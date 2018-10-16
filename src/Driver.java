@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+// TODO To find your TODO comments... open Window -> Views -> Tasks
+
 /**
  * Driver for the project.
  * 
@@ -24,6 +26,7 @@ public class Driver {
 		InvertedIndex index = new InvertedIndex();
 
 		if (map.hasFlag("-path")) {
+			// TODO Will be simplified by the changes in your FileFinder class.
 			ArrayList<Path> filenames = new ArrayList<>();
 
 			Path path = map.getPath("-path");
@@ -48,13 +51,13 @@ public class Driver {
 			InvertedIndexBuilder.buildMap(filenames, index);
 		}
 
-		Path indexFlag = null;
 		if (map.hasFlag("-index")) {
-			indexFlag = map.getPath("-index", Paths.get("index.json"));
+			Path indexFlag = map.getPath("-index", Paths.get("index.json"));
+			
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
-
+				// TODO System.out.println("There is an error when writing JSON file: " + indexFlag);
 				System.out.println("There is an error when writing JSON file");
 				return;
 			}
