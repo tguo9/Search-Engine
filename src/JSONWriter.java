@@ -507,6 +507,7 @@ public class JSONWriter {
 			quote("queries", writer);
 			writer.write(": ");
 			quote(q, writer);
+			writer.write(",");
 			
 			writer.write(System.lineSeparator());
 			
@@ -532,7 +533,7 @@ public class JSONWriter {
 	public static void asInner(String q, List<SearchResult> results, Writer writer, int level) throws IOException {
 		
 		indent(2, writer);
-		quote("result", writer);
+		quote("results", writer);
 		writer.write(": [");
 		writer.write(System.lineSeparator());
 
@@ -561,14 +562,18 @@ public class JSONWriter {
 		indent(4, writer);
 		quote("count", writer);
 		writer.write(": ");
-		quote(result.getPath(), writer);
+		writer.write(new Integer(result.getMatches()).toString());
 		writer.write(",");
 		writer.write(System.lineSeparator());
 		
 		indent(4, writer);
 		quote("score", writer);
 		writer.write(": ");
-		quote(result.getPath(), writer);
+		writer.write((new Integer(result.getScore()).toString()));
+		writer.write(System.lineSeparator());
+		
+		indent(3, writer);
+		writer.write("}");
 		writer.write(System.lineSeparator());
 		
 	}

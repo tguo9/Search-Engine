@@ -153,15 +153,8 @@ public class ArgumentMap {
 	 *         if there is no mapping for the flag
 	 */
 	public String getString(String flag, String defaultValue) {
-		// TODO map.getOrDefault(flag, ...);
-		// Not sure if this one works
-		String returnVal = map.get(flag);
-		if (returnVal != null) {
-
-			return returnVal;
-		}
-
-		return defaultValue;
+		
+		return map.getOrDefault(flag, defaultValue);
 
 	}
 

@@ -3,6 +3,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -25,7 +26,9 @@ public class Driver {
 
 		InvertedIndex index = new InvertedIndex();
 
-		TreeMap<String, List<SearchResult>> result = new TreeMap<>();
+//		TreeMap<String, List<SearchResult>> result = new TreeMap<>();
+		
+		TreeMap<String, List<SearchResult>> results = new TreeMap<>();
 
 		if (map.hasFlag("-path")) {
 			ArrayList<Path> filenames = new ArrayList<>();
@@ -49,7 +52,12 @@ public class Driver {
 				filenames.add(path);
 			}
 
-			InvertedIndexBuilder.buildMap(filenames, index);
+			try {
+				InvertedIndexBuilder.buildMap(filenames, index);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		Path indexFlag = null;
@@ -88,9 +96,11 @@ public class Driver {
 				mode = "exact";
 
 			}
+			
+			QueryParser q = new QueryParser(index);
 
 			try {
-				QueryParser.parseAndSearch(searchPath, index, mode);
+				results = q.parseAndSearch(searchPath, index, mode);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;
@@ -103,7 +113,7 @@ public class Driver {
 			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
 			
 			try {
-				index.toJSONResult(resultFlag);
+				index.toJSONResult(results, resultFlag);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 			}

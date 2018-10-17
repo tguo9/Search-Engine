@@ -5,7 +5,24 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 
 public class FileFinder {
-	
+
+	public static boolean isTextFile(Path path) {
+		String name = path.getFileName().toString().toLowerCase();
+		return Files.isRegularFile(path) && (name.endsWith(".txt") || name.endsWith(".text"));
+	}
+
+	public static ArrayList<Path> traverse(Path path) throws IOException {
+		ArrayList<Path> paths = new ArrayList<>();
+
+		if (isTextFile(path)) {
+			paths.add(path);
+		} else {
+			traverse(path, paths);
+		}
+
+		return paths;
+	}
+
 	/**
 	 * Find the files. Adapted from a FileFinder
 	 *

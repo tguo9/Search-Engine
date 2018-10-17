@@ -6,104 +6,73 @@
  */
 public class SearchResult implements Comparable<SearchResult> {
 
-	private String path; // where
-	private int position; // word position
-	private int words; // count
-	private int locations;
-	private int frequency; // frequency
+	private int matches;
+	private String path;
+	private int score;
 
 	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
+	 * Constructor for building SearchResult object
+	 * 
+	 * @param path      the path of the query
+	 * @param frequency how many times query appears
+	 * @param position  the first position of query in the file.
 	 */
-	public SearchResult(String path, int position, int frequency) {
-
-		this.frequency = frequency;
-		this.position = position;
-		this.frequency = frequency;
-		
+	public SearchResult(String path, int matches, int score) {
+		this.path = path;
+		this.matches = matches;
+		this.score = score;
 	}
 
 	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
+	 * Compare SearchResult objects based on frequency, initial position and path.
+	 * 
+	 * @param s SearchResult Object for comparison
+	 * @return comparison result of two SearchResult
+	 */
+	@Override
+	public int compareTo(SearchResult s) {
+		return (this.path).compareTo(s.path);
+	}
+
+	/**
+	 * increment the frequency of this SearchResult
+	 * 
+	 * @param frequency increment amount
 	 */
 	public void addFrequency(int frequency) {
-		this.frequency += frequency;
+		this.matches += frequency;
 	}
-	
+
 	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
+	 * @return the frequency
 	 */
-	public void setPosition(int position) {
-		this.position = position;
+	public int getMatches() {
+		return this.matches;
 	}
 	
+	public void setPosition(Integer integer)
+	{
+		this.matches = integer;
+}
+
 	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 */
-	public int getFrequency() {
-		return frequency;
-	}
-	
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 */
-	public int getPosition() {
-		return position;
-	}
-	
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
+	 * @return the path
 	 */
 	public String getPath() {
 		return path;
 	}
 	
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 */
-	@Override
-	public int compareTo(SearchResult o) {
-
-		if (this.frequency == o.frequency) {
-			if (this.position == o.position) {
-				
-				return path.compareTo(o.getPath());
-			} else {
-				
-				return Integer.compare(position, o.position);
-			}
-		} else {
-			
-			return (-1) * Integer.compare(frequency, o.frequency);
-		}
+	public int getScore() {
+		
+		return score;
+	}
+	
+	public String toString() {
+		
+		
+		return "Path: " + path + "Matches: " + matches + "Score " + score;
+		
+		
 	}
 
 }

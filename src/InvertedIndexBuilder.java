@@ -10,7 +10,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
-	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) {
+	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
@@ -40,9 +40,6 @@ public class InvertedIndexBuilder {
 				}
 				
 				
-			} catch (IOException e) {
-				// TODO Improve
-				e.getMessage();
 			}
 		}
 	}

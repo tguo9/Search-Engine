@@ -6,9 +6,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * Parser for Query Parsing
@@ -25,33 +29,65 @@ public class QueryParser {
 	 * @return true if this map did not already contain this word and position
 	 */
 
-	private final static TreeMap<String, List<SearchResult>> results = new TreeMap<>();
+	private final TreeMap<String, List<SearchResult>> results;
+	private static SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-	public static void parseAndSearch(Path path, InvertedIndex index, String mode) throws IOException {
+	private final InvertedIndex index;
+
+	public QueryParser(InvertedIndex index) {
+
+		this.results = new TreeMap<>();
+		this.index = index;
+	}
+
+	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, InvertedIndex index, String mode)
+			throws IOException {
+		
+		TreeSet<String> set = new TreeSet<>();
+		List<String> queries = null;
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				String[] queries = TextParser.parse(line);
-				if (queries.length == 0) {
-					continue;
-				}
-				Arrays.sort(queries);
+				line = stemmer.stem(line).toString();
 
-				if (mode.equals("exact")) {
+				if (!line.isEmpty()) {
+					
+//					System.out.println(line);
 
-					results.put(String.join(" ", queries), index.exactSearch(queries));
-				} else {
-
-					results.put(String.join(" ", queries), index.partialSearch(queries));
-				}
-			}
-		}
-	}
-	
-	public static TreeMap<String, List<SearchResult>> getMap() {
+					queries = TextFileStemmer.stemLine(line);
+					
+//					System.out.println(queries.toString());
 		
-		return results;
+
+					set.addAll(queries);
+
+					Collections.sort(queries);
+					
+					if (results.containsKey(String.join(" ", queries))) {
+						
+						continue;
+					}
+					
+					if (mode.equals("exact")) {
+
+						results.put(String.join(" ", queries), index.exactSearch(set));
+					} else {
+
+						results.put(String.join(" ", queries), index.partialSearch(set));
+					}
+
+				}
+				
+
+			}
+			
+			
+			
+//			System.out.println(results.toString());
+
+			return results;
+		}
 	}
 
 }
