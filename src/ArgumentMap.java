@@ -154,13 +154,7 @@ public class ArgumentMap {
 	 */
 	public String getString(String flag, String defaultValue) {
 
-		String returnVal = map.get(flag);
-		if (returnVal != null) {
-
-			return returnVal;
-		}
-
-		return defaultValue;
+		return map.getOrDefault(flag, defaultValue);
 
 	}
 
@@ -185,7 +179,6 @@ public class ArgumentMap {
 			return returnVal;
 
 		} catch (Exception e) {
-			e.getMessage(); // TODO Remove
 			return null;
 		}
 
@@ -216,7 +209,6 @@ public class ArgumentMap {
 				return returnValue;
 
 			} catch (Exception e) {
-				e.getMessage();
 				return defaultValue;
 
 			}

@@ -20,38 +20,47 @@ public class InvertedIndexBuilder {
 	 *
 	 * @param args the command-line arguments to parse
 	 * @return 0 if everything went well
+	 * @throws IOException
 	 */
-	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) {
+	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
 
-		// TODO Move the stemmer into your new buildMap(...) method.
-		// TODO (One stemmer per file.)
+		for (Path filename : filenames) {
+			buildMap(filename, index);
+		}
+	}
+
+	/**
+	 * Parses the command-line arguments to build and use an in-memory search engine
+	 * from files or the web.
+	 *
+	 * @param args the command-line arguments to parse
+	 * @return 0 if everything went well
+	 * @throws IOException
+	 */
+	public static void buildMap(Path filename, InvertedIndex index) throws IOException {
+
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		for (Path files : filenames) {
-			// TODO Move this code into a separate method.
-			// TODO buildMap(Path filename, InvertedIndex index)
-			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = Files.newBufferedReader(filename, StandardCharsets.UTF_8)) {
 
-				String thisLine = null;
+			String thisLine = null;
 
-				int indexCount = 1;
+			int indexCount = 1;
 
-				while ((thisLine = reader.readLine()) != null) {
+			while ((thisLine = reader.readLine()) != null) {
 
-					String[] thatLine = TextParser.parse(thisLine);
+				String[] thatLine = TextParser.parse(thisLine);
 
-					for (String word : thatLine) {
+				for (String word : thatLine) {
 
-						String newWord = stemmer.stem(word).toString();
-						index.add(newWord, files.toString(), indexCount);
-						indexCount++;
-					}
+					String newWord = stemmer.stem(word).toString();
+					index.add(newWord, filename.toString(), indexCount);
+					indexCount++;
 				}
-
-			} catch (IOException e) { // TODO Remove catch block, throw to Driver, catch there.
-				System.out.println("There is an error when build the map");;
 			}
+
 		}
+
 	}
 
 }

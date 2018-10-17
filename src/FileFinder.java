@@ -10,27 +10,24 @@ import java.util.ArrayList;
  * @author Tao Guo
  */
 public class FileFinder {
-	
-	/* TODO More generalized, helps you simplify Driver.
+
 	public static boolean isTextFile(Path path) {
 		String name = path.getFileName().toString().toLowerCase();
 		return Files.isRegularFile(path) && (name.endsWith(".txt") || name.endsWith(".text"));
 	}
-	
+
 	public static ArrayList<Path> traverse(Path path) throws IOException {
 		ArrayList<Path> paths = new ArrayList<>();
-		
+
 		if (isTextFile(path)) {
 			paths.add(path);
-		}
-		else {
+		} else {
 			traverse(path, paths);
 		}
-		
+
 		return paths;
 	}
-	*/
-	
+
 	/**
 	 * Find the files. Adapted from a FileFinder
 	 *

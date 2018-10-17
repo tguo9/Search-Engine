@@ -39,52 +39,9 @@ public class InvertedIndex {
 	 */
 	public void add(String word, String path, int position) {
 
-		if (word == null) {
-
-			return;
-		}
-
-		if (index.containsKey(word)) {
-
-			TreeMap<String, TreeSet<Integer>> pathMap = index.get(word);
-			if (pathMap.containsKey(path)) {
-
-				var set = pathMap.get(path);
-				set.add(position);
-			} else {
-
-				TreeSet<Integer> newSet = new TreeSet<>();
-				newSet.add(position);
-				pathMap.put(path, newSet);
-			}
-		} else {
-
-			TreeSet<Integer> indices = new TreeSet<>();
-			indices.add(position);
-			TreeMap<String, TreeSet<Integer>> paths = new TreeMap<>();
-			paths.put(path, indices);
-			index.put(word, paths);
-		}
-		
-		
-		
-		/* TODO
-		Version 1
-		if (index.get(word) == null) {
-			index.put(word, new TreeMap<>());
-		}
-		
-		if (index.get(word).get(path) == null) {
-			index.get(word).put(path, new TreeSet<>());
-		}
-		
-		index.get(word).get(path).add(position);
-		
-		Version 2:
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
-		*/
 	}
 	
 	/**
@@ -176,33 +133,7 @@ public class InvertedIndex {
 
 		return index.size();
 	}
-
-	// TODO Remove for project 1.
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public TreeMap<String, TreeSet<Integer>> locations(String word) {
-
-		return index.get(word);
-	}
-
-	// TODO Remove for project 1.
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public TreeSet<Integer> positions(String word, String location) {
-
-		return index.get(word).get(location);
-	}
-
+	
 	/**
 	 * Returns a string representation of this map.
 	 */

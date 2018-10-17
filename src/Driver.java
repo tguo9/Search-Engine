@@ -4,8 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
-// TODO To find your TODO comments... open Window -> Views -> Tasks
-
 /**
  * Driver for the project.
  * 
@@ -26,6 +24,7 @@ public class Driver {
 		InvertedIndex index = new InvertedIndex();
 
 		if (map.hasFlag("-path")) {
+			
 			// TODO Will be simplified by the changes in your FileFinder class.
 			ArrayList<Path> filenames = new ArrayList<>();
 
@@ -48,7 +47,11 @@ public class Driver {
 				filenames.add(path);
 			}
 
-			InvertedIndexBuilder.buildMap(filenames, index);
+			try {
+				InvertedIndexBuilder.buildMap(filenames, index);
+			} catch (IOException e) {
+				System.out.println("There is an error when reading the file");
+			}
 		}
 
 		if (map.hasFlag("-index")) {
