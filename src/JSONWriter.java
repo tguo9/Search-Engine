@@ -175,30 +175,26 @@ public class JSONWriter {
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
-		if (elements.values().isEmpty()) { // TODO if (elements.isEmpty());
+		if (!elements.isEmpty()) {
 
-			indent(level, writer);
-			writer.write('}');
-			return;
-		}
-		
-		for (String element : (elements).headMap(elements.lastKey()).keySet()) {
+			for (String element : (elements).headMap(elements.lastKey()).keySet()) {
+
+				indent(level + 1, writer);
+				quote(element, writer);
+				writer.write(": ");
+				asArray(elements.get(element), writer, level + 1);
+				writer.write(',');
+				writer.write(System.lineSeparator());
+			}
 
 			indent(level + 1, writer);
-			quote(element, writer);
+			quote(elements.lastKey(), writer);
 			writer.write(": ");
-			asArray(elements.get(element), writer, level + 1);
-			writer.write(',');
+			asArray(elements.get(elements.lastKey()), writer, level + 1);
 			writer.write(System.lineSeparator());
 		}
 
-		indent(level + 1, writer);
-		quote(elements.lastKey(), writer);
-		writer.write(": ");
-		asArray(elements.get(elements.lastKey()), writer, level + 1);
-		writer.write(System.lineSeparator());
 		indent(level, writer);
-
 		writer.write('}');
 	}
 
@@ -264,100 +260,33 @@ public class JSONWriter {
 		writer.write('{');
 		writer.write(System.lineSeparator());
 
-		/*
-		 * TODO
-		 * Avoid the if inside the for... 
-		 * for (String key : elements.headMap(....).keySet())
-		 * 
-		 * if (!elements.isEmpty()) {
-		 * 		for inside of here
-		 * }
-		 */
-		
-		for (String key : elements.keySet()) {
+		if (!elements.isEmpty()) {
+
+			for (String key : elements.headMap(elements.lastKey()).keySet()) {
+
+				indent(level + 1, writer);
+
+				quote(key.toString(), writer);
+
+				writer.write(": ");
+
+				asNestedObject(elements.get(key), writer, level);
+
+				writer.write(",");
+
+				writer.write(System.lineSeparator());
+
+			}
 
 			indent(level + 1, writer);
-
-			quote(key.toString(), writer);
-
+			quote(elements.lastKey(), writer);
 			writer.write(": ");
-
-			asNestedObject(elements.get(key), writer, level);
-
-			if (!key.equals(elements.lastKey())) {
-				writer.write(",");
-			}
+			asNestedObject(elements.get(elements.lastKey()), writer, level + 1);
 			writer.write(System.lineSeparator());
-
 		}
 
 		indent(level, writer);
 		writer.write('}');
 	}
 
-	/**
-	 * Returns the nested map of elements formatted as a nested pretty JSON object.
-	 *
-	 * @param elements the elements to convert to JSON
-	 * @return {@link String} containing the elements in pretty JSON format
-	 *
-	 * @see #asNestedObject(TreeMap, Writer, int)
-	 */
-	public static String writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements) {
-		try {
-			StringWriter writer = new StringWriter();
-			writesEmpty(elements, writer, 0);
-			return writer.toString();
-		} catch (IOException e) {
-			return null;
-		}
-	}
-
-	// TODO See if you can remove this?
-	/**
-	 * Writes the nested map of elements formatted as a nested pretty JSON object to
-	 * the specified file.
-	 *
-	 * @param elements the elements to convert to JSON
-	 * @param path     the path to the file write to output
-	 * @throws IOException if the writer encounters any issues
-	 *
-	 * @see #asNestedObject(TreeMap, Writer, int)
-	 */
-	public static void writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Path indexPath)
-			throws IOException {
-
-		try (BufferedWriter writer = Files.newBufferedWriter(indexPath, StandardCharsets.UTF_8)) {
-			writesEmpty(elements, writer, 0);
-		}
-
-	}
-
-	/**
-	 * Writes the nested map of elements as a nested pretty JSON object using the
-	 * provided {@link Writer} and indentation level.
-	 *
-	 * @param elements the elements to convert to JSON
-	 * @param writer   the writer to use
-	 * @param level    the initial indentation level
-	 * @throws IOException if the writer encounters any issues
-	 *
-	 * @see Writer#write(String)
-	 * @see Writer#append(CharSequence)
-	 *
-	 * @see System#lineSeparator()
-	 *
-	 * @see #indent(int, Writer)
-	 * @see #quote(String, Writer)
-	 *
-	 * @see #asArray(TreeSet, Writer, int)
-	 */
-	public static void writesEmpty(TreeMap<String, TreeMap<String, TreeSet<Integer>>> elements, Writer writer,
-			int level) throws IOException {
-		writer.write('{');
-		writer.write(System.lineSeparator());
-		indent(level, writer);
-		writer.write('}');
-
-	}
 }

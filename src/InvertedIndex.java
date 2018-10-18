@@ -5,8 +5,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 /**
- * Data straturce for the project.
- * Store all the data.
+ * Data straturce for the project. Store all the data.
  * 
  * @author Tao Guo
  */
@@ -43,7 +42,7 @@ public class InvertedIndex {
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
 	}
-	
+
 	/**
 	 * Writes the nested map of elements formatted as a nested pretty JSON object to
 	 * the specified file.
@@ -107,21 +106,6 @@ public class InvertedIndex {
 		JSONWriter.writes(index, path);
 	}
 
-	// TODO Remove?
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public void toJSONEmpty(Path path) throws IOException {
-
-		TreeMap<String, TreeMap<String, TreeSet<Integer>>> empty = new TreeMap<>();
-
-		JSONWriter.writesEmpty(empty, path);
-	}
-
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -133,7 +117,7 @@ public class InvertedIndex {
 
 		return index.size();
 	}
-	
+
 	/**
 	 * Returns a string representation of this map.
 	 */

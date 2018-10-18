@@ -37,27 +37,28 @@ public class FileFinder {
 	public static void traverse(Path path, ArrayList<Path> result) throws IOException {
 
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
-			// Efficiently iterate through the files and subdirectories.
+
 			for (Path file : listing) {
+				
+				traverse(file);
 
-				// Check if this is a subdirectory
-				if (Files.isDirectory(file)) {
-					// Add a slash so we can tell it is a directory
-					// Recursively traverse the subdirectory.
-					// Add a little bit of padding so files in subdirectory
-					// are indented under that directory.
-					traverse(file, result);
-				} else {
-					// Add the file size next to the name
-					// TODO String name = file.getFileName().toString().toLowerCase();
-					// TODO name.endsWith(...)
-					if (file.getFileName().toString().toLowerCase().endsWith("txt")
-							|| file.getFileName().toString().toLowerCase().endsWith("text")) {
-
-						result.add(file);
-					}
-
-				}
+//				// Check if this is a subdirectory
+//				if (Files.isDirectory(file)) {
+//					// Add a slash so we can tell it is a directory
+//					// Recursively traverse the subdirectory.
+//					// Add a little bit of padding so files in subdirectory
+//					// are indented under that directory.
+//					traverse(file, result);
+//				} else {
+//					// Add the file size next to the name
+//
+//					if (file.getFileName().toString().toLowerCase().endsWith("txt")
+//							|| file.getFileName().toString().toLowerCase().endsWith("text")) {
+//
+//						result.add(file);
+//					}
+//
+//				}
 			}
 		}
 

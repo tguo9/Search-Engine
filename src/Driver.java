@@ -30,21 +30,28 @@ public class Driver {
 
 			Path path = map.getPath("-path");
 
-			if (path == null) {
-
-				return;
-			}
-
-			if (path != null && Files.isDirectory(path)) {
-				try {
-					FileFinder.traverse(path, filenames);
-				} catch (IOException e) {
-					e.getMessage();
-				}
-
-			} else if (Files.isRegularFile(path)) {
-
-				filenames.add(path);
+//			if (path == null) {
+//
+//				return;
+//			}
+//
+//			if (path != null && Files.isDirectory(path)) {
+//				try {
+//					FileFinder.traverse(path, filenames);
+//				} catch (IOException e) {
+//					e.getMessage();
+//				}
+//
+//			} else if (Files.isRegularFile(path)) {
+//
+//				filenames.add(path);
+//			}
+			
+			try {
+				filenames = FileFinder.traverse(path);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 
 			try {
