@@ -1,8 +1,6 @@
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 /**
  * Driver for the project.
@@ -24,51 +22,29 @@ public class Driver {
 		InvertedIndex index = new InvertedIndex();
 
 		if (map.hasFlag("-path")) {
-			
-			// TODO Will be simplified by the changes in your FileFinder class.
-			ArrayList<Path> filenames = new ArrayList<>();
 
 			Path path = map.getPath("-path");
 
-//			if (path == null) {
-//
-//				return;
-//			}
-//
-//			if (path != null && Files.isDirectory(path)) {
-//				try {
-//					FileFinder.traverse(path, filenames);
-//				} catch (IOException e) {
-//					e.getMessage();
-//				}
-//
-//			} else if (Files.isRegularFile(path)) {
-//
-//				filenames.add(path);
-//			}
-			
-			try {
-				filenames = FileFinder.traverse(path);
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+			if (path == null) {
+
+				return;
 			}
 
 			try {
-				InvertedIndexBuilder.buildMap(filenames, index);
+				InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
 			} catch (IOException e) {
-				System.out.println("There is an error when reading the file");
+				System.out.println("There is an error when reading the file: " + path);
 			}
+
 		}
 
 		if (map.hasFlag("-index")) {
 			Path indexFlag = map.getPath("-index", Paths.get("index.json"));
-			
+
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
-				// TODO System.out.println("There is an error when writing JSON file: " + indexFlag);
-				System.out.println("There is an error when writing JSON file");
+				System.out.println("There is an error when writing JSON file: " + indexFlag);
 				return;
 			}
 		}
