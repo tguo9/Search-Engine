@@ -24,6 +24,7 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> location;
+	private final TreeMap<String, List<SearchResult>> socres;
 
 //	private 
 
@@ -33,6 +34,7 @@ public class InvertedIndex {
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
 		this.location = new TreeMap<>();
+		this.socres = new TreeMap<>();
 	}
 
 	/**
@@ -188,34 +190,62 @@ public class InvertedIndex {
 	 */
 	public List<SearchResult> exactSearch(TreeSet<String> query) {
 
-		
-		HashMap<String, SearchResult> remove = new HashMap<>();
+		List<SearchResult> searches = new ArrayList<>();
+		TreeMap<String, SearchResult> remove = new TreeMap<>();
 
 		for (String word : query) {
 
 			if (index.containsKey(word)) {
 
 				for (String path : index.get(word).keySet()) {
-
-					if (remove.containsKey(path)) {
+					
+					
+					
+					if (socres.containsKey(word)) {
 						
-						//update
-						remove.get(path).addFrequency(1);
-					} else {
+						List<SearchResult> x = socres.get(word);
 						
-						remove.put(path, new SearchResult(path, 1, 1));
+						for (SearchResult s: x) {
+							
+							if(s.getPath().equals(path)) {
+								
+								s.update(index.get(word).get(path).size(), 1);
+							}
+						}
+						
+						
+						searches.add(new SearchResult(path, index.get(word).get(path).size(), 1));
+						socres.put(word, searches);
+						
 					}
+
+//					if (remove.containsKey(path)) {
+//						
+//						//update
+//						SearchResult r = remove.get(path);
+//						r.update(index.get(word).get(path).size(), 1);
+//						
+//						remove.put(path, r);
+//						
+//						
+//					} else {
+//						
+//						remove.put(path, new SearchResult(path, index.get(word).get(path).size(), 1));
+//					}
 					
 				}
 
 			}
+			
 		}
 		
-		List<SearchResult> results = new ArrayList<>(remove.values());
+//		List<SearchResult> results = new ArrayList<>(remove.values());
 		
-		Collections.sort(results);
+//		Collections.sort(results);
+		
+//		System.out.println(results.toString());
 
-		return results;
+		return searches;
 
 	}
 
