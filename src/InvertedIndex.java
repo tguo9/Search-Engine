@@ -251,7 +251,7 @@ public class InvertedIndex {
 						}
 					} else {
 						
-						searches.add(new SearchResult(path, index.get(word).get(path).size(), index.get(word).get(path).size()/location.get(path)));
+						searches.add(new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
 						scores.put(word, searches);
 					}
 					

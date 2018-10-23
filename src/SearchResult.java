@@ -8,7 +8,7 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	private int matches;
 	private String path;
-	private int score;
+	private double score;
 
 	/**
 	 * Constructor for building SearchResult object
@@ -17,7 +17,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * @param frequency how many times query appears
 	 * @param position  the first position of query in the file.
 	 */
-	public SearchResult(String path, int matches, int score) {
+	public SearchResult(String path, int matches, double score) {
 		this.path = path;
 		this.matches = matches;
 		this.score = score;
@@ -63,7 +63,7 @@ public class SearchResult implements Comparable<SearchResult> {
 		return path;
 	}
 	
-	public int getScore() {
+	public double getScore() {
 		
 		return score;
 	}
