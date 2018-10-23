@@ -187,130 +187,37 @@ public class InvertedIndex {
 	 * @return true if this map did not already contain this word and position
 	 */
 	public List<SearchResult> exactSearch(TreeSet<String> query) {
+
 		
-//		HashMap<String, SearchResult> results = new HashMap<>();
-//		ArrayList<SearchResult> finalResults = new ArrayList<>();
-//
-//		for (String word: query)
-//		{
-//			if (this.contains(word))
-//			{
-//				for (String path: index.get(word).keySet())
-//				{
-//					TreeSet<Integer> indices = index.get(word).get(path);
-//
-//					if (results.containsKey(path))
-//					{
-//						SearchResult result = results.get(path);
-//						result.addFrequency(indices.size());
-//						result.setPosition(indices.first());
-//					} else
-//					{
-//						SearchResult result = new SearchResult(path, indices.size(), indices.iterator().next());
-//						results.put(path, result);
-//						finalResults.add(result);
-//					}
-//		}
-//			}
-//		}
-//
-//		Collections.sort(finalResults);
-//return finalResults;
-		
-		List<SearchResult> results = new ArrayList<>();
+		HashMap<String, SearchResult> remove = new HashMap<>();
 
 		for (String word : query) {
-			
-				if (this.contains(word)) {
-				TreeMap<String, Integer> remove = new TreeMap<>();
-					
+
+			if (index.containsKey(word)) {
+
 				for (String path : index.get(word).keySet()) {
-					
+
 					if (remove.containsKey(path)) {
 						
-						
-						remove.put(path, remove.get(path)+1);
+						//update
+						remove.get(path).addFrequency(1);
 					} else {
 						
-						remove.put(path, 1);
+						remove.put(path, new SearchResult(path, 1, 1));
 					}
 					
-				}
-				
-				for (String p: remove.keySet()) {
-					
-					results.add(new SearchResult(p, remove.get(p), 1));
-				}
-				
-
-				
-				
-			
-			
-		}
-		/*
-		int count = 1;
-
-		for (String word : query) {
-
-			System.out.println(word);
-			
-			
-
-			if (this.contains(word)) {
-				
-				TreeSet<String> remove = new TreeSet<>();
-
-				for (String path : index.get(word).keySet()) {
-					
-//					
-//					
-					for (SearchResult r: results) {
-						
-						if (r.getPath().equals(path)) {
-							
-							r.addFrequency(1);
-						} else {
-							
-							results.add(r);
-						}
-					}
-					
-//					
-//					
-//
 				}
 
 			}
-			*/
-
-//			System.out.println(s);
-
-//			if (index.get(s).keySet() != null) {
-//				System.out.println(index.get(s).toString());
-//			}
-
-//			for (String x: index.get(s).keySet()) {
-
-//					for (SearchResult r : results) {
-//
-//						r.setPosition(location.values().size());
-//						results.add(r);
-//
-//					}
-
-//			}
-
-//		}
-
-//		System.out.println(results.toString());
 		}
+		
+		List<SearchResult> results = new ArrayList<>(remove.values());
+		
 		Collections.sort(results);
 
 		return results;
-		
-			
-		}
+
+	}
 
 	/**
 	 * Adds the word and the position it was found to the map.
