@@ -39,9 +39,9 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * 
 	 * @param frequency increment amount
 	 */
-	public void update(int matches, int score) {
-		this.matches = matches;
-		this.score = score;
+	public void update(int matches, int total) {
+		this.matches += matches;
+		this.score = (this.matches) / total;
 	}
 
 	/**

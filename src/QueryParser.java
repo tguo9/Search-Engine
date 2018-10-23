@@ -52,13 +52,8 @@ public class QueryParser {
 				line = stemmer.stem(line).toString();
 
 				if (!line.isEmpty()) {
-					
-//					System.out.println(line);
 
-					queries = TextFileStemmer.stemLine(line);
-					
-//					System.out.println(queries.toString());
-		
+					queries = TextFileStemmer.stemLine(line);		
 
 					set.addAll(queries);
 
@@ -73,8 +68,8 @@ public class QueryParser {
 
 						results.put(String.join(" ", queries), index.exactSearch(set));
 					} else {
-
 						results.put(String.join(" ", queries), index.partialSearch(set));
+						
 					}
 
 				}

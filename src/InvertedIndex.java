@@ -24,7 +24,7 @@ public class InvertedIndex {
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
 	private final TreeMap<String, Integer> location;
-	private final TreeMap<String, List<SearchResult>> socres;
+	private final TreeMap<String, List<SearchResult>> scores;
 
 //	private 
 
@@ -34,7 +34,7 @@ public class InvertedIndex {
 	public InvertedIndex() {
 		this.index = new TreeMap<>();
 		this.location = new TreeMap<>();
-		this.socres = new TreeMap<>();
+		this.scores = new TreeMap<>();
 	}
 
 	/**
@@ -158,27 +158,64 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public List<SearchResult> partialSearch(TreeSet<String> arr) {
+	public List<SearchResult> partialSearch(TreeSet<String> query) {
 
-//		HashMap<String, SearchResult> results = new HashMap<>();
-		ArrayList<SearchResult> finalResults = new ArrayList<>();
+		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		for (String query : arr) {
-			boolean found = false;
-			for (String word : index.tailMap(query).keySet()) {
-				if (word.startsWith(query)) {
-//					search(word, results, finalResults);
-					found = true;
-				} else {
-					if (found) {
-						break;
+		for (String word : query) {
+
+			if (index.containsKey(word)) {
+
+				for (String path : index.get(word).keySet()) {
+
+					String curPath = path;
+
+					if (scores.containsKey(word)) {
+
+						List<SearchResult> res = scores.get(word);
+
+						for (SearchResult nr : res) {
+
+							if (nr.getPath().equals(curPath)) {
+
+								nr.update(index.get(word).get(curPath).size(), 1);
+							}
+						}
 					}
+					searches.add(new SearchResult(curPath, index.get(word).get(curPath).size(), 1));
+					scores.put(word, searches);
 				}
 			}
+
 		}
 
-		Collections.sort(finalResults);
-		return finalResults;
+		return searches;
+
+//		for (String word : query) {
+//
+//			if (index.containsKey(word)) {
+//
+//				for (String path : index.get(word).keySet()) {
+//
+//					if (remove.containsKey(path)) {
+//
+//						// update
+//						remove.get(path).update(index.get(word).get(path).size(), 1);
+//					} else {
+//
+//						remove.put(path, new SearchResult(path, 1, 1));
+//					}
+//
+//				}
+//
+//			}
+//		}
+//
+//		List<SearchResult> results = new ArrayList<>(remove.values());
+//
+//		Collections.sort(results);
+//
+//		return results;
 	}
 
 	/**
@@ -189,65 +226,121 @@ public class InvertedIndex {
 	 * @return true if this map did not already contain this word and position
 	 */
 	public List<SearchResult> exactSearch(TreeSet<String> query) {
+		
+		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		List<SearchResult> searches = new ArrayList<>();
-		TreeMap<String, SearchResult> remove = new TreeMap<>();
+//		HashMap<String, SearchResult> remove = new HashMap<>();
 
 		for (String word : query) {
 
 			if (index.containsKey(word)) {
 
 				for (String path : index.get(word).keySet()) {
-					
-					
-					
-					if (socres.containsKey(word)) {
-						
-						List<SearchResult> x = socres.get(word);
-						
-						for (SearchResult s: x) {
-							
-							if(s.getPath().equals(path)) {
-								
-								s.update(index.get(word).get(path).size(), 1);
+
+
+					if (scores.containsKey(word)) {
+
+						List<SearchResult> res = scores.get(word);
+
+						for (SearchResult nr : res) {
+
+							if (nr.getPath().equals(path)) {
+
+								nr.setMatches((index.get(word).get(path).size()));
 							}
 						}
+					} else {
 						
-						
-						searches.add(new SearchResult(path, index.get(word).get(path).size(), 1));
-						socres.put(word, searches);
-						
+						searches.add(new SearchResult(path, index.get(word).get(path).size(), index.get(word).get(path).size()/location.get(path)));
+						scores.put(word, searches);
 					}
-
-//					if (remove.containsKey(path)) {
-//						
-//						//update
-//						SearchResult r = remove.get(path);
-//						r.update(index.get(word).get(path).size(), 1);
-//						
-//						remove.put(path, r);
-//						
-//						
-//					} else {
-//						
-//						remove.put(path, new SearchResult(path, index.get(word).get(path).size(), 1));
-//					}
+					
 					
 				}
-
 			}
-			
+
 		}
-		
-//		List<SearchResult> results = new ArrayList<>(remove.values());
-		
-//		Collections.sort(results);
-		
-//		System.out.println(results.toString());
 
 		return searches;
 
+//		HashMap<String, SearchResult> remove = new HashMap<>();
+//
+//		for (String word : query) {
+//
+//			if (index.containsKey(word)) {
+//
+//				for (String path : index.get(word).keySet()) {
+//
+//					if (remove.containsKey(path)) {
+//
+//						// update
+//						remove.get(path).update(index.get(word).get(path).size(), 1);
+//					} else {
+//
+//						remove.put(path, new SearchResult(path, 1, 1));
+//					}
+//
+//				}
+//
+//			}
+//		}
+//
+//		List<SearchResult> results = new ArrayList<>(remove.values());
+//
+//		Collections.sort(results);
+//
+//		return results;
+
+//		TreeMap<String, SearchResult> remove = new TreeMap<>();
+//
+//		for (String word : query) {
+//
+//			if (index.containsKey(word)) {
+//
+//				for (String path : index.get(word).keySet()) {
+//
+//					if (scores.containsKey(word)) {
+//
+//						// get the whole list
+//						// add
+//
+//						List<SearchResult> slist = scores.get(word);
+//						boolean updated = false;
+//
+//						for (SearchResult s : slist) {
+//
+//							if (s.getPath().equals(path)) {
+//
+//								s.update(index.get(word).get(path).size(), 1);
+//								updated = true;
+//
+//							} 
+//							
+//						}
+//
+//						if (updated == false) {
+//							
+//							slist.add(new SearchResult(path, index.get(word).get(path).size(), 1));
+//						}
+//						
+//						scores.put(word, slist);
+//
+//					} else {
+//
+//						// crate a new one and put to map
+//						List<SearchResult> newList = new ArrayList<>();
+//						newList.add(new SearchResult(path, index.get(word).get(path).size(), 1));
+//						scores.put(word, newList);
+//					}
+//				}
+//			}
+//			
+////			System.out.println(scores.toString());
+//
+//		}
+//		return scores.values();
 	}
+
 
 	/**
 	 * Adds the word and the position it was found to the map.
@@ -271,6 +364,11 @@ public class InvertedIndex {
 	public TreeMap<String, TreeSet<Integer>> locations(String word) {
 
 		return index.get(word);
+	}
+
+	public TreeMap<String, List<SearchResult>> getScores() {
+
+		return scores;
 	}
 
 	/**

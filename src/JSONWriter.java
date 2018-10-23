@@ -5,7 +5,7 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -518,7 +518,7 @@ public class JSONWriter {
 				writer.write(System.lineSeparator());
 			} else {
 
-				writer.write(",");
+//				writer.write(",");
 				writer.write(System.lineSeparator());
 			}
 			indent(1, writer);
@@ -539,6 +539,7 @@ public class JSONWriter {
 
 		for (SearchResult r : results) {
 			
+
 			asResult(r, writer, level + 1);
 		}
 		indent(2, writer);
@@ -546,6 +547,7 @@ public class JSONWriter {
 		
 	}
 
+	@SuppressWarnings("deprecation")
 	public static void asResult(SearchResult result, Writer writer, int level) throws IOException {
 
 		indent(3, writer);
@@ -569,7 +571,8 @@ public class JSONWriter {
 		indent(4, writer);
 		quote("score", writer);
 		writer.write(": ");
-		writer.write((new Integer(result.getScore()).toString()));
+		DecimalFormat FORMATTER = new DecimalFormat("0.000000");
+		writer.write(FORMATTER.format((new Double(result.getScore()))).toString());
 		writer.write(System.lineSeparator());
 		
 		indent(3, writer);
