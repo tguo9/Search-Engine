@@ -31,7 +31,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	@Override
 	public int compareTo(SearchResult s) {
-		return (this.path).compareTo(s.path);
+		return ;
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	public void update(int matches, double total) {
 		this.matches += matches;
-		this.score = total;
+		this.score += total;
 	}
 
 	/**

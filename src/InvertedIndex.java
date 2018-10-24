@@ -240,23 +240,22 @@ public class InvertedIndex {
 
 //					System.out.println(word + path);
 					
-					if (scores.containsKey(path)) {
+					if (hello.containsKey(path)) {
 
-						List<SearchResult> res = scores.get(word);
 
-						for (SearchResult nr : res) {
+//						for (SearchResult nr : res) {
 
-							if (nr.getPath().equals(path)) {
+//							if (nr.getPath().equals(path)) {
 
-								nr.update((index.get(word).get(path).size()), (double)index.get(word).get(path).size()/location.get(path));
+					hello.get(path).update((index.get(word).get(path).size()), (double)index.get(word).get(path).size()/location.get(path));
 
-							}
-						}
+//							}
+//						}
 						
 					} else {
 						
-						searches.add(new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
-						scores.put(path, searches);
+//						searches.add(new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
+						hello.put(path, new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
 					}
 					
 					
@@ -266,6 +265,8 @@ public class InvertedIndex {
 		}
 		
 //		scores.put(String.join(" ", query), searches);
+		
+		searches.addAll(hello.values());
 
 		return searches;
 
