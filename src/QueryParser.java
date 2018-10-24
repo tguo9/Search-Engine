@@ -86,7 +86,7 @@ public class QueryParser {
 		for (String k: results.keySet()) {
 			
 			Collections.sort(results.get(k));
-			System.out.println(results.get(k).toString());
+//			System.out.println(results.get(k).toString());
 
 		}
 		

@@ -42,7 +42,6 @@ public class SearchResult implements Comparable<SearchResult> {
 			if(result == 0) {
 				result = this.getPath().compareToIgnoreCase(other.getPath());
 			}
-			return result;
 		}
 		return result;
 	}

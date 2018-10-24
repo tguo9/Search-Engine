@@ -162,32 +162,42 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
+		TreeMap<String, SearchResult> hello = new TreeMap<>();
+
 		for (String word : query) {
+			
+			for (String k: index.keySet()) {
+				
+				if (k.startsWith(word)) {
+					
+					for (String path : index.get(k).keySet()) {
 
-			if (index.containsKey(word)) {
+						
+						if (hello.containsKey(path)) {
 
-				for (String path : index.get(word).keySet()) {
 
-					String curPath = path;
+						hello.get(path).update((index.get(k).get(path).size()), (double)index.get(k).get(path).size()/location.get(path));
 
-					if (scores.containsKey(word)) {
-
-						List<SearchResult> res = scores.get(word);
-
-						for (SearchResult nr : res) {
-
-							if (nr.getPath().equals(curPath)) {
-
-								nr.update(index.get(word).get(curPath).size(), 1);
-							}
+							
+						} else {
+							
+							hello.put(path, new SearchResult(path, index.get(k).get(path).size(), (double)index.get(k).get(path).size()/location.get(path)));
 						}
+						
+						
 					}
-					searches.add(new SearchResult(curPath, index.get(word).get(curPath).size(), 1));
-					scores.put(word, searches);
 				}
 			}
 
+
+				
+			
+
 		}
+		
+		
+		searches.addAll(hello.values());
+		Collections.sort(searches);
 
 		return searches;
 
@@ -217,6 +227,18 @@ public class InvertedIndex {
 //
 //		return results;
 	}
+	
+	public boolean findPartial(String word) {
+		
+		for (String k: index.keySet()) {
+			
+			if (word.startsWith(k)) {
+				
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Adds the word and the position it was found to the map.
@@ -232,29 +254,20 @@ public class InvertedIndex {
 		TreeMap<String, SearchResult> hello = new TreeMap<>();
 
 		for (String word : query) {
-//			System.out.println(word);
 
 			if (index.containsKey(word)) {
 
 				for (String path : index.get(word).keySet()) {
 
-//					System.out.println(word + path);
 					
 					if (hello.containsKey(path)) {
 
 
-//						for (SearchResult nr : res) {
-
-//							if (nr.getPath().equals(path)) {
-
 					hello.get(path).update((index.get(word).get(path).size()), (double)index.get(word).get(path).size()/location.get(path));
 
-//							}
-//						}
 						
 					} else {
 						
-//						searches.add(new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
 						hello.put(path, new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
 					}
 					
@@ -264,7 +277,6 @@ public class InvertedIndex {
 
 		}
 		
-//		scores.put(String.join(" ", query), searches);
 		
 		searches.addAll(hello.values());
 		Collections.sort(searches);
