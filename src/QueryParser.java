@@ -69,7 +69,7 @@ public class QueryParser {
 					}
 
 					if (mode.equals("exact")) {
-//						System.out.println(set.toString());
+
 						results.put(String.join(" ", queries), index.exactSearch(set));
 
 					} else {
@@ -78,9 +78,24 @@ public class QueryParser {
 					}
 
 				}
+				
 			}
 
 		}
+		
+		for (String k: results.keySet()) {
+			
+			Collections.sort(results.get(k));
+			System.out.println(results.get(k).toString());
+
+		}
+		
+		
+//		for (List<SearchResult> i: results.values()) {
+//			
+//			Collections.sort(i);
+//			results.put(key, value)
+//		}
 
 		return results;
 	}

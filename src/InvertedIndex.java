@@ -232,7 +232,7 @@ public class InvertedIndex {
 		TreeMap<String, SearchResult> hello = new TreeMap<>();
 
 		for (String word : query) {
-			System.out.println(word);
+//			System.out.println(word);
 
 			if (index.containsKey(word)) {
 
@@ -267,6 +267,7 @@ public class InvertedIndex {
 //		scores.put(String.join(" ", query), searches);
 		
 		searches.addAll(hello.values());
+		Collections.sort(searches);
 
 		return searches;
 
