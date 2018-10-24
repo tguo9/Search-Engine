@@ -512,19 +512,21 @@ public class JSONWriter {
 			writer.write(System.lineSeparator());
 			
 			asInner(q, elements.get(q), writer, 1);
+			writer.write(System.lineSeparator());
 			
-			if (q.equals(elements.lastKey())) {
-
-				writer.write(System.lineSeparator());
-			} else {
-
-//				writer.write(",");
-				writer.write(System.lineSeparator());
-			}
 			indent(1, writer);
 			writer.write("}");
-			writer.write(",");
-			writer.write(System.lineSeparator());
+			
+if (q.equals(elements.lastKey())) {
+
+	writer.write(System.lineSeparator());
+			} else {
+
+				writer.write(",");
+				writer.write(System.lineSeparator());
+			}
+//			writer.write(",");
+			
 			
 		}
 		writer.write("]");

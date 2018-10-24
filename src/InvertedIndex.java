@@ -232,13 +232,15 @@ public class InvertedIndex {
 		TreeMap<String, SearchResult> hello = new TreeMap<>();
 
 		for (String word : query) {
+			System.out.println(word);
 
 			if (index.containsKey(word)) {
 
 				for (String path : index.get(word).keySet()) {
 
-
-					if (scores.containsKey(word)) {
+//					System.out.println(word + path);
+					
+					if (scores.containsKey(path)) {
 
 						List<SearchResult> res = scores.get(word);
 
@@ -246,18 +248,15 @@ public class InvertedIndex {
 
 							if (nr.getPath().equals(path)) {
 
-								nr.setMatches((index.get(word).get(path).size()));
+								nr.update((index.get(word).get(path).size()), (double)index.get(word).get(path).size()/location.get(path));
 
 							}
 						}
+						
 					} else {
 						
-						hello.put(word,
-								new SearchResult(path, index.get(word).get(path).size(), 
-								(double)index.get(word).get(path).size()/location.get(path)));
 						searches.add(new SearchResult(path, index.get(word).get(path).size(), (double)index.get(word).get(path).size()/location.get(path)));
-						scores.put(word, searches);
-						System.out.println(searches.toString());
+						scores.put(path, searches);
 					}
 					
 					
@@ -266,7 +265,7 @@ public class InvertedIndex {
 
 		}
 		
-		
+//		scores.put(String.join(" ", query), searches);
 
 		return searches;
 

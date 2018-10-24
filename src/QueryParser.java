@@ -32,57 +32,61 @@ public class QueryParser {
 	private final TreeMap<String, List<SearchResult>> results;
 	private static SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-	private final InvertedIndex index;
-
 	public QueryParser(InvertedIndex index) {
 
 		this.results = new TreeMap<>();
-		this.index = index;
 	}
 
 	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, InvertedIndex index, String mode)
 			throws IOException {
-		
-		TreeSet<String> set = new TreeSet<>();
+
 		List<String> queries = null;
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				line = stemmer.stem(line).toString();
+				queries = TextFileStemmer.stemLine(line, stemmer);
+				if (!queries.isEmpty()) {
 
-				if (!line.isEmpty()) {
+					TreeSet<String> set = new TreeSet<>();
 
-					queries = TextFileStemmer.stemLine(line);		
+					queries = TextFileStemmer.stemLine(line);
 
-					set.addAll(queries);
+					for (String q : queries) {
 
+						if (!set.contains(q)) {
+
+							set.add(q);
+						}
+					}
+					queries.clear();
+					queries.addAll(set);
 					Collections.sort(queries);
-					
+
 					if (results.containsKey(String.join(" ", queries))) {
-						
+
 						continue;
 					}
-					
-					if (mode.equals("exact")) {
 
+					if (mode.equals("exact")) {
+//						System.out.println(set.toString());
 						results.put(String.join(" ", queries), index.exactSearch(set));
+
 					} else {
 						results.put(String.join(" ", queries), index.partialSearch(set));
-						
+
 					}
 
 				}
-				
-
 			}
-			
-			
-			
-//			System.out.println(results.toString());
 
-			return results;
 		}
+
+		return results;
+	}
+
+	public void loopSet() {
+
 	}
 
 }

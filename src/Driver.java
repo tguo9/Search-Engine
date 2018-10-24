@@ -113,6 +113,7 @@ public class Driver {
 			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
 			
 			try {
+//				System.out.println(results.size());
 				index.toJSONResult(results, resultFlag);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
