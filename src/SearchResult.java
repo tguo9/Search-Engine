@@ -33,14 +33,16 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
-		int result = Double.compare(this.getScore(), other.getScore());
+		int result = Double.compare(other.getScore(), this.getScore());
 		if(result == 0) {
-			System.out.println("HERE");
-			result = Integer.compare(this.getMatches(), other.getMatches());
+			
+			result = Integer.compare(other.getMatches(), this.getMatches());
+			
 
 			if(result == 0) {
 				result = this.getPath().compareToIgnoreCase(other.getPath());
 			}
+			return result;
 		}
 		return result;
 	}

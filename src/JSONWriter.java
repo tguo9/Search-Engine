@@ -525,7 +525,6 @@ if (q.equals(elements.lastKey())) {
 				writer.write(",");
 				writer.write(System.lineSeparator());
 			}
-//			writer.write(",");
 			
 			
 		}
@@ -543,6 +542,14 @@ if (q.equals(elements.lastKey())) {
 			
 
 			asResult(r, writer, level + 1);
+			indent(3, writer);
+			writer.write("}");
+			if (!r.equals(results.get(results.size() - 1))) {
+				
+				writer.write(",");
+			}
+			
+			writer.write(System.lineSeparator());
 		}
 		indent(2, writer);
 		writer.write("]");
@@ -577,9 +584,7 @@ if (q.equals(elements.lastKey())) {
 		writer.write(FORMATTER.format((new Double(result.getScore()))).toString());
 		writer.write(System.lineSeparator());
 		
-		indent(3, writer);
-		writer.write("}");
-		writer.write(System.lineSeparator());
+		
 		
 	}
 
