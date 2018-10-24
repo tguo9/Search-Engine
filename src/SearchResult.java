@@ -1,4 +1,5 @@
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 /**
  * Object for the search result.
@@ -10,7 +11,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	private int matches;
 	private String path;
 	private double score;
-	private DecimalFormat FORMATTER = new DecimalFormat("0.000000");
+	private NumberFormat FORMATTER = new DecimalFormat("#0.000000000000000");
 
 	/**
 	 * Constructor for building SearchResult object
@@ -33,17 +34,20 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
-		int result = Double.compare(other.getScore(), this.getScore());
-		if(result == 0) {
-			
-			result = Integer.compare(other.getMatches(), this.getMatches());
+		int temp = Double.compare(other.getScore(), this.getScore());
+		
+
+//		System.out.println();
+//		System.out.println(other.toString() + "	" + temp);
+		if(temp == 0) {
+			temp = Integer.compare(Integer.valueOf(other.getMatches()), Integer.valueOf(this.getMatches()));
 			
 
-			if(result == 0) {
-				result = this.getPath().compareToIgnoreCase(other.getPath());
+			if(temp == 0) {
+				temp = this.getPath().compareToIgnoreCase(other.getPath());
 			}
 		}
-		return result;
+		return temp;
 	}
 
 	/**
@@ -76,8 +80,9 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 	
 	public double getScore() {
-		
-//		score = FORMATTER.format(score);
+//		
+		String temp = FORMATTER.format(score);
+		score = Double.valueOf(temp);
 		
 		return score;
 	}
