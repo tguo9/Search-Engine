@@ -48,7 +48,7 @@ public class FileFinder {
 	 * @param words    word to clean and add to map
 	 * @param position position word was found
 	 */
-	public static ArrayList<Path> traverse(Path path, ArrayList<Path> result) throws IOException {
+	public static void traverse(Path path, ArrayList<Path> result) throws IOException {
 
 		try (DirectoryStream<Path> listing = Files.newDirectoryStream(path)) {
 
@@ -72,7 +72,6 @@ public class FileFinder {
 				}
 			}
 		}
-		return result;
 	}
 
 }
