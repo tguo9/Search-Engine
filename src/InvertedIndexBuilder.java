@@ -46,6 +46,11 @@ public class InvertedIndexBuilder {
 			String thisLine = null;
 
 			int indexCount = 1;
+			
+			// TODO call filename.toString() over and over and over again
+			// TODO save the result here, and reuse later.
+			// TODO e.g. String location = filename.toString()
+			// TODO ... index.add(..., location, ...)
 
 			while ((thisLine = reader.readLine()) != null) {
 
