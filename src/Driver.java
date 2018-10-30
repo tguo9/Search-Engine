@@ -27,6 +27,7 @@ public class Driver {
 
 			if (path == null) {
 				// TODO Might as well output something here, or catch a null pointer below.
+				System.out.println("The path is invaild.");
 				return;
 			}
 
