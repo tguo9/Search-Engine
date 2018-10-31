@@ -3,11 +3,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -78,30 +74,18 @@ public class QueryParser {
 					}
 
 				}
-				
+
 			}
 
 		}
-		
-		for (String k: results.keySet()) {
-			
+
+		for (String k : results.keySet()) {
+
 			Collections.sort(results.get(k));
-//			System.out.println(results.get(k).toString());
 
 		}
-		
-		
-//		for (List<SearchResult> i: results.values()) {
-//			
-//			Collections.sort(i);
-//			results.put(key, value)
-//		}
 
 		return results;
-	}
-
-	public void loopSet() {
-
 	}
 
 }

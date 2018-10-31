@@ -35,15 +35,11 @@ public class SearchResult implements Comparable<SearchResult> {
 	@Override
 	public int compareTo(SearchResult other) {
 		int temp = Double.compare(other.getScore(), this.getScore());
-		
 
-//		System.out.println();
-//		System.out.println(other.toString() + "	" + temp);
-		if(temp == 0) {
+		if (temp == 0) {
 			temp = Integer.compare(Integer.valueOf(other.getMatches()), Integer.valueOf(this.getMatches()));
-			
 
-			if(temp == 0) {
+			if (temp == 0) {
 				temp = this.getPath().compareToIgnoreCase(other.getPath());
 			}
 		}
@@ -66,11 +62,10 @@ public class SearchResult implements Comparable<SearchResult> {
 	public int getMatches() {
 		return this.matches;
 	}
-	
-	public void setMatches(Integer integer)
-	{
+
+	public void setMatches(Integer integer) {
 		this.matches = integer;
-}
+	}
 
 	/**
 	 * @return the path
@@ -78,21 +73,18 @@ public class SearchResult implements Comparable<SearchResult> {
 	public String getPath() {
 		return path;
 	}
-	
+
 	public double getScore() {
-//		
 		String temp = FORMATTER.format(score);
 		score = Double.valueOf(temp);
-		
+
 		return score;
 	}
-	
+
 	public String toString() {
-		
-		
+
 		return "Path: " + path + "Matches: " + matches + "Score " + score;
-		
-		
+
 	}
 
 }

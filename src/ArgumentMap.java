@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ArgumentMap {
-	
+
 	private final Map<String, String> map;
 
 	/**
@@ -153,7 +153,7 @@ public class ArgumentMap {
 	 *         if there is no mapping for the flag
 	 */
 	public String getString(String flag, String defaultValue) {
-		
+
 		return map.getOrDefault(flag, defaultValue);
 
 	}

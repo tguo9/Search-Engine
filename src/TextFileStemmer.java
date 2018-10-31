@@ -67,10 +67,10 @@ public class TextFileStemmer {
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
 
 		if (outputFile == null) {
-			
+
 			return;
 		}
-		
+
 		String thisLine = null;
 
 		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
@@ -91,20 +91,4 @@ public class TextFileStemmer {
 
 	}
 
-	/**
-	 * Uses {@link #stemFile(Path, Path)} to stem a single hard-coded file. Useful
-	 * for development.
-	 *
-	 * @param args unused
-	 * @throws IOException
-	 */
-//	public static void main(String[] args) throws IOException {
-//		Path inputPath = Paths.get("test", "words.tExT");
-//		Path outputPath = Paths.get("out", "words.tExT");
-//
-//		Files.createDirectories(Paths.get("out"));
-//
-//		System.out.println(inputPath);
-//		stemFile(inputPath, outputPath);
-//	}
 }

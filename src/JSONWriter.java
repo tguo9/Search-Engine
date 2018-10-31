@@ -508,52 +508,50 @@ public class JSONWriter {
 			writer.write(": ");
 			quote(q, writer);
 			writer.write(",");
-			
+
 			writer.write(System.lineSeparator());
-			
+
 			asInner(q, elements.get(q), writer, 1);
 			writer.write(System.lineSeparator());
-			
+
 			indent(1, writer);
 			writer.write("}");
-			
-if (q.equals(elements.lastKey())) {
 
-	writer.write(System.lineSeparator());
+			if (q.equals(elements.lastKey())) {
+
+				writer.write(System.lineSeparator());
 			} else {
 
 				writer.write(",");
 				writer.write(System.lineSeparator());
 			}
-			
-			
+
 		}
 		writer.write("]");
 	}
 
 	public static void asInner(String q, List<SearchResult> results, Writer writer, int level) throws IOException {
-		
+
 		indent(2, writer);
 		quote("results", writer);
 		writer.write(": [");
 		writer.write(System.lineSeparator());
 
 		for (SearchResult r : results) {
-			
 
 			asResult(r, writer, level + 1);
 			indent(3, writer);
 			writer.write("}");
 			if (!r.equals(results.get(results.size() - 1))) {
-				
+
 				writer.write(",");
 			}
-			
+
 			writer.write(System.lineSeparator());
 		}
 		indent(2, writer);
 		writer.write("]");
-		
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -562,30 +560,28 @@ if (q.equals(elements.lastKey())) {
 		indent(3, writer);
 		writer.write("{");
 		writer.write(System.lineSeparator());
-		
+
 		indent(4, writer);
 		quote("where", writer);
 		writer.write(": ");
 		quote(result.getPath(), writer);
 		writer.write(",");
 		writer.write(System.lineSeparator());
-		
+
 		indent(4, writer);
 		quote("count", writer);
 		writer.write(": ");
 		writer.write(new Integer(result.getMatches()).toString());
 		writer.write(",");
 		writer.write(System.lineSeparator());
-		
+
 		indent(4, writer);
 		quote("score", writer);
 		writer.write(": ");
 		DecimalFormat FORMATTER = new DecimalFormat("0.000000");
 		writer.write(FORMATTER.format((new Double(result.getScore()))).toString());
 		writer.write(System.lineSeparator());
-		
-		
-		
+
 	}
 
 }
