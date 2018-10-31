@@ -3,61 +3,45 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 * @throws IOException
-	 */
 	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
-
-		for (Path filename : filenames) {
-			buildMap(filename, index);
-		}
-	}
-
-	/**
-	 * Parses the command-line arguments to build and use an in-memory search engine
-	 * from files or the web.
-	 *
-	 * @param args the command-line arguments to parse
-	 * @return 0 if everything went well
-	 * @throws IOException
-	 */
-	public static void buildMap(Path filename, InvertedIndex index) throws IOException {
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		try (BufferedReader reader = Files.newBufferedReader(filename, StandardCharsets.UTF_8)) {
+		for (Path files : filenames) {
+			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
 
-			String thisLine = null;
+				String thisLine = null;
 
-			int indexCount = 1;
+				int indexCount = 1;
+				int wordCount = 0;
 
-			String location = filename.toString();
+				while ((thisLine = reader.readLine()) != null) {
 
-			while ((thisLine = reader.readLine()) != null) {
+					String[] thatLine = TextParser.parse(thisLine);
 
-				String[] thatLine = TextParser.parse(thisLine);
+					for (String word : thatLine) {
 
-				for (String word : thatLine) {
-
-					String newWord = stemmer.stem(word).toString();
-					index.add(newWord, location, indexCount);
-					indexCount++;
+						String newWord = stemmer.stem(word).toString();
+						index.add(newWord, files.toString(), indexCount);
+						indexCount++;
+						wordCount++;
+					}
 				}
+				if (wordCount != 0) {
+					index.add(files.toString(), wordCount);
+					
+				}
+				
+				
 			}
-
 		}
-
 	}
 
 }

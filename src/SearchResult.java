@@ -35,7 +35,6 @@ public class SearchResult implements Comparable<SearchResult> {
 	@Override
 	public int compareTo(SearchResult other) {
 		int temp = Double.compare(other.getScore(), this.getScore());
-
 		if (temp == 0) {
 			temp = Integer.compare(Integer.valueOf(other.getMatches()), Integer.valueOf(this.getMatches()));
 
