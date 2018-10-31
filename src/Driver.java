@@ -1,8 +1,6 @@
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -24,7 +22,7 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
-		
+
 		TreeMap<String, List<SearchResult>> results = new TreeMap<>();
 
 		if (map.hasFlag("-path")) {
@@ -42,7 +40,7 @@ public class Driver {
 				System.out.println("There is an error when reading the file: " + path);
 			}
 
-}
+		}
 
 		Path indexFlag = null;
 		if (map.hasFlag("-index")) {
@@ -55,7 +53,6 @@ public class Driver {
 				return;
 			}
 		}
-
 
 		if (map.hasFlag("-locations")) {
 

@@ -3,13 +3,19 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
+	/**
+	 * Adds the word and the position it was found to the map.
+	 *
+	 * @param words    word to clean and add to map
+	 * @param position position word was found
+	 * @return true if this map did not already contain this word and position
+	 */
 	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
