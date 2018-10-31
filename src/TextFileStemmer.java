@@ -67,10 +67,10 @@ public class TextFileStemmer {
 	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
 
 		if (outputFile == null) {
-			
+
 			return;
 		}
-		
+
 		String thisLine = null;
 
 		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
@@ -90,4 +90,5 @@ public class TextFileStemmer {
 		}
 
 	}
+
 }

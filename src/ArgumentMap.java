@@ -179,6 +179,7 @@ public class ArgumentMap {
 			return returnVal;
 
 		} catch (Exception e) {
+			e.getMessage();
 			return null;
 		}
 
@@ -209,6 +210,7 @@ public class ArgumentMap {
 				return returnValue;
 
 			} catch (Exception e) {
+				e.getMessage();
 				return defaultValue;
 
 			}
