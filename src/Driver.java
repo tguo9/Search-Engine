@@ -1,8 +1,6 @@
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -28,7 +26,6 @@ public class Driver {
 		TreeMap<String, List<SearchResult>> results = new TreeMap<>();
 
 		if (map.hasFlag("-path")) {
-			ArrayList<Path> filenames = new ArrayList<>();
 
 			Path path = map.getPath("-path");
 
@@ -37,34 +34,22 @@ public class Driver {
 				return;
 			}
 
-			if (path != null && Files.isDirectory(path)) {
-				try {
-					FileFinder.traverse(path, filenames);
-				} catch (IOException e) {
-					e.getMessage();
-				}
-
-			} else if (Files.isRegularFile(path)) {
-
-				filenames.add(path);
-			}
-
 			try {
-				InvertedIndexBuilder.buildMap(filenames, index);
+				InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
 			} catch (IOException e) {
-
 				System.out.println("There is an error when reading the file: " + path);
 			}
+
 		}
 
-		Path indexFlag = null;
 		if (map.hasFlag("-index")) {
-			indexFlag = map.getPath("-index", Paths.get("index.json"));
+			Path indexFlag = map.getPath("-index", Paths.get("index.json"));
+
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
-
-				System.out.println("There is an error when reading the file: " + indexFlag);
+				System.out.println("There is an error when writing JSON file: " + indexFlag);
+				return;
 			}
 		}
 

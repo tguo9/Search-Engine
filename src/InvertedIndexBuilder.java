@@ -9,37 +9,55 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 public class InvertedIndexBuilder {
 
+	/**
+	 * Parses the command-line arguments to build and use an in-memory search engine
+	 * from files or the web.
+	 *
+	 * @param args the command-line arguments to parse
+	 * @return 0 if everything went well
+	 * @throws IOException
+	 */
 	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
+
+		for (Path filename : filenames) {
+			buildMap(filename, index);
+		}
+	}
+
+	/**
+	 * Parses the command-line arguments to build and use an in-memory search engine
+	 * from files or the web.
+	 *
+	 * @param args the command-line arguments to parse
+	 * @return 0 if everything went well
+	 * @throws IOException
+	 */
+	public static void buildMap(Path filename, InvertedIndex index) throws IOException {
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		for (Path files : filenames) {
-			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = Files.newBufferedReader(filename, StandardCharsets.UTF_8)) {
 
-				String thisLine = null;
+			String thisLine = null;
 
-				int indexCount = 1;
-				int wordCount = 0;
+			int indexCount = 1;
 
-				while ((thisLine = reader.readLine()) != null) {
+			String location = filename.toString();
 
-					String[] thatLine = TextParser.parse(thisLine);
+			while ((thisLine = reader.readLine()) != null) {
 
-					for (String word : thatLine) {
+				String[] thatLine = TextParser.parse(thisLine);
 
-						String newWord = stemmer.stem(word).toString();
-						index.add(newWord, files.toString(), indexCount);
-						indexCount++;
-						wordCount++;
-					}
+				for (String word : thatLine) {
+
+					String newWord = stemmer.stem(word).toString();
+					index.add(newWord, location, indexCount);
+					indexCount++;
 				}
-				if (wordCount != 0) {
-					index.add(files.toString(), wordCount);
-
-				}
-
 			}
+
 		}
+
 	}
 
 }
