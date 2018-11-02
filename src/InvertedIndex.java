@@ -15,13 +15,13 @@ import java.util.TreeSet;
 public class InvertedIndex {
 
 	/**
-	 * Data structure to store strings and their positions.
-	 */
-
-	/**
 	 * Stores a mapping of words to the positions the words were found.
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
+	
+	/**
+	 * Data structure to store strings and their positions.
+	 */	
 	private final TreeMap<String, Integer> location;
 
 	/**
@@ -44,8 +44,20 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
+		
+		/*
+		 * Update your location map here... add 1 to the count every time a word
+		 * is added for a location
+		 */
 	}
 
+	/*
+	 * TODO
+	 * This method allows the location map to be inconsistent with the index
+	 * Because its public, anyone can do add(hello.txt, -12)
+	 * 
+	 * To protect data integrity... lets change this a bit.
+	 */
 	/**
 	 * Writes the nested map of elements formatted as a nested pretty JSON object to
 	 * the specified file.
@@ -116,11 +128,11 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public void toJSONLoc(Path path) throws IOException {
+	public void toJSONLoc(Path path) throws IOException { // TODO toJSONLocations ... locationsToJSON
 		JSONWriter.asObject(location, path);
 	}
 
-
+	// TODO Move this method... most likely to your query parser.
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -144,16 +156,34 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> hello = new TreeMap<>();
+		/*
+		 * TODO (Fix this stuff for exact search too)
+		 * Temporary storage! Why is this good??
+		 * Map has a faster contains(...) method than a list, which requires a linear search.
+		 * If we only need this map for the contains(...) method, do not use a TreeMap!
+		 * Use a HashMap
+		 * Also, call it "lookup" instead of hello
+		 */
+		TreeMap<String, SearchResult> hello = new TreeMap<>(); 
 
 		for (String word : query) {
 
-			for (String k : index.keySet()) {
+			/*
+			 * TODO Currently looping through every key... but your keys are sorted!
+			 * 
+			 * 1) Have to start at the "right" key in the map... hints:
+			 * Use either headMap or tailMap given the query... and an approach similar to:
+			 * https://github.com/usf-cs212-fall2018/lectures/blob/master/Data%20Structures/src/FindDemo.java
+			 * 
+			 * 2) If you start at the right key, you can break when your key no longer starts with your query
+			 */
+			
+			for (String k : index.keySet()) { // TODO Avoid the 1 letter variable name... String key : index.keySet()
 
 				if (k.startsWith(word)) {
 
 					for (String path : index.get(k).keySet()) {
-
+						
 						if (hello.containsKey(path)) {
 
 							hello.get(path).update((index.get(k).get(path).size()),
@@ -163,6 +193,14 @@ public class InvertedIndex {
 
 							hello.put(path, new SearchResult(path, index.get(k).get(path).size(),
 									(double) index.get(k).get(path).size() / location.get(path)));
+							
+							/*
+							 * TODO
+							 * SearchResult result = new SearchResult(....)
+							 * 
+							 * hello.put(path, result);
+							 * searches.add(result);
+							 */
 						}
 
 					}
@@ -170,14 +208,20 @@ public class InvertedIndex {
 			}
 
 		}
+		
+		/*
+		 * TODO Pull out the code of this loop since its the same in both partial and exact search,
+		 * and make searchHelper(String key, look up map, result list)
+		 */
 
-		searches.addAll(hello.values());
+		searches.addAll(hello.values()); // TODO Avoid this extra "loop"
 		Collections.sort(searches);
 
 		return searches;
 
 	}
 
+	// TODO Remove
 	public boolean findPartial(String word) {
 
 		for (String k : index.keySet()) {
@@ -244,6 +288,7 @@ public class InvertedIndex {
 		return index.size();
 	}
 
+	// TODO Breaks encapsulation
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -256,6 +301,7 @@ public class InvertedIndex {
 		return index.get(word);
 	}
 
+	// TODO Breaks encapsulation
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -276,6 +322,7 @@ public class InvertedIndex {
 		return this.index.toString();
 	}
 
+	// TODO Javadoc
 	public int size() {
 		return index.size();
 	}

@@ -1,6 +1,10 @@
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
+/*
+ * TODO Javadoc
+ */
+
 /**
  * Object for the search result.
  * 
@@ -9,8 +13,13 @@ import java.text.NumberFormat;
 public class SearchResult implements Comparable<SearchResult> {
 
 	private int matches;
-	private String path;
+	private String path; // TODO make final
 	private double score;
+	
+	// TODO private final int total; and set this in the constructor instead of passing in the score
+	// TODO every time the matches value changes, you can use this to automatically update the score
+	
+	// TODO Remove for now.... (only formatting should happen at output)
 	private NumberFormat FORMATTER = new DecimalFormat("#0.000000000000000");
 
 	/**
@@ -21,6 +30,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * @param position  the first position of query in the file.
 	 */
 	public SearchResult(String path, int matches, double score) {
+	// TODO public SearchResult(String path, int matches, int total) { and use this.score = (double) matches / total; 
 		this.path = path;
 		this.matches = matches;
 		this.score = score;
@@ -34,6 +44,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
+		// TODO Can access private data directly, for example: int temp = Integer.compare(other.matches, this.matches);
+		
 		int temp = Double.compare(other.getScore(), this.getScore());
 		if (temp == 0) {
 			temp = Integer.compare(Integer.valueOf(other.getMatches()), Integer.valueOf(this.getMatches()));
@@ -50,7 +62,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * 
 	 * @param frequency increment amount
 	 */
-	public void update(int matches, double total) {
+	public void update(int matches, double total) { // TODO Only need matches
 		this.matches += matches;
 		this.score += total;
 	}
@@ -62,7 +74,7 @@ public class SearchResult implements Comparable<SearchResult> {
 		return this.matches;
 	}
 
-	public void setMatches(Integer integer) {
+	public void setMatches(Integer integer) { // TODO Remove?
 		this.matches = integer;
 	}
 
@@ -82,7 +94,7 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	public String toString() {
 
-		return "Path: " + path + "Matches: " + matches + "Score " + score;
+		return "Path: " + path + "Matches: " + matches + "Score: " + score;
 
 	}
 
