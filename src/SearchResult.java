@@ -74,10 +74,6 @@ public class SearchResult implements Comparable<SearchResult> {
 		return this.matches;
 	}
 
-	public void setMatches(Integer integer) { // TODO Remove?
-		this.matches = integer;
-	}
-
 	/**
 	 * @return the path
 	 */

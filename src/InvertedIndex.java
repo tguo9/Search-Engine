@@ -221,19 +221,6 @@ public class InvertedIndex {
 
 	}
 
-	// TODO Remove
-	public boolean findPartial(String word) {
-
-		for (String k : index.keySet()) {
-
-			if (word.startsWith(k)) {
-
-				return true;
-			}
-		}
-		return false;
-	}
-
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *
@@ -286,32 +273,6 @@ public class InvertedIndex {
 	public int words() {
 
 		return index.size();
-	}
-
-	// TODO Breaks encapsulation
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public TreeMap<String, TreeSet<Integer>> locations(String word) {
-
-		return index.get(word);
-	}
-
-	// TODO Breaks encapsulation
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public TreeSet<Integer> positions(String word, String location) {
-
-		return index.get(word).get(location);
 	}
 
 	/**
