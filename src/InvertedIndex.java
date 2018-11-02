@@ -164,7 +164,7 @@ public class InvertedIndex {
 		 * Use a HashMap
 		 * Also, call it "lookup" instead of hello
 		 */
-		TreeMap<String, SearchResult> hello = new TreeMap<>(); 
+		TreeMap<String, SearchResult> lookup = new TreeMap<>(); 
 
 		for (String word : query) {
 
@@ -184,14 +184,14 @@ public class InvertedIndex {
 
 					for (String path : index.get(k).keySet()) {
 						
-						if (hello.containsKey(path)) {
+						if (lookup.containsKey(path)) {
 
-							hello.get(path).update((index.get(k).get(path).size()),
+							lookup.get(path).update((index.get(k).get(path).size()),
 									(double) index.get(k).get(path).size() / location.get(path));
 
 						} else {
 
-							hello.put(path, new SearchResult(path, index.get(k).get(path).size(),
+							lookup.put(path, new SearchResult(path, index.get(k).get(path).size(),
 									(double) index.get(k).get(path).size() / location.get(path)));
 							
 							/*
@@ -214,7 +214,7 @@ public class InvertedIndex {
 		 * and make searchHelper(String key, look up map, result list)
 		 */
 
-		searches.addAll(hello.values()); // TODO Avoid this extra "loop"
+		searches.addAll(lookup.values()); // TODO Avoid this extra "loop"
 		Collections.sort(searches);
 
 		return searches;
