@@ -27,8 +27,9 @@ public class QueryParser {
 
 	private final TreeMap<String, List<SearchResult>> results;
 	// TODO private final InvertedIndex index;
-	
-	// TODO Maybe avoid the static stemmer (this makes multithreading a bit easier later)
+
+	// TODO Maybe avoid the static stemmer (this makes multithreading a bit easier
+	// later)
 	private static SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 	public QueryParser(InvertedIndex index) {
@@ -36,8 +37,13 @@ public class QueryParser {
 		this.results = new TreeMap<>();
 	}
 
-	// TODO boolean exact instead of String mode, no return... move the write method into here and won't need to return the map
-	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, InvertedIndex index, String mode) // TODO Remove InvertedIndex as a parameter
+	// TODO boolean exact instead of String mode, no return... move the write method
+	// into here and won't need to return the map
+	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, InvertedIndex index, String mode) // TODO
+																											// Remove
+																											// InvertedIndex
+																											// as a
+																											// parameter
 			throws IOException {
 
 		List<String> queries = null;
@@ -81,12 +87,6 @@ public class QueryParser {
 
 			}
 
-		}
-
-		// TODO Remove? (Sorting inside your search methods)
-		for (String k : results.keySet()) {
-
-			Collections.sort(results.get(k));
 		}
 
 		return results;
