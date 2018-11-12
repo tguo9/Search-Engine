@@ -2,7 +2,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /*
- * TODO Javadoc
+ * This is a class to store the search result. It will give the matches, score, path and score.
+ * Given the compareTo to sort the list.
  */
 
 /**
@@ -13,12 +14,10 @@ import java.text.NumberFormat;
 public class SearchResult implements Comparable<SearchResult> {
 
 	private int matches;
-	private String path; // TODO make final
+	private final String path;
 	private double score;
-	
-	// TODO private final int total; and set this in the constructor instead of passing in the score
-	// TODO every time the matches value changes, you can use this to automatically update the score
-	
+	private final int total;
+
 	// TODO Remove for now.... (only formatting should happen at output)
 	private NumberFormat FORMATTER = new DecimalFormat("#0.000000000000000");
 
@@ -29,11 +28,12 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * @param frequency how many times query appears
 	 * @param position  the first position of query in the file.
 	 */
-	public SearchResult(String path, int matches, double score) {
-	// TODO public SearchResult(String path, int matches, int total) { and use this.score = (double) matches / total; 
+	public SearchResult(String path, int matches, int total) {
+		this.total = total;
 		this.path = path;
 		this.matches = matches;
-		this.score = score;
+		this.score = (double) matches / total;
+
 	}
 
 	/**
@@ -44,14 +44,13 @@ public class SearchResult implements Comparable<SearchResult> {
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
-		// TODO Can access private data directly, for example: int temp = Integer.compare(other.matches, this.matches);
-		
+
 		int temp = Double.compare(other.getScore(), this.getScore());
 		if (temp == 0) {
-			temp = Integer.compare(Integer.valueOf(other.getMatches()), Integer.valueOf(this.getMatches()));
+			temp = Integer.compare(Integer.valueOf(other.matches), Integer.valueOf(this.matches));
 
 			if (temp == 0) {
-				temp = this.getPath().compareToIgnoreCase(other.getPath());
+				temp = this.path.compareToIgnoreCase(other.path);
 			}
 		}
 		return temp;
@@ -60,15 +59,22 @@ public class SearchResult implements Comparable<SearchResult> {
 	/**
 	 * increment the frequency of this SearchResult
 	 * 
-	 * @param frequency increment amount
+	 * @param increment amount
 	 */
-	public void update(int matches, double total) { // TODO Only need matches
+	public void update(int matches, double total) {
 		this.matches += matches;
-		this.score += total;
+//		this.score += total;
+	}
+	
+	/**
+	 * @return the matches
+	 */
+	public int getTotal() {
+		return this.total;
 	}
 
 	/**
-	 * @return the frequency
+	 * @return the matches
 	 */
 	public int getMatches() {
 		return this.matches;
