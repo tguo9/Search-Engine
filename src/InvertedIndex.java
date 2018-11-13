@@ -44,6 +44,7 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
+		location.putIfAbsent(path, 1);
 
 		/*
 		 * Update your location map here... add 1 to the count every time a word is
