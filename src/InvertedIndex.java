@@ -175,21 +175,7 @@ public class InvertedIndex {
 
 				if (key.startsWith(word)) {
 
-					for (String path : index.get(key).keySet()) {
-
-						if (lookup.containsKey(path)) {
-
-							lookup.get(path).update((index.get(key).get(path).size()));
-
-						} else {
-
-							SearchResult result = new SearchResult(path, index.get(key).get(path).size(),
-									location.get(path));
-							lookup.put(path, result);
-							searches.add(result);
-						}
-
-					}
+					searchHelper(key, lookup, searches);
 				}
 			}
 
@@ -212,26 +198,13 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> hello = new TreeMap<>();
+		TreeMap<String, SearchResult> lookup = new TreeMap<>();
 
 		for (String word : query) {
 
 			if (index.containsKey(word)) {
 
-				for (String path : index.get(word).keySet()) {
-
-					if (hello.containsKey(path)) {
-
-						hello.get(path).update((index.get(word).get(path).size()));
-
-					} else {
-						SearchResult result = new SearchResult(path, index.get(word).get(path).size(),
-								location.get(path));
-						hello.put(path, result);
-						searches.add(result);
-					}
-
-				}
+				searchHelper(word, lookup, searches);
 			}
 
 		}
@@ -240,6 +213,24 @@ public class InvertedIndex {
 
 		return searches;
 
+	}
+	
+	private void searchHelper(String word, TreeMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
+		
+		for (String path : index.get(word).keySet()) {
+
+			if (lookup.containsKey(path)) {
+
+				lookup.get(path).update((index.get(word).get(path).size()));
+
+			} else {
+				SearchResult result = new SearchResult(path, index.get(word).get(path).size(),
+						location.get(path));
+				lookup.put(path, result);
+				searches.add(result);
+			}
+
+		}
 	}
 
 	/**
