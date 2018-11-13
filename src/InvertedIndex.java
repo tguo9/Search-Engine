@@ -155,12 +155,6 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		/*
-		 * TODO (Fix this stuff for exact search too) Temporary storage! Why is this
-		 * good?? Map has a faster contains(...) method than a list, which requires a
-		 * linear search. If we only need this map for the contains(...) method, do not
-		 * use a TreeMap! Use a HashMap Also, call it "lookup" instead of hello
-		 */
 		TreeMap<String, SearchResult> lookup = new TreeMap<>();
 
 		for (String word : query) {
@@ -177,19 +171,19 @@ public class InvertedIndex {
 			 * starts with your query
 			 */
 
-			for (String k : index.keySet()) { // TODO Avoid the 1 letter variable name... String key : index.keySet()
+			for (String key : index.keySet()) {
 
-				if (k.startsWith(word)) {
+				if (key.startsWith(word)) {
 
-					for (String path : index.get(k).keySet()) {
+					for (String path : index.get(key).keySet()) {
 
 						if (lookup.containsKey(path)) {
 
-							lookup.get(path).update((index.get(k).get(path).size()), location.get(path));
+							lookup.get(path).update((index.get(key).get(path).size()));
 
 						} else {
 
-							SearchResult result = new SearchResult(path, index.get(k).get(path).size(),
+							SearchResult result = new SearchResult(path, index.get(key).get(path).size(),
 									location.get(path));
 							lookup.put(path, result);
 							searches.add(result);
@@ -201,12 +195,6 @@ public class InvertedIndex {
 
 		}
 
-		/*
-		 * TODO Pull out the code of this loop since its the same in both partial and
-		 * exact search, and make searchHelper(String key, look up map, result list)
-		 */
-
-		searches.addAll(lookup.values()); // TODO Avoid this extra "loop"
 		Collections.sort(searches);
 
 		return searches;
@@ -234,12 +222,13 @@ public class InvertedIndex {
 
 					if (hello.containsKey(path)) {
 
-						hello.get(path).update((index.get(word).get(path).size()),
-								(double) index.get(word).get(path).size() / location.get(path));
+						hello.get(path).update((index.get(word).get(path).size()));
 
 					} else {
-
-						hello.put(path, new SearchResult(path, index.get(word).get(path).size(), location.get(path)));
+						SearchResult result = new SearchResult(path, index.get(word).get(path).size(),
+								location.get(path));
+						hello.put(path, result);
+						searches.add(result);
 					}
 
 				}
@@ -247,7 +236,6 @@ public class InvertedIndex {
 
 		}
 
-		searches.addAll(hello.values());
 		Collections.sort(searches);
 
 		return searches;

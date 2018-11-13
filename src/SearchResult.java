@@ -61,8 +61,9 @@ public class SearchResult implements Comparable<SearchResult> {
 	 * 
 	 * @param increment amount
 	 */
-	public void update(int matches, double total) {
+	public void update(int matches) {
 		this.matches += matches;
+		this.score = (double) (this.matches) / (this.total);
 //		this.score += total;
 	}
 	
