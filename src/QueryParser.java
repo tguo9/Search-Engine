@@ -26,25 +26,18 @@ public class QueryParser {
 	 */
 
 	private final TreeMap<String, List<SearchResult>> results;
-	// TODO private final InvertedIndex index;
-
-	// TODO Maybe avoid the static stemmer (this makes multithreading a bit easier
-	// later)
-	private static SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+	private final InvertedIndex index;
 
 	public QueryParser(InvertedIndex index) {
 
 		this.results = new TreeMap<>();
+		this.index = index;
 	}
 
 	// TODO boolean exact instead of String mode, no return... move the write method
 	// into here and won't need to return the map
-	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, InvertedIndex index, String mode) // TODO
-																											// Remove
-																											// InvertedIndex
-																											// as a
-																											// parameter
-			throws IOException {
+	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, boolean exact) throws IOException {
+		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		List<String> queries = null;
 
@@ -74,7 +67,7 @@ public class QueryParser {
 						continue;
 					}
 
-					if (mode.equals("exact")) {
+					if (exact == true) {
 
 						results.put(String.join(" ", queries), index.exactSearch(set));
 

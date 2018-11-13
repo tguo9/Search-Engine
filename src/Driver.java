@@ -71,18 +71,18 @@ public class Driver {
 
 			Path searchPath = map.getPath("-search");
 
-			String mode = "partial";
+			boolean mode = false;
 
 			if (map.hasFlag("-exact")) {
 
-				mode = "exact";
+				mode = true;
 
 			}
 
 			QueryParser q = new QueryParser(index);
 
 			try {
-				results = q.parseAndSearch(searchPath, index, mode);
+				results = q.parseAndSearch(searchPath, mode);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;

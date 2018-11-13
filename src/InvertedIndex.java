@@ -159,24 +159,14 @@ public class InvertedIndex {
 
 		for (String word : query) {
 
-			/*
-			 * TODO Currently looping through every key... but your keys are sorted!
-			 * 
-			 * 1) Have to start at the "right" key in the map... hints: Use either headMap
-			 * or tailMap given the query... and an approach similar to:
-			 * https://github.com/usf-cs212-fall2018/lectures/blob/master/Data%20Structures/
-			 * src/FindDemo.java
-			 * 
-			 * 2) If you start at the right key, you can break when your key no longer
-			 * starts with your query
-			 */
+			for (String key : index.tailMap(word).keySet()) {
 
-			for (String key : index.keySet()) {
-
-				if (key.startsWith(word)) {
-
-					searchHelper(key, lookup, searches);
+				if (!key.startsWith(word)) {
+					break;
 				}
+
+				searchHelper(key, lookup, searches);
+
 			}
 
 		}
@@ -214,9 +204,9 @@ public class InvertedIndex {
 		return searches;
 
 	}
-	
+
 	private void searchHelper(String word, TreeMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
-		
+
 		for (String path : index.get(word).keySet()) {
 
 			if (lookup.containsKey(path)) {
@@ -224,8 +214,7 @@ public class InvertedIndex {
 				lookup.get(path).update((index.get(word).get(path).size()));
 
 			} else {
-				SearchResult result = new SearchResult(path, index.get(word).get(path).size(),
-						location.get(path));
+				SearchResult result = new SearchResult(path, index.get(word).get(path).size(), location.get(path));
 				lookup.put(path, result);
 				searches.add(result);
 			}
