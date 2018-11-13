@@ -60,7 +60,7 @@ public class Driver {
 
 			try {
 
-				index.toJSONLoc(locationsFlag);
+				index.toJSONLocations(locationsFlag);
 			} catch (IOException e) {
 
 				System.out.println("There is an error when writing JSON file");

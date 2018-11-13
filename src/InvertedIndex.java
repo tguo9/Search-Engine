@@ -18,10 +18,10 @@ public class InvertedIndex {
 	 * Stores a mapping of words to the positions the words were found.
 	 */
 	private final TreeMap<String, TreeMap<String, TreeSet<Integer>>> index;
-	
+
 	/**
 	 * Data structure to store strings and their positions.
-	 */	
+	 */
 	private final TreeMap<String, Integer> location;
 
 	/**
@@ -44,16 +44,15 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
-		
+
 		/*
-		 * Update your location map here... add 1 to the count every time a word
-		 * is added for a location
+		 * Update your location map here... add 1 to the count every time a word is
+		 * added for a location
 		 */
 	}
 
 	/*
-	 * TODO
-	 * This method allows the location map to be inconsistent with the index
+	 * TODO This method allows the location map to be inconsistent with the index
 	 * Because its public, anyone can do add(hello.txt, -12)
 	 * 
 	 * To protect data integrity... lets change this a bit.
@@ -128,7 +127,7 @@ public class InvertedIndex {
 	 * @param position position word was found
 	 * @return true if this map did not already contain this word and position
 	 */
-	public void toJSONLoc(Path path) throws IOException { // TODO toJSONLocations ... locationsToJSON
+	public void toJSONLocations(Path path) throws IOException {
 		JSONWriter.asObject(location, path);
 	}
 
@@ -157,50 +156,43 @@ public class InvertedIndex {
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
 		/*
-		 * TODO (Fix this stuff for exact search too)
-		 * Temporary storage! Why is this good??
-		 * Map has a faster contains(...) method than a list, which requires a linear search.
-		 * If we only need this map for the contains(...) method, do not use a TreeMap!
-		 * Use a HashMap
-		 * Also, call it "lookup" instead of hello
+		 * TODO (Fix this stuff for exact search too) Temporary storage! Why is this
+		 * good?? Map has a faster contains(...) method than a list, which requires a
+		 * linear search. If we only need this map for the contains(...) method, do not
+		 * use a TreeMap! Use a HashMap Also, call it "lookup" instead of hello
 		 */
-		TreeMap<String, SearchResult> lookup = new TreeMap<>(); 
+		TreeMap<String, SearchResult> lookup = new TreeMap<>();
 
 		for (String word : query) {
 
 			/*
 			 * TODO Currently looping through every key... but your keys are sorted!
 			 * 
-			 * 1) Have to start at the "right" key in the map... hints:
-			 * Use either headMap or tailMap given the query... and an approach similar to:
-			 * https://github.com/usf-cs212-fall2018/lectures/blob/master/Data%20Structures/src/FindDemo.java
+			 * 1) Have to start at the "right" key in the map... hints: Use either headMap
+			 * or tailMap given the query... and an approach similar to:
+			 * https://github.com/usf-cs212-fall2018/lectures/blob/master/Data%20Structures/
+			 * src/FindDemo.java
 			 * 
-			 * 2) If you start at the right key, you can break when your key no longer starts with your query
+			 * 2) If you start at the right key, you can break when your key no longer
+			 * starts with your query
 			 */
-			
+
 			for (String k : index.keySet()) { // TODO Avoid the 1 letter variable name... String key : index.keySet()
 
 				if (k.startsWith(word)) {
 
 					for (String path : index.get(k).keySet()) {
-						
+
 						if (lookup.containsKey(path)) {
 
-							lookup.get(path).update((index.get(k).get(path).size()),
-									(double) index.get(k).get(path).size() / location.get(path));
+							lookup.get(path).update((index.get(k).get(path).size()), location.get(path));
 
 						} else {
 
-							lookup.put(path, new SearchResult(path, index.get(k).get(path).size(),
-									(double) index.get(k).get(path).size() / location.get(path)));
-							
-							/*
-							 * TODO
-							 * SearchResult result = new SearchResult(....)
-							 * 
-							 * hello.put(path, result);
-							 * searches.add(result);
-							 */
+							SearchResult result = new SearchResult(path, index.get(k).get(path).size(),
+									location.get(path));
+							lookup.put(path, result);
+							searches.add(result);
 						}
 
 					}
@@ -208,10 +200,10 @@ public class InvertedIndex {
 			}
 
 		}
-		
+
 		/*
-		 * TODO Pull out the code of this loop since its the same in both partial and exact search,
-		 * and make searchHelper(String key, look up map, result list)
+		 * TODO Pull out the code of this loop since its the same in both partial and
+		 * exact search, and make searchHelper(String key, look up map, result list)
 		 */
 
 		searches.addAll(lookup.values()); // TODO Avoid this extra "loop"
@@ -247,8 +239,7 @@ public class InvertedIndex {
 
 					} else {
 
-						hello.put(path, new SearchResult(path, index.get(word).get(path).size(),
-								(double) index.get(word).get(path).size() / location.get(path)));
+						hello.put(path, new SearchResult(path, index.get(word).get(path).size(), location.get(path)));
 					}
 
 				}
@@ -283,7 +274,10 @@ public class InvertedIndex {
 		return this.index.toString();
 	}
 
-	// TODO Javadoc
+	/**
+	 * 
+	 * @return size of the map
+	 */
 	public int size() {
 		return index.size();
 	}
