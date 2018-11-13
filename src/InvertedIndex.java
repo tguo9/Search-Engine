@@ -44,34 +44,11 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
-		location.putIfAbsent(path, 1);
+		location.putIfAbsent(path, 0);
+		location.put(path, location.get(path)+1);
 
-		/*
-		 * Update your location map here... add 1 to the count every time a word is
-		 * added for a location
-		 */
 	}
 
-	/*
-	 * TODO This method allows the location map to be inconsistent with the index
-	 * Because its public, anyone can do add(hello.txt, -12)
-	 * 
-	 * To protect data integrity... lets change this a bit.
-	 */
-	/**
-	 * Writes the nested map of elements formatted as a nested pretty JSON object to
-	 * the specified file.
-	 *
-	 * @param elements the elements to convert to JSON
-	 * @param path     the path to the file write to output
-	 * @throws IOException if the writer encounters any issues
-	 *
-	 * @see #asNestedObject(TreeMap, Writer, int)
-	 */
-	public void add(String path, int count) {
-
-		location.put(path, count);
-	}
 
 	/**
 	 * Adds the word and the position it was found to the map.
