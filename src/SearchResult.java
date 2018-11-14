@@ -1,10 +1,3 @@
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-
-/*
- * This is a class to store the search result. It will give the matches, score, path and score.
- * Given the compareTo to sort the list.
- */
 
 /**
  * Object for the search result.
@@ -18,15 +11,12 @@ public class SearchResult implements Comparable<SearchResult> {
 	private double score;
 	private final int total;
 
-	// TODO Remove for now.... (only formatting should happen at output)
-	private NumberFormat FORMATTER = new DecimalFormat("#0.000000000000000");
-
 	/**
-	 * Constructor for building SearchResult object
+	 * Build this object
 	 * 
-	 * @param path      the path of the query
-	 * @param frequency how many times query appears
-	 * @param position  the first position of query in the file.
+	 * @param path
+	 * @param matches
+	 * @param total
 	 */
 	public SearchResult(String path, int matches, int total) {
 		this.total = total;
@@ -37,10 +27,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
-	 * Compare SearchResult objects based on frequency, initial position and path.
-	 * 
-	 * @param s SearchResult Object for comparison
-	 * @return comparison result of two SearchResult
+	 * Compare two object
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
@@ -57,43 +44,48 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
-	 * increment the frequency of this SearchResult
+	 * Increment the matches of the SearchResult
 	 * 
-	 * @param increment amount
+	 * @param increment matches
 	 */
 	public void update(int matches) {
 		this.matches += matches;
 		this.score = (double) (this.matches) / (this.total);
 	}
-	
+
 	/**
-	 * @return the matches
+	 * @return total
 	 */
 	public int getTotal() {
 		return this.total;
 	}
 
 	/**
-	 * @return the matches
+	 * @return matches
 	 */
 	public int getMatches() {
 		return this.matches;
 	}
 
 	/**
-	 * @return the path
+	 * @return path
 	 */
 	public String getPath() {
 		return path;
 	}
 
+	/**
+	 * 
+	 * @return score
+	 */
 	public double getScore() {
-		String temp = FORMATTER.format(score);
-		score = Double.valueOf(temp);
 
 		return score;
 	}
 
+	/**
+	 * @return string
+	 */
 	public String toString() {
 
 		return "Path: " + path + " Matches: " + matches + " Score: " + score;

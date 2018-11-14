@@ -473,6 +473,16 @@ public class JSONWriter {
 		writer.write("]");
 	}
 
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 * 
+	 * @param q
+	 * @param results
+	 * @param writer
+	 * @param level
+	 * @throws IOException
+	 */
 	public static void asInner(String q, List<SearchResult> results, Writer writer, int level) throws IOException {
 
 		indent(2, writer);
@@ -497,6 +507,15 @@ public class JSONWriter {
 
 	}
 
+	/**
+	 * Writes the nested map of elements as a nested pretty JSON object using the
+	 * provided {@link Writer} and indentation level.
+	 * 
+	 * @param result
+	 * @param writer
+	 * @param level
+	 * @throws IOException
+	 */
 	@SuppressWarnings("deprecation")
 	public static void asResult(SearchResult result, Writer writer, int level) throws IOException {
 

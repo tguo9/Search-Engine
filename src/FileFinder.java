@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Tao Guo
  */
 public class FileFinder {
-	
+
 	/**
 	 * Find the files. Adapted from a FileFinder
 	 *
@@ -21,7 +21,7 @@ public class FileFinder {
 		String name = path.getFileName().toString().toLowerCase();
 		return Files.isRegularFile(path) && (name.endsWith(".txt") || name.endsWith(".text"));
 	}
-	
+
 	/**
 	 * Find the files. Adapted from a FileFinder
 	 *

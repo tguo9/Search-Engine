@@ -32,11 +32,11 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * Add word to index
+	 * 
+	 * @param word
+	 * @param path
+	 * @param position
 	 */
 	public void add(String word, String path, int position) {
 
@@ -49,11 +49,10 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * Check word contains in index
+	 * 
+	 * @param word
+	 * @return
 	 */
 	public boolean contains(String word) {
 
@@ -61,11 +60,11 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * Check word contains in location
+	 * 
+	 * @param word
+	 * @param location
+	 * @return
 	 */
 	public boolean contains(String word, String location) {
 
@@ -73,11 +72,12 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * Check word contains in location and position
+	 * 
+	 * @param word
+	 * @param location
+	 * @param position
+	 * @return
 	 */
 	public boolean contains(String word, String location, int position) {
 
@@ -86,33 +86,30 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * The method for writing JSON
+	 * 
+	 * @param path
+	 * @throws IOException
 	 */
 	public void toJSON(Path path) throws IOException {
 		JSONWriter.writes(index, path);
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * The method for writing location
+	 * 
+	 * @param path
+	 * @throws IOException
 	 */
 	public void toJSONLocations(Path path) throws IOException {
 		JSONWriter.asObject(location, path);
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * The method for partial search
+	 * 
+	 * @param query
+	 * @return
 	 */
 	public List<SearchResult> partialSearch(TreeSet<String> query) {
 
@@ -129,7 +126,6 @@ public class InvertedIndex {
 				}
 
 				searchHelper(key, lookup, searches);
-
 			}
 
 		}
@@ -141,11 +137,10 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * The method for exact search
+	 * 
+	 * @param query
+	 * @return
 	 */
 	public List<SearchResult> exactSearch(TreeSet<String> query) {
 
@@ -168,6 +163,13 @@ public class InvertedIndex {
 
 	}
 
+	/**
+	 * The helper method for search
+	 * 
+	 * @param word
+	 * @param lookup
+	 * @param searches
+	 */
 	private void searchHelper(String word, TreeMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
 
 		for (String path : index.get(word).keySet()) {
@@ -186,11 +188,8 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
+	 * 
+	 * @return the size of the words
 	 */
 	public int words() {
 
@@ -198,7 +197,7 @@ public class InvertedIndex {
 	}
 
 	/**
-	 * Returns a string representation of this map.
+	 * Return the toString
 	 */
 	@Override
 	public String toString() {

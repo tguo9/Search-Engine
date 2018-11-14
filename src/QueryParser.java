@@ -28,12 +28,24 @@ public class QueryParser {
 	private TreeMap<String, List<SearchResult>> results;
 	private final InvertedIndex index;
 
+	/**
+	 * Build the query
+	 * 
+	 * @param index
+	 */
 	public QueryParser(InvertedIndex index) {
 
 		this.results = new TreeMap<>();
 		this.index = index;
 	}
 
+	/**
+	 * Parse and search method.
+	 * 
+	 * @param path
+	 * @param exact
+	 * @throws IOException
+	 */
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
@@ -82,6 +94,12 @@ public class QueryParser {
 
 	}
 
+	/**
+	 * Write the result to JSON file
+	 * 
+	 * @param path
+	 * @throws IOException
+	 */
 	public void toJSONResult(Path path) throws IOException {
 
 		JSONWriter.writesResult(results, path);

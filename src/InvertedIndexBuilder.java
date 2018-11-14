@@ -7,6 +7,12 @@ import java.util.ArrayList;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
+/**
+ * The class build the Inverted Index
+ * 
+ * @author Tao Guo
+ *
+ */
 public class InvertedIndexBuilder {
 
 	/**
