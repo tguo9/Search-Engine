@@ -20,6 +20,7 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
+		
 		QueryParser query = new QueryParser(index);
 
 		if (map.hasFlag("-path")) {
