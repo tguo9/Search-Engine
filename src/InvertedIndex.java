@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.io.Writer;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,10 +44,9 @@ public class InvertedIndex {
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
 		location.putIfAbsent(path, 0);
-		location.put(path, location.get(path)+1);
+		location.put(path, location.get(path) + 1);
 
 	}
-
 
 	/**
 	 * Adds the word and the position it was found to the map.
@@ -107,19 +105,6 @@ public class InvertedIndex {
 	 */
 	public void toJSONLocations(Path path) throws IOException {
 		JSONWriter.asObject(location, path);
-	}
-
-	// TODO Move this method... most likely to your query parser.
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-	public void toJSONResult(TreeMap<String, List<SearchResult>> results, Path path) throws IOException {
-
-		JSONWriter.writesResult(results, path);
 	}
 
 	/**

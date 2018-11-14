@@ -1,8 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.TreeMap;
 
 /**
  * Driver for the project.
@@ -22,8 +20,7 @@ public class Driver {
 		ArgumentMap map = new ArgumentMap(args);
 
 		InvertedIndex index = new InvertedIndex();
-
-		TreeMap<String, List<SearchResult>> results = new TreeMap<>();
+		QueryParser query = new QueryParser(index);
 
 		if (map.hasFlag("-path")) {
 
@@ -79,10 +76,8 @@ public class Driver {
 
 			}
 
-			QueryParser q = new QueryParser(index);
-
 			try {
-				results = q.parseAndSearch(searchPath, mode);
+				query.parseAndSearch(searchPath, mode);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;
@@ -95,7 +90,7 @@ public class Driver {
 			Path resultFlag = map.getPath("-results", Paths.get("results.json"));
 
 			try {
-				index.toJSONResult(results, resultFlag);
+				query.toJSONResult(resultFlag);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 			}

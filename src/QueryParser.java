@@ -25,7 +25,7 @@ public class QueryParser {
 	 * @return true if this map did not already contain this word and position
 	 */
 
-	private final TreeMap<String, List<SearchResult>> results;
+	private TreeMap<String, List<SearchResult>> results;
 	private final InvertedIndex index;
 
 	public QueryParser(InvertedIndex index) {
@@ -34,9 +34,7 @@ public class QueryParser {
 		this.index = index;
 	}
 
-	// TODO boolean exact instead of String mode, no return... move the write method
-	// into here and won't need to return the map
-	public TreeMap<String, List<SearchResult>> parseAndSearch(Path path, boolean exact) throws IOException {
+	public void parseAndSearch(Path path, boolean exact) throws IOException {
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		List<String> queries = null;
@@ -82,7 +80,11 @@ public class QueryParser {
 
 		}
 
-		return results;
+	}
+
+	public void toJSONResult(Path path) throws IOException {
+
+		JSONWriter.writesResult(results, path);
 	}
 
 }

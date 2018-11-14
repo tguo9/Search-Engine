@@ -64,7 +64,6 @@ public class SearchResult implements Comparable<SearchResult> {
 	public void update(int matches) {
 		this.matches += matches;
 		this.score = (double) (this.matches) / (this.total);
-//		this.score += total;
 	}
 	
 	/**
@@ -97,7 +96,7 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	public String toString() {
 
-		return "Path: " + path + "Matches: " + matches + "Score: " + score;
+		return "Path: " + path + " Matches: " + matches + " Score: " + score;
 
 	}
 

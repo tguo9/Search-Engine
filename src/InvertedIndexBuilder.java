@@ -27,7 +27,6 @@ public class InvertedIndexBuilder {
 
 				int indexCount = 1;
 
-
 				while ((thisLine = reader.readLine()) != null) {
 
 					String[] thatLine = TextParser.parse(thisLine);
@@ -40,9 +39,6 @@ public class InvertedIndexBuilder {
 
 					}
 				}
-
-				
-				
 			}
 		}
 	}
