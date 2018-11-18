@@ -45,8 +45,12 @@ public class InvertedIndex {
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
 
-		location.putIfAbsent(path, 0);
-		location.put(path, location.get(path) + 1);
+		index.putIfAbsent(word, new TreeMap<>());
+		index.get(word).putIfAbsent(path, new TreeSet<>());
+		boolean success = index.get(word).get(path).add(position);
+		if (success) {
+			location.put(path, location.getOrDefault(path, 0) + 1);
+		}
 
 		/*
 		 * TODO What happens if add(...) is called twice with the same parameters? The
