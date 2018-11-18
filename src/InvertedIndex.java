@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -43,24 +44,19 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
-		
+
 		location.putIfAbsent(path, 0);
 		location.put(path, location.get(path) + 1);
 
 		/*
-		 * TODO
-		 * What happens if add(...) is called twice with the same parameters?
-		 * The second time, the position isn't actually re-added to the set. But,
-		 * you still increase the count by one. To avoid this issue, fix the 
-		 * method like this:
+		 * TODO What happens if add(...) is called twice with the same parameters? The
+		 * second time, the position isn't actually re-added to the set. But, you still
+		 * increase the count by one. To avoid this issue, fix the method like this:
 		 * 
-		index.putIfAbsent(word, new TreeMap<>());
-		index.get(word).putIfAbsent(path, new TreeSet<>());
-		boolean success = index.get(word).get(path).add(position);
-		
-		if (success) {
-			location.put(path, location.getOrDefault(path, 0) + 1);
-		}
+		 * index.putIfAbsent(word, new TreeMap<>()); index.get(word).putIfAbsent(path,
+		 * new TreeSet<>()); boolean success = index.get(word).get(path).add(position);
+		 * 
+		 * if (success) { location.put(path, location.getOrDefault(path, 0) + 1); }
 		 */
 	}
 
@@ -131,12 +127,11 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		// TODO Does this need to be a treemap?
-		TreeMap<String, SearchResult> lookup = new TreeMap<>();
+		HashMap<String, SearchResult> lookup = new HashMap<>();
 
 		for (String word : query) {
 
-			for (String key : index.tailMap(word).keySet()) {
+			for (String key : index.keySet()) {
 
 				if (!key.startsWith(word)) {
 					break;
@@ -163,7 +158,7 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> lookup = new TreeMap<>(); // TODO Same as above
+		HashMap<String, SearchResult> lookup = new HashMap<>();
 
 		for (String word : query) {
 
@@ -187,7 +182,7 @@ public class InvertedIndex {
 	 * @param lookup
 	 * @param searches
 	 */
-	private void searchHelper(String word, TreeMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
+	private void searchHelper(String word, HashMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
 
 		for (String path : index.get(word).keySet()) {
 
