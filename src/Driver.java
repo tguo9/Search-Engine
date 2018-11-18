@@ -39,7 +39,7 @@ public class Driver {
 
 		}
 
-		Path indexFlag = null;
+		Path indexFlag = null; // TODO Declare this where you define it (i.e. move inside the if block below)
 		if (map.hasFlag("-index")) {
 			indexFlag = map.getPath("-index", Paths.get("index.json"));
 			try {
@@ -68,6 +68,7 @@ public class Driver {
 
 			Path searchPath = map.getPath("-search");
 
+			// TODO Remove, can use result of hasFlag directly...
 			boolean mode = false;
 
 			if (map.hasFlag("-exact")) {
@@ -77,6 +78,7 @@ public class Driver {
 			}
 
 			try {
+				// TODO query.parseAndSearch(searchPath, map.hasFlag("-exact"));
 				query.parseAndSearch(searchPath, mode);
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");

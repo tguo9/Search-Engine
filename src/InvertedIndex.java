@@ -43,9 +43,25 @@ public class InvertedIndex {
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
 		index.get(word).get(path).add(position);
+		
 		location.putIfAbsent(path, 0);
 		location.put(path, location.get(path) + 1);
 
+		/*
+		 * TODO
+		 * What happens if add(...) is called twice with the same parameters?
+		 * The second time, the position isn't actually re-added to the set. But,
+		 * you still increase the count by one. To avoid this issue, fix the 
+		 * method like this:
+		 * 
+		index.putIfAbsent(word, new TreeMap<>());
+		index.get(word).putIfAbsent(path, new TreeSet<>());
+		boolean success = index.get(word).get(path).add(position);
+		
+		if (success) {
+			location.put(path, location.getOrDefault(path, 0) + 1);
+		}
+		 */
 	}
 
 	/**
@@ -115,6 +131,7 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
+		// TODO Does this need to be a treemap?
 		TreeMap<String, SearchResult> lookup = new TreeMap<>();
 
 		for (String word : query) {
@@ -146,7 +163,7 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> lookup = new TreeMap<>();
+		TreeMap<String, SearchResult> lookup = new TreeMap<>(); // TODO Same as above
 
 		for (String word : query) {
 
