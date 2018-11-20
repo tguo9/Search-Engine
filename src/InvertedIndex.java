@@ -43,25 +43,11 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
-		index.get(word).get(path).add(position);
-
-		index.putIfAbsent(word, new TreeMap<>());
-		index.get(word).putIfAbsent(path, new TreeSet<>());
 		boolean success = index.get(word).get(path).add(position);
+
 		if (success) {
 			location.put(path, location.getOrDefault(path, 0) + 1);
 		}
-
-		/*
-		 * TODO What happens if add(...) is called twice with the same parameters? The
-		 * second time, the position isn't actually re-added to the set. But, you still
-		 * increase the count by one. To avoid this issue, fix the method like this:
-		 * 
-		 * index.putIfAbsent(word, new TreeMap<>()); index.get(word).putIfAbsent(path,
-		 * new TreeSet<>()); boolean success = index.get(word).get(path).add(position);
-		 * 
-		 * if (success) { location.put(path, location.getOrDefault(path, 0) + 1); }
-		 */
 	}
 
 	/**
@@ -127,7 +113,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> partialSearch(TreeSet<String> query) {
+	public List<SearchResult> partialSearch(List<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
@@ -137,11 +123,10 @@ public class InvertedIndex {
 
 			for (String key : index.keySet()) {
 
-				if (!key.startsWith(word)) {
-					break;
+				if (key.startsWith(word)) {
+					searchHelper(key, lookup, searches);
 				}
 
-				searchHelper(key, lookup, searches);
 			}
 
 		}
@@ -158,7 +143,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> exactSearch(TreeSet<String> query) {
+	public List<SearchResult> exactSearch(List<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 

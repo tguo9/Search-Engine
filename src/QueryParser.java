@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
-import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
@@ -31,13 +31,6 @@ public class QueryParser {
 		this.index = index;
 	}
 
-	/*
-	 * TODO Try to clean up the method below based on what you have learned so far
-	 * about efficiency. Simplify, reduce loops, remove temporoary storage, avoid
-	 * creating too many objects. If you get stuck or want to be sure you fixed it
-	 * correctly, post on Piazza and directly link to this method in your
-	 * repository!
-	 */
 	/**
 	 * Parse and search method.
 	 * 
@@ -51,26 +44,14 @@ public class QueryParser {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				/*
-				 * TODO It is inefficient to stem the line into a list, and then move the
-				 * contents of that list into a set.
-				 * 
-				 */
 
 				List<String> queries = TextFileStemmer.stemLine(line, stemmer);
 				if (!queries.isEmpty()) {
 
-					TreeSet<String> set = new TreeSet<>();
-
-					for (String q : queries) {
-
-						if (!set.contains(q)) {
-
-							set.add(q);
-						}
-					}
+					List<String> set = queries.stream().distinct().collect(Collectors.toList());
 					queries.clear();
-					queries.addAll(set);
+					queries = set;
+					Collections.sort(queries);
 
 					String result = String.join(" ", queries);
 
