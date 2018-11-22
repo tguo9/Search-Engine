@@ -44,7 +44,16 @@ public class QueryParser {
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-
+				/*
+				 * TODO This is still an issue:
+				 * https://github.com/usf-cs212-fall2018/project-tguo9/blob/1a46ad321f21fa8ba68e4623224ab341cfcaea1f/src/QueryParser.java#L66
+				 * 
+				 * If you didn't understand how to fix that TODO you should have
+				 * asked on Piazza instead of requesting another offline review.
+				 * It is okay if you don't know how, but in that case you HAVE to
+				 * ask for help BEFORE your review. If you request another review
+				 * with code here that still uses a list for the queries, I'll deny it.
+				 */
 				List<String> queries = TextFileStemmer.stemLine(line, stemmer);
 				if (!queries.isEmpty()) {
 

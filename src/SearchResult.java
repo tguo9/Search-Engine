@@ -53,6 +53,8 @@ public class SearchResult implements Comparable<SearchResult> {
 		this.score = (double) (this.matches) / (this.total);
 	}
 
+	// TODO Actually fill in descriptions in your Javadocs.
+	
 	/**
 	 * @return total
 	 */
