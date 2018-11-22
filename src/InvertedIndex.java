@@ -121,14 +121,13 @@ public class InvertedIndex {
 
 		for (String word : query) {
 
-			// TODO WHAT HAPPENED HERE? YOU HAD A BETTER METHOD BEFORE:
-			// https://github.com/usf-cs212-fall2018/project-tguo9/blob/1a46ad321f21fa8ba68e4623224ab341cfcaea1f/src/InvertedIndex.java#L139
-			for (String key : index.keySet()) {
+			for (String key : index.tailMap(word).keySet()) {
 
-				if (key.startsWith(word)) {
-					searchHelper(key, lookup, searches);
+				if (!key.startsWith(word)) {
+					break;
 				}
 
+				searchHelper(key, lookup, searches);
 			}
 
 		}
