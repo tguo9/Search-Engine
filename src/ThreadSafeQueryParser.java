@@ -80,7 +80,7 @@ public class ThreadSafeQueryParser implements Query {
 				}
 				queries.clear();
 				queries.addAll(set);
-				Collections.sort(queries);
+//				Collections.sort(queries);
 
 				List<SearchResult> temp;
 				if (exact == true) {

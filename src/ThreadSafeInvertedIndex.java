@@ -27,9 +27,9 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	 */
 	public void add(String word, String path, int position) {
 
-		lock.lockReadWrite();
+//		lock.lockReadWrite();
 		super.add(word, path, position);
-		lock.unlockReadWrite();
+//		lock.unlockReadWrite();
 	}
 
 	public void addAll(ThreadSafeInvertedIndex other) {
@@ -78,15 +78,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	 * @return true if this map did not already contain this word and position
 	 */
 	public List<SearchResult> exactSearch(TreeSet<String> query) {
-
-		lock.lockReadOnly();
-		try {
-
-			return super.exactSearch(query);
-		} finally {
-
-			lock.unlockReadOnly();
-		}
+		return super.exactSearch(query);
 
 	}
 

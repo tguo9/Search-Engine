@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -42,11 +43,12 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
+
 		boolean success = index.get(word).get(path).add(position);
 
 		if (success) {
 			location.put(path, location.getOrDefault(path, 0) + 1);
-}
+		}
 
 	}
 
@@ -133,7 +135,7 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> lookup = new TreeMap<>();
+		HashMap<String, SearchResult> lookup = new HashMap<>();
 
 		for (String word : query) {
 
@@ -164,7 +166,7 @@ public class InvertedIndex {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
-		TreeMap<String, SearchResult> lookup = new TreeMap<>();
+		HashMap<String, SearchResult> lookup = new HashMap<>();
 
 		for (String word : query) {
 
@@ -188,7 +190,7 @@ public class InvertedIndex {
 	 * @param lookup
 	 * @param searches
 	 */
-	private void searchHelper(String word, TreeMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
+	private void searchHelper(String word, HashMap<String, SearchResult> lookup, ArrayList<SearchResult> searches) {
 
 		for (String path : index.get(word).keySet()) {
 
