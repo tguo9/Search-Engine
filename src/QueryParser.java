@@ -3,14 +3,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
-
-import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
  * Parser for Query Parsing
@@ -41,21 +36,11 @@ public class QueryParser {
 	 * @throws IOException
 	 */
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
-//		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				/*
-				 * TODO This is still an issue:
-				 * https://github.com/usf-cs212-fall2018/project-tguo9/blob/1a46ad321f21fa8ba68e4623224ab341cfcaea1f/src/QueryParser.java#L66
-				 * 
-				 * If you didn't understand how to fix that TODO you should have
-				 * asked on Piazza instead of requesting another offline review.
-				 * It is okay if you don't know how, but in that case you HAVE to
-				 * ask for help BEFORE your review. If you request another review
-				 * with code here that still uses a list for the queries, I'll deny it.
-				 */
+
 				TreeSet<String> queries = TextFileStemmer.stemLine(line);
 				if (!queries.isEmpty()) {
 
