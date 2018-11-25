@@ -5,7 +5,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -23,7 +26,7 @@ public class TextFileStemmer {
 	 * @see SnowballStemmer.ALGORITHM#ENGLISH
 	 * @see #stemLine(String, Stemmer)
 	 */
-	public static List<String> stemLine(String line) {
+	public static TreeSet<String> stemLine(String line) {
 		// This is provided for you.
 		return stemLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
 	}
@@ -38,8 +41,8 @@ public class TextFileStemmer {
 	 * @see Stemmer#stem(CharSequence)
 	 * @see TextParser#parse(String)
 	 */
-	public static List<String> stemLine(String line, Stemmer stemmer) {
-		List<String> returnList = new ArrayList<String>();
+	public static TreeSet<String> stemLine(String line, Stemmer stemmer) {
+		TreeSet<String> returnList = new TreeSet<String>();
 
 		String[] arr = TextParser.parse(line);
 
@@ -64,31 +67,31 @@ public class TextFileStemmer {
 	 * @see #stemLine(String)
 	 * @see TextParser#parse(String)
 	 */
-	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-
-		if (outputFile == null) {
-
-			return;
-		}
-
-		String thisLine = null;
-
-		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
-				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
-
-			while ((thisLine = reader.readLine()) != null) {
-				List<String> list = stemLine(thisLine);
-				for (int i = 0; i < list.size(); i++) {
-					writer.write(list.get(i));
-					writer.write(" ");
-				}
-				writer.write(System.lineSeparator());
-			}
-
-		} catch (Exception e) {
-			e.getMessage();
-		}
-
-	}
+//	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
+//
+//		if (outputFile == null) {
+//
+//			return;
+//		}
+//
+//		String thisLine = null;
+//
+//		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
+//				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
+//
+//			while ((thisLine = reader.readLine()) != null) {
+//				Set<String> list = stemLine(thisLine);
+//				for (int i = 0; i < list.size(); i++) {
+//					writer.write(list.get(i));
+//					writer.write(" ");
+//				}
+//				writer.write(System.lineSeparator());
+//			}
+//
+//		} catch (Exception e) {
+//			e.getMessage();
+//		}
+//
+//	}
 
 }

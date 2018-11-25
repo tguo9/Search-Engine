@@ -5,7 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -39,7 +41,7 @@ public class QueryParser {
 	 * @throws IOException
 	 */
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
-		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+//		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
@@ -54,13 +56,8 @@ public class QueryParser {
 				 * ask for help BEFORE your review. If you request another review
 				 * with code here that still uses a list for the queries, I'll deny it.
 				 */
-				List<String> queries = TextFileStemmer.stemLine(line, stemmer);
+				TreeSet<String> queries = TextFileStemmer.stemLine(line);
 				if (!queries.isEmpty()) {
-
-					List<String> set = queries.stream().distinct().collect(Collectors.toList());
-					queries.clear();
-					queries = set;
-					Collections.sort(queries);
 
 					String result = String.join(" ", queries);
 
@@ -71,10 +68,10 @@ public class QueryParser {
 
 					if (exact == true) {
 
-						results.put(result, index.exactSearch(set));
+						results.put(result, index.exactSearch(queries));
 
 					} else {
-						results.put(result, index.partialSearch(set));
+						results.put(result, index.partialSearch(queries));
 
 					}
 

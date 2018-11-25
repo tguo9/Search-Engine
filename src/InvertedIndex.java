@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -113,7 +114,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> partialSearch(List<String> query) {
+	public List<SearchResult> partialSearch(Set<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
@@ -144,7 +145,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> exactSearch(List<String> query) {
+	public List<SearchResult> exactSearch(Set<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
