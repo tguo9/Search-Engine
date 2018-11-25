@@ -1,4 +1,6 @@
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
@@ -16,7 +18,7 @@ public class TextFileStemmer {
 	 * @see SnowballStemmer.ALGORITHM#ENGLISH
 	 * @see #stemLine(String, Stemmer)
 	 */
-	public static TreeSet<String> stemLine(String line) {
+	public static List<String> stemLine(String line) {
 		// This is provided for you.
 		return stemLine(line, new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH));
 	}
@@ -31,19 +33,23 @@ public class TextFileStemmer {
 	 * @see Stemmer#stem(CharSequence)
 	 * @see TextParser#parse(String)
 	 */
-	public static TreeSet<String> stemLine(String line, Stemmer stemmer) {
-		TreeSet<String> returnList = new TreeSet<String>();
+	public static List<String> stemLine(String line, Stemmer stemmer) {
+		List<String> returnList = new ArrayList<String>();
 
+		stemLine(line, stemmer, returnList);
+
+		return returnList;
+	}
+
+	public static void stemLine(String line, Stemmer stemmer, Collection<String> container) {
 		String[] arr = TextParser.parse(line);
 
 		for (int i = 0; i < arr.length; i++) {
 
 			CharSequence cs = stemmer.stem(arr[i]);
 			String temp = cs.toString();
-			returnList.add(temp);
+			container.add(temp);
 		}
-
-		return returnList;
 	}
 
 	/**

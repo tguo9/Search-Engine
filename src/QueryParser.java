@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
+
 /**
  * Parser for Query Parsing
  * 
@@ -37,11 +39,15 @@ public class QueryParser {
 	 */
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
 
+		var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 
-				TreeSet<String> queries = TextFileStemmer.stemLine(line);
+				TreeSet<String> queries = new TreeSet<>();
+				TextFileStemmer.stemLine(line, stemmer, queries);
+
 				if (!queries.isEmpty()) {
 
 					String result = String.join(" ", queries);
