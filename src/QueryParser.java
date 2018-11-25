@@ -15,7 +15,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * 
  * @author Tao Guo
  */
-public class QueryParser {
+public class QueryParser implements Query {
 
 	/**
 	 * Adds the word and the position it was found to the map.
@@ -104,5 +104,4 @@ public class QueryParser {
 
 		JSONWriter.writesResult(results, path);
 	}
-
 }

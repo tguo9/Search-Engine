@@ -17,11 +17,53 @@ public class Driver {
 	 * @return 0 if everything went well
 	 */
 	public static void main(String[] args) {
+
+		boolean multi = false;
+
 		ArgumentMap map = new ArgumentMap(args);
 
-		InvertedIndex index = new InvertedIndex();
-		
-		QueryParser query = new QueryParser(index);
+		ThreadSafeInvertedIndex threadSafe = null;
+
+		InvertedIndex index = null;
+
+		Query query = null;
+
+		WorkQueue queue = null;
+
+		if (map.hasValue("-threads") && (Integer.valueOf(map.getString("-threads")) > 0)) {
+
+			multi = true;
+			queue = new WorkQueue(Integer.valueOf(map.getString("-threads")));
+
+			threadSafe = new ThreadSafeInvertedIndex();
+
+			index = threadSafe;
+
+			query = new ThreadSafeQueryParser(threadSafe, queue);
+
+			if (map.hasValue("-path")) {
+				try {
+					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(Paths.get(map.getString("-path"))),
+							threadSafe, queue);
+				} catch (IOException e) {
+					System.out.println("There is an error to build map");
+					return;
+				}
+			}
+		} else {
+			index = new InvertedIndex();
+
+			query = new QueryParser(index);
+
+			if (map.hasValue("-path")) {
+				try {
+					InvertedIndexBuilder.buildMap(FileFinder.traverse(Paths.get(map.getString("-path"))), index);
+				} catch (IOException e) {
+					System.out.println("There is an error to build map");
+					return;
+				}
+			}
+		}
 
 		if (map.hasFlag("-path")) {
 
@@ -95,6 +137,10 @@ public class Driver {
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 			}
+		}
+
+		if (multi) {
+			queue.shutdown();
 		}
 
 	}

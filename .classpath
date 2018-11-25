@@ -7,6 +7,7 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/opennlp-tools"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/OpenNLP"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/log4j2"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="output" path="bin"/>

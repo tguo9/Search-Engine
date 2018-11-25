@@ -24,26 +24,31 @@ public class InvertedIndexBuilder {
 	 */
 	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index) throws IOException {
 
+		for (Path files : filenames) {
+			buildMap(files, index);
+		}
+	}
+
+	public static void buildMap(Path files, InvertedIndex index) throws IOException {
+
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		for (Path files : filenames) {
-			try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = Files.newBufferedReader(files, StandardCharsets.UTF_8)) {
 
-				String thisLine = null;
+			String thisLine = null;
 
-				int indexCount = 1;
+			int indexCount = 1;
 
-				while ((thisLine = reader.readLine()) != null) {
+			while ((thisLine = reader.readLine()) != null) {
 
-					String[] thatLine = TextParser.parse(thisLine);
+				String[] thatLine = TextParser.parse(thisLine);
 
-					for (String word : thatLine) {
+				for (String word : thatLine) {
 
-						String newWord = stemmer.stem(word).toString();
-						index.add(newWord, files.toString(), indexCount);
-						indexCount++;
+					String newWord = stemmer.stem(word).toString();
+					index.add(newWord, files.toString(), indexCount);
+					indexCount++;
 
-					}
 				}
 			}
 		}

@@ -48,6 +48,22 @@ public class InvertedIndex {
 
 	}
 
+	public void addAll(InvertedIndex other) {
+		for (String word : other.index.keySet()) {
+			if (this.index.containsKey(word) == false) {
+				this.index.put(word, other.index.get(word));
+			} else {
+				for (String path : other.index.get(word).keySet()) {
+					if (!this.index.get(word).containsKey(path)) {
+						this.index.get(word).put(path, other.index.get(word).get(path));
+					} else {
+						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * Check word contains in index
 	 * 
