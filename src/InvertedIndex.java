@@ -191,6 +191,7 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Get the size of the word
 	 * 
 	 * @return the size of the words
 	 */
@@ -208,6 +209,7 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Methods to get the size of the map
 	 * 
 	 * @return size of the map
 	 */

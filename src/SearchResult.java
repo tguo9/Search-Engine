@@ -28,6 +28,8 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	/**
 	 * Compare two object
+	 * 
+	 * @return result
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
@@ -52,7 +54,7 @@ public class SearchResult implements Comparable<SearchResult> {
 		this.matches += matches;
 		this.score = (double) (this.matches) / (this.total);
 	}
-	
+
 	/**
 	 * Get the total number of words
 	 * 
