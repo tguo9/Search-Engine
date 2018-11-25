@@ -42,9 +42,11 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
-		index.get(word).get(path).add(position);
-		location.putIfAbsent(path, 0);
-		location.put(path, location.get(path) + 1);
+		boolean success = index.get(word).get(path).add(position);
+
+		if (success) {
+			location.put(path, location.getOrDefault(path, 0) + 1);
+}
 
 	}
 
