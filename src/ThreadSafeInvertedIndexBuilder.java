@@ -1,13 +1,8 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeMap;
-import java.util.TreeSet;
 
 public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
-
-	private static WorkQueue queue;
 
 	/**
 	 * A terrible and naive approach to determining if a number is prime.

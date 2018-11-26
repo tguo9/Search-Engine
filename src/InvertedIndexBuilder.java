@@ -38,6 +38,7 @@ public class InvertedIndexBuilder {
 			String thisLine = null;
 
 			int indexCount = 1;
+			int wordCount = 0;
 
 			while ((thisLine = reader.readLine()) != null) {
 
@@ -48,8 +49,14 @@ public class InvertedIndexBuilder {
 					String newWord = stemmer.stem(word).toString();
 					index.add(newWord, files.toString(), indexCount);
 					indexCount++;
+					wordCount++;
 
 				}
+			}
+
+			if (wordCount != 0) {
+				index.add(files.toString(), wordCount);
+
 			}
 		}
 	}

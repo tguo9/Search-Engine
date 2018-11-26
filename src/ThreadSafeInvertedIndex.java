@@ -1,11 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.TreeSet;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ThreadSafeInvertedIndex extends InvertedIndex {
 
@@ -27,9 +23,7 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	 */
 	public void add(String word, String path, int position) {
 
-//		lock.lockReadWrite();
 		super.add(word, path, position);
-//		lock.unlockReadWrite();
 	}
 
 	public void addAll(ThreadSafeInvertedIndex other) {

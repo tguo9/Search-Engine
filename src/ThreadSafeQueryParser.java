@@ -3,15 +3,9 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import opennlp.tools.stemmer.snowball.SnowballStemmer;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class ThreadSafeQueryParser implements Query {
 
