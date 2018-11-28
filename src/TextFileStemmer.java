@@ -40,7 +40,18 @@ public class TextFileStemmer {
 
 		return returnList;
 	}
-
+	
+	/**
+	 * Returns a list of cleaned and stemmed words parsed from the provided line.
+	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
+	 *
+	 * @param line the line of words to clean, split, and stem
+	 * @return list of cleaned and stemmed words
+	 *
+	 * @see SnowballStemmer
+	 * @see SnowballStemmer.ALGORITHM#ENGLISH
+	 * @see #stemLine(String, Stemmer)
+	 */
 	public static void stemLine(String line, Stemmer stemmer, Collection<String> container) {
 		String[] arr = TextParser.parse(line);
 
