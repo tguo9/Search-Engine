@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -15,17 +14,9 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * 
  * @author Tao Guo
  */
-public class QueryParser implements Query {
+public class QueryParser implements Query{
 
-	/**
-	 * Adds the word and the position it was found to the map.
-	 *
-	 * @param words    word to clean and add to map
-	 * @param position position word was found
-	 * @return true if this map did not already contain this word and position
-	 */
-
-	private TreeMap<String, List<SearchResult>> results;
+	private final TreeMap<String, List<SearchResult>> results;
 	private final InvertedIndex index;
 
 	/**
@@ -47,42 +38,31 @@ public class QueryParser implements Query {
 	 * @throws IOException
 	 */
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
-		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		List<String> queries = null;
+		var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				queries = TextFileStemmer.stemLine(line, stemmer);
+
+				TreeSet<String> queries = new TreeSet<>();
+				TextFileStemmer.stemLine(line, stemmer, queries);
+
 				if (!queries.isEmpty()) {
 
-					TreeSet<String> set = new TreeSet<>();
+					String result = String.join(" ", queries);
 
-					queries = TextFileStemmer.stemLine(line);
-
-					for (String q : queries) {
-
-						if (!set.contains(q)) {
-
-							set.add(q);
-						}
-					}
-					queries.clear();
-					queries.addAll(set);
-					Collections.sort(queries);
-
-					if (results.containsKey(String.join(" ", queries))) {
+					if (results.containsKey(result)) {
 
 						continue;
 					}
 
 					if (exact == true) {
 
-						results.put(String.join(" ", queries), index.exactSearch(set));
+						results.put(result, index.exactSearch(queries));
 
 					} else {
-						results.put(String.join(" ", queries), index.partialSearch(set));
+						results.put(result, index.partialSearch(queries));
 
 					}
 
@@ -104,4 +84,5 @@ public class QueryParser implements Query {
 
 		JSONWriter.writesResult(results, path);
 	}
+
 }

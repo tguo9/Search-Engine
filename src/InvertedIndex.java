@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -43,7 +44,6 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
-
 		index.get(word).get(path).add(position);
 
 	}
@@ -61,7 +61,7 @@ public class InvertedIndex {
 	}
 	
 	/**
-	 * Add word to index
+	 * Add another object to index
 	 * 
 	 * @param word
 	 * @param path
@@ -146,7 +146,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> partialSearch(TreeSet<String> query) {
+	public List<SearchResult> partialSearch(Set<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
@@ -177,7 +177,7 @@ public class InvertedIndex {
 	 * @param query
 	 * @return
 	 */
-	public List<SearchResult> exactSearch(TreeSet<String> query) {
+	public List<SearchResult> exactSearch(Set<String> query) {
 
 		ArrayList<SearchResult> searches = new ArrayList<>();
 
@@ -223,6 +223,7 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Get the size of the word
 	 * 
 	 * @return the size of the words
 	 */
@@ -240,6 +241,7 @@ public class InvertedIndex {
 	}
 
 	/**
+	 * Methods to get the size of the map
 	 * 
 	 * @return size of the map
 	 */
@@ -269,5 +271,6 @@ public class InvertedIndex {
 	public int size(String word, String path) {
 		return contains(word, path) ? index.get(word).get(path).size() : 0;
 	}
+
 
 }

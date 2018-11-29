@@ -41,27 +41,42 @@ public class Driver {
 
 			query = new ThreadSafeQueryParser(threadSafe, queue);
 
-			if (map.hasValue("-path")) {
-				try {
-					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(Paths.get(map.getString("-path"))),
-							threadSafe, queue);
-				} catch (IOException e) {
-					System.out.println("There is an error to build map");
+			if (map.hasFlag("-path")) {
+
+				Path path = map.getPath("-path");
+
+				if (path == null) {
+					System.out.println("The path is invaild.");
 					return;
 				}
+
+				try {
+					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+
 			}
 		} else {
 			index = new InvertedIndex();
 
 			query = new QueryParser(index);
 
-			if (map.hasValue("-path")) {
-				try {
-					InvertedIndexBuilder.buildMap(FileFinder.traverse(Paths.get(map.getString("-path"))), index);
-				} catch (IOException e) {
-					System.out.println("There is an error to build map");
+			if (map.hasFlag("-path")) {
+
+				Path path = map.getPath("-path");
+
+				if (path == null) {
+					System.out.println("The path is invaild.");
 					return;
 				}
+
+				try {
+					InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+
 			}
 		}
 
@@ -82,9 +97,8 @@ public class Driver {
 
 		}
 
-		Path indexFlag = null;
 		if (map.hasFlag("-index")) {
-			indexFlag = map.getPath("-index", Paths.get("index.json"));
+			Path indexFlag = map.getPath("-index", Paths.get("index.json"));
 			try {
 				index.toJSON(indexFlag);
 			} catch (IOException e) {
@@ -111,16 +125,8 @@ public class Driver {
 
 			Path searchPath = map.getPath("-search");
 
-			boolean mode = false;
-
-			if (map.hasFlag("-exact")) {
-
-				mode = true;
-
-			}
-
 			try {
-				query.parseAndSearch(searchPath, mode);
+				query.parseAndSearch(searchPath, map.hasFlag("-exact"));
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;

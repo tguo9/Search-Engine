@@ -28,6 +28,8 @@ public class SearchResult implements Comparable<SearchResult> {
 
 	/**
 	 * Compare two object
+	 * 
+	 * @return result
 	 */
 	@Override
 	public int compareTo(SearchResult other) {
@@ -54,6 +56,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
+	 * Get the total number of words
+	 * 
 	 * @return total
 	 */
 	public int getTotal() {
@@ -61,6 +65,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
+	 * Get the matches
+	 * 
 	 * @return matches
 	 */
 	public int getMatches() {
@@ -68,6 +74,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
+	 * Get the word path
+	 * 
 	 * @return path
 	 */
 	public String getPath() {
@@ -75,6 +83,7 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
+	 * Get the word score
 	 * 
 	 * @return score
 	 */
@@ -84,6 +93,8 @@ public class SearchResult implements Comparable<SearchResult> {
 	}
 
 	/**
+	 * String to print this object
+	 * 
 	 * @return string
 	 */
 	public String toString() {
