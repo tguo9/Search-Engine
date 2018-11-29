@@ -44,10 +44,42 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
-		boolean success = index.get(word).get(path).add(position);
+		index.get(word).get(path).add(position);
 
-		if (success) {
-			location.put(path, location.getOrDefault(path, 0) + 1);
+	}
+
+	/**
+	 * Add word to index
+	 * 
+	 * @param word
+	 * @param path
+	 * @param position
+	 */
+	public void add(String path, int count) {
+
+		location.put(path, count);
+	}
+
+	/**
+	 * Add another object to index
+	 * 
+	 * @param word
+	 * @param path
+	 * @param position
+	 */
+	public void addAll(InvertedIndex other) {
+		for (String word : other.index.keySet()) {
+			if (this.index.containsKey(word) == false) {
+				this.index.put(word, other.index.get(word));
+			} else {
+				for (String path : other.index.get(word).keySet()) {
+					if (!this.index.get(word).containsKey(path)) {
+						this.index.get(word).put(path, other.index.get(word).get(path));
+					} else {
+						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
+					}
+				}
+			}
 		}
 	}
 

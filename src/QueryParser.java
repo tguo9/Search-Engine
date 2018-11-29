@@ -14,7 +14,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * 
  * @author Tao Guo
  */
-public class QueryParser {
+public class QueryParser implements Query {
 
 	private final TreeMap<String, List<SearchResult>> results;
 	private final InvertedIndex index;

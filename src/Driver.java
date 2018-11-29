@@ -17,10 +17,68 @@ public class Driver {
 	 * @return 0 if everything went well
 	 */
 	public static void main(String[] args) {
+
+		boolean multi = false;
+
 		ArgumentMap map = new ArgumentMap(args);
 
-		InvertedIndex index = new InvertedIndex();
-		QueryParser query = new QueryParser(index);
+		ThreadSafeInvertedIndex threadSafe = null;
+
+		InvertedIndex index = null;
+
+		Query query = null;
+
+		WorkQueue queue = null;
+
+		if (map.hasValue("-threads") && (Integer.valueOf(map.getString("-threads")) > 0)) {
+
+			multi = true;
+			queue = new WorkQueue(Integer.valueOf(map.getString("-threads")));
+
+			threadSafe = new ThreadSafeInvertedIndex();
+
+			index = threadSafe;
+
+			query = new ThreadSafeQueryParser(threadSafe, queue);
+
+			if (map.hasFlag("-path")) {
+
+				Path path = map.getPath("-path");
+
+				if (path == null) {
+					System.out.println("The path is invaild.");
+					return;
+				}
+
+				try {
+					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+
+			}
+		} else {
+			index = new InvertedIndex();
+
+			query = new QueryParser(index);
+
+			if (map.hasFlag("-path")) {
+
+				Path path = map.getPath("-path");
+
+				if (path == null) {
+					System.out.println("The path is invaild.");
+					return;
+				}
+
+				try {
+					InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+
+			}
+		}
 
 		if (map.hasFlag("-path")) {
 
@@ -85,6 +143,10 @@ public class Driver {
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 			}
+		}
+
+		if (multi) {
+			queue.shutdown();
 		}
 
 	}

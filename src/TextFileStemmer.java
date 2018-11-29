@@ -40,7 +40,7 @@ public class TextFileStemmer {
 
 		return returnList;
 	}
-	
+
 	/**
 	 * Returns a list of cleaned and stemmed words parsed from the provided line.
 	 * Uses the English {@link SnowballStemmer.ALGORITHM} for stemming.
@@ -62,43 +62,5 @@ public class TextFileStemmer {
 			container.add(temp);
 		}
 	}
-
-	/**
-	 * Reads a file line by line, parses each line into cleaned and stemmed words,
-	 * and then writes that line to a new file.
-	 *
-	 * @param inputFile  the input file to parse
-	 * @param outputFile the output file to write the cleaned and stemmed words
-	 * @throws IOException if unable to read or write to file
-	 *
-	 * @see #stemLine(String)
-	 * @see TextParser#parse(String)
-	 */
-//	public static void stemFile(Path inputFile, Path outputFile) throws IOException {
-//
-//		if (outputFile == null) {
-//
-//			return;
-//		}
-//
-//		String thisLine = null;
-//
-//		try (BufferedReader reader = Files.newBufferedReader(inputFile, StandardCharsets.UTF_8);
-//				BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardCharsets.UTF_8)) {
-//
-//			while ((thisLine = reader.readLine()) != null) {
-//				Set<String> list = stemLine(thisLine);
-//				for (int i = 0; i < list.size(); i++) {
-//					writer.write(list.get(i));
-//					writer.write(" ");
-//				}
-//				writer.write(System.lineSeparator());
-//			}
-//
-//		} catch (Exception e) {
-//			e.getMessage();
-//		}
-//
-//	}
 
 }
