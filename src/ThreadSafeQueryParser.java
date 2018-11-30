@@ -15,6 +15,11 @@ public class ThreadSafeQueryParser implements Query {
 	private final WorkQueue queue;
 	private final ThreadSafeInvertedIndex index;
 
+	/**
+	 * TODO
+	 * @param index
+	 * @param queue
+	 */
 	public ThreadSafeQueryParser(ThreadSafeInvertedIndex index, WorkQueue queue) {
 
 		this.results = new TreeMap<>();
@@ -22,6 +27,8 @@ public class ThreadSafeQueryParser implements Query {
 		this.queue = queue;
 	}
 
+	// TODO Use @OVerride annotation
+	
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
@@ -80,7 +87,35 @@ public class ThreadSafeQueryParser implements Query {
 				}
 
 			}
+			
+			/* TODO
+			var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+			TreeSet<String> queries = new TreeSet<>();
+			TextFileStemmer.stemLine(line, stemmer, queries);
 
+			if (!queries.isEmpty()) {
+
+				String key = String.join(" ", queries);
+				
+				synchronized (results) {
+					if (results.containsKey(key)) {
+						return;
+					}	
+				}
+				
+				List<SearchResult> temp;
+				if (exact == true) {
+					temp = index.exactSearch(queries);
+
+				} else {
+					temp = index.partialSearch(queries);
+				}
+
+				synchronized (results) {
+					results.put(key, temp);
+				}
+			}
+			*/
 		}
 
 	}

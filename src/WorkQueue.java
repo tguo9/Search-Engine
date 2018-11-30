@@ -55,20 +55,33 @@ public class WorkQueue {
 		}
 	}
 
+	// TODO Make increment and decrementPending PRIVATE methods
+	
+	/**
+	 * TODO
+	 */
 	public synchronized void incrementPending() {
 
 		pending++;
 	}
 
+	/**
+	 * TODO
+	 */
 	public void decrementPending() {
 
-		synchronized (queue) {
+		synchronized (queue) { // TODO Fix
 			pending--;
 			if (pending == 0) {
 				queue.notifyAll();
 			}
 		}
 	}
+	
+	/*
+	 * TODO You have to protect data CONSISTENTLY or it is not properly protected.
+	 * Use the "this" keyword to lock for pending.
+	 */
 
 	/**
 	 * Adds a work request to the queue. A thread will process this request when
@@ -78,7 +91,7 @@ public class WorkQueue {
 	 */
 	public void execute(Runnable r) {
 		synchronized (queue) {
-			incrementPending();
+			incrementPending(); // TODO Move this BEFORE the synchronized on queue block
 			queue.addLast(r);
 			queue.notifyAll();
 		}
@@ -88,7 +101,7 @@ public class WorkQueue {
 	 * Waits for all pending work to be finished.
 	 */
 	public void finish() {
-		synchronized (queue) {
+		synchronized (queue) { // TODO Fix
 
 			try {
 
@@ -162,7 +175,7 @@ public class WorkQueue {
 					r.run();
 				} catch (RuntimeException ex) {
 					// catch runtime exceptions to avoid leaking threads
-					ex.printStackTrace();
+					ex.printStackTrace(); // TODO Fix
 					System.err.println("Warning: Work queue encountered an " + "exception while running.");
 				}
 				decrementPending();

@@ -79,7 +79,46 @@ public class Driver {
 
 			}
 		}
+		
+		/*
+		ArgumentMap map = new ArgumentMap(args);
+		InvertedIndex index = null;
+		Query query = null;
+		WorkQueue queue = null;
 
+		if (map.hasFlag(-threads)) {
+			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
+			index = threadSafe;
+			
+			init work queue using default value if you need to
+			queue = new WorkQueue(...);
+			
+			query = new ThreadSafeQueryParser(threadSafe, queue);
+
+			if (map.hasFlag("-path")) {
+
+				Path path = map.getPath("-path");
+
+				if (path == null) {
+					System.out.println("The path is invaild.");
+					return;
+				}
+
+				try {
+					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+			}			
+		}
+		else {
+			what you already have for single threading
+		}
+
+
+		*/
+
+		// TODO Remove from here
 		if (map.hasFlag("-path")) {
 
 			Path path = map.getPath("-path");
@@ -113,7 +152,6 @@ public class Driver {
 			Path locationsFlag = map.getPath("-locations", Paths.get("locations.json"));
 
 			try {
-
 				index.toJSONLocations(locationsFlag);
 			} catch (IOException e) {
 
