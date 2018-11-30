@@ -3,6 +3,11 @@ import java.nio.file.Path;
 
 public interface Query {
 
+	/**
+	 * TODO
+	 * @param path
+	 * @throws IOException
+	 */
 	void toJSONResult(Path path) throws IOException;
 
 	/**

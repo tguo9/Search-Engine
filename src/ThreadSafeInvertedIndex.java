@@ -7,13 +7,25 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 
 	private final ReadWriteLock lock;
 
+	/**
+	 * TODO
+	 */
 	public ThreadSafeInvertedIndex() {
 
 		super();
 		lock = new ReadWriteLock();
 
 	}
-
+	
+	/*
+	 * TODO Use the @Override annotation for all of these methods
+	 * And you can skip the Javadoc
+	 */
+	
+	// TODO Every public method in INvertedIndex must be overridden and locked
+	// TODO Lock EVERYTHING
+	// TODO Use the try/finally pattern: https://github.com/usf-cs212-fall2018/lectures/blob/master/Multithreading%20Synchronization/src/ConcurrentSet.java
+	
 	/**
 	 * Adds the word and the position it was found to the map.
 	 *

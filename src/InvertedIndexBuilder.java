@@ -29,6 +29,12 @@ public class InvertedIndexBuilder {
 		}
 	}
 
+	/**
+	 * TODO
+	 * @param files
+	 * @param index
+	 * @throws IOException
+	 */
 	public static void buildMap(Path files, InvertedIndex index) throws IOException {
 
 		SnowballStemmer stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);

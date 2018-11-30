@@ -47,6 +47,10 @@ public class ReadWriteLock {
 
 		// Notify any waiting threads if necessary
 		this.notifyAll();
+
+		// TODO Over-notification issue.
+		// TODO Only call notifyAll when readers is 0
+	
 	}
 
 	/**

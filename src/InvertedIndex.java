@@ -33,6 +33,8 @@ public class InvertedIndex {
 		this.location = new TreeMap<>();
 	}
 
+	// TODO Go back to this: https://github.com/usf-cs212-fall2018/project-tguo9/blob/v2.4.0/src/InvertedIndex.java#L43-L52
+	
 	/**
 	 * Add word to index
 	 * 
@@ -48,6 +50,7 @@ public class InvertedIndex {
 
 	}
 
+	// TODO Remove
 	/**
 	 * Add word to index
 	 * 
@@ -81,6 +84,15 @@ public class InvertedIndex {
 				}
 			}
 		}
+		
+		/* TODO
+		for (String location : other.location.keySet()) {
+			if location is not in this
+				put
+			else
+				combine	
+		}
+		*/
 	}
 
 	/**
