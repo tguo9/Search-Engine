@@ -45,12 +45,11 @@ public class ReadWriteLock {
 		// Decrease the number of active readers
 		readers--;
 
-		// Notify any waiting threads if necessary
-		this.notifyAll();
+		if (readers <= 0) {
 
-		// TODO Over-notification issue.
-		// TODO Only call notifyAll when readers is 0
-	
+			this.notifyAll();
+		}
+
 	}
 
 	/**
@@ -79,8 +78,11 @@ public class ReadWriteLock {
 
 		// Decrease the number of active writers
 		writers--;
+		if (writers <= 0) {
 
-		// Notify any waiting threads if necessary
-		this.notifyAll();
+			// Notify any waiting threads if necessary
+			this.notifyAll();
+		}
+
 	}
 }
