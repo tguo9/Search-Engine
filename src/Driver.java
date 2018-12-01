@@ -19,79 +19,17 @@ public class Driver {
 	public static void main(String[] args) {
 
 		boolean multi = false;
-
-		ArgumentMap map = new ArgumentMap(args);
-
-		ThreadSafeInvertedIndex threadSafe = null;
-
-		InvertedIndex index = null;
-
-		Query query = null;
-
-		WorkQueue queue = null;
-
-		if (map.hasValue("-threads") && (Integer.valueOf(map.getString("-threads")) > 0)) {
-
-			multi = true;
-			queue = new WorkQueue(Integer.valueOf(map.getString("-threads")));
-
-			threadSafe = new ThreadSafeInvertedIndex();
-
-			index = threadSafe;
-
-			query = new ThreadSafeQueryParser(threadSafe, queue);
-
-			if (map.hasFlag("-path")) {
-
-				Path path = map.getPath("-path");
-
-				if (path == null) {
-					System.out.println("The path is invaild.");
-					return;
-				}
-
-				try {
-					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
-				} catch (IOException e) {
-					System.out.println("There is an error when reading the file: " + path);
-				}
-
-			}
-		} else {
-			index = new InvertedIndex();
-
-			query = new QueryParser(index);
-
-			if (map.hasFlag("-path")) {
-
-				Path path = map.getPath("-path");
-
-				if (path == null) {
-					System.out.println("The path is invaild.");
-					return;
-				}
-
-				try {
-					InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
-				} catch (IOException e) {
-					System.out.println("There is an error when reading the file: " + path);
-				}
-
-			}
-		}
 		
-		/*
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = null;
 		Query query = null;
 		WorkQueue queue = null;
 
-		if (map.hasFlag(-threads)) {
+		if (map.hasFlag("-threads")) {
+			multi = true;
 			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
 			index = threadSafe;
-			
-			init work queue using default value if you need to
-			queue = new WorkQueue(...);
+			queue = new WorkQueue(Integer.valueOf(map.getString("-threads")));
 			
 			query = new ThreadSafeQueryParser(threadSafe, queue);
 
@@ -112,28 +50,26 @@ public class Driver {
 			}			
 		}
 		else {
-			what you already have for single threading
-		}
+			index = new InvertedIndex();
 
+			query = new QueryParser(index);
 
-		*/
+			if (map.hasFlag("-path")) {
 
-		// TODO Remove from here
-		if (map.hasFlag("-path")) {
+				Path path = map.getPath("-path");
 
-			Path path = map.getPath("-path");
+				if (path == null) {
+					System.out.println("The path is invaild.");
+					return;
+				}
 
-			if (path == null) {
-				System.out.println("The path is invaild.");
-				return;
+				try {
+					InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+				} catch (IOException e) {
+					System.out.println("There is an error when reading the file: " + path);
+				}
+
 			}
-
-			try {
-				InvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
-			} catch (IOException e) {
-				System.out.println("There is an error when reading the file: " + path);
-			}
-
 		}
 
 		if (map.hasFlag("-index")) {

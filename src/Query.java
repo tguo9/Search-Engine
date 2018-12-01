@@ -4,7 +4,8 @@ import java.nio.file.Path;
 public interface Query {
 
 	/**
-	 * TODO
+	 * Writes the result to JSON format.
+	 * 
 	 * @param path
 	 * @throws IOException
 	 */

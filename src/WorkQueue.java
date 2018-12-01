@@ -70,7 +70,7 @@ public class WorkQueue {
 	 */
 	public void decrementPending() {
 
-		synchronized (queue) { // TODO Fix
+		synchronized (this.queue) { // TODO Fix
 			pending--;
 			if (pending == 0) {
 				queue.notifyAll();
@@ -90,7 +90,7 @@ public class WorkQueue {
 	 * @param r work request (in the form of a {@link Runnable} object)
 	 */
 	public void execute(Runnable r) {
-		synchronized (queue) {
+		synchronized (this.queue) {
 			incrementPending(); // TODO Move this BEFORE the synchronized on queue block
 			queue.addLast(r);
 			queue.notifyAll();
@@ -101,7 +101,7 @@ public class WorkQueue {
 	 * Waits for all pending work to be finished.
 	 */
 	public void finish() {
-		synchronized (queue) { // TODO Fix
+		synchronized (this.queue) { // TODO Fix
 
 			try {
 

@@ -16,7 +16,8 @@ public class ThreadSafeQueryParser implements Query {
 	private final ThreadSafeInvertedIndex index;
 
 	/**
-	 * TODO
+	 * The Thread Safe version of query parser
+	 * 
 	 * @param index
 	 * @param queue
 	 */
@@ -27,8 +28,7 @@ public class ThreadSafeQueryParser implements Query {
 		this.queue = queue;
 	}
 
-	// TODO Use @OVerride annotation
-	
+	@Override
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
 
 		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
@@ -45,6 +45,7 @@ public class ThreadSafeQueryParser implements Query {
 
 	}
 
+	@Override
 	public void toJSONResult(Path path) throws IOException {
 
 		synchronized (results) {
@@ -65,30 +66,7 @@ public class ThreadSafeQueryParser implements Query {
 
 		@Override
 		public void run() {
-			var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
-			TreeSet<String> queries = new TreeSet<>();
-			TextFileStemmer.stemLine(line, stemmer, queries);
 
-			if (!queries.isEmpty()) {
-
-				List<SearchResult> temp;
-				if (exact == true) {
-
-					temp = index.exactSearch(queries);
-
-				} else {
-					temp = index.partialSearch(queries);
-
-				}
-
-				String key = String.join(" ", queries);
-				synchronized (results) {
-					results.put(key, temp);
-				}
-
-			}
-			
-			/* TODO
 			var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 			TreeSet<String> queries = new TreeSet<>();
 			TextFileStemmer.stemLine(line, stemmer, queries);
@@ -96,13 +74,13 @@ public class ThreadSafeQueryParser implements Query {
 			if (!queries.isEmpty()) {
 
 				String key = String.join(" ", queries);
-				
+
 				synchronized (results) {
 					if (results.containsKey(key)) {
 						return;
-					}	
+					}
 				}
-				
+
 				List<SearchResult> temp;
 				if (exact == true) {
 					temp = index.exactSearch(queries);
@@ -115,7 +93,7 @@ public class ThreadSafeQueryParser implements Query {
 					results.put(key, temp);
 				}
 			}
-			*/
+
 		}
 
 	}

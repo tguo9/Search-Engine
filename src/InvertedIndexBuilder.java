@@ -30,7 +30,8 @@ public class InvertedIndexBuilder {
 	}
 
 	/**
-	 * TODO
+	 * Helper methods for building the map
+	 * 
 	 * @param files
 	 * @param index
 	 * @throws IOException
