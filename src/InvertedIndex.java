@@ -33,8 +33,9 @@ public class InvertedIndex {
 		this.location = new TreeMap<>();
 	}
 
-	// TODO Go back to this: https://github.com/usf-cs212-fall2018/project-tguo9/blob/v2.4.0/src/InvertedIndex.java#L43-L52
-	
+	// TODO Go back to this:
+	// https://github.com/usf-cs212-fall2018/project-tguo9/blob/v2.4.0/src/InvertedIndex.java#L43-L52
+
 	/**
 	 * Add word to index
 	 * 
@@ -46,21 +47,13 @@ public class InvertedIndex {
 
 		index.putIfAbsent(word, new TreeMap<>());
 		index.get(word).putIfAbsent(path, new TreeSet<>());
-		index.get(word).get(path).add(position);
+		boolean success = index.get(word).get(path).add(position);
 
-	}
+		if (success) {
 
-	// TODO Remove
-	/**
-	 * Add word to index
-	 * 
-	 * @param word
-	 * @param path
-	 * @param position
-	 */
-	public void add(String path, int count) {
+			location.put(path, location.getOrDefault(path, 0) + 1);
+		}
 
-		location.put(path, count);
 	}
 
 	/**
@@ -84,15 +77,20 @@ public class InvertedIndex {
 				}
 			}
 		}
-		
-		/* TODO
+
 		for (String location : other.location.keySet()) {
-			if location is not in this
-				put
-			else
-				combine	
+			if (this.index.containsKey(location) == false) {
+				this.index.put(location, other.index.get(location));
+			} else {
+				for (String path : other.index.get(location).keySet()) {
+					if (!this.index.get(location).containsKey(path)) {
+						this.index.get(location).put(path, other.index.get(location).get(path));
+					} else {
+						this.index.get(location).get(path).addAll(other.index.get(location).get(path));
+					}
+				}
+			}
 		}
-		*/
 	}
 
 	/**
