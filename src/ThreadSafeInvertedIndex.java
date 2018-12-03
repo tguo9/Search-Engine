@@ -8,7 +8,8 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	private final ReadWriteLock lock;
 
 	/**
-	 * TODO
+	 * The constructor for Thread Safe InvertedIndex
+	 * 
 	 */
 	public ThreadSafeInvertedIndex() {
 

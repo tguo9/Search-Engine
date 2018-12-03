@@ -29,7 +29,16 @@ public class Driver {
 			multi = true;
 			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
 			index = threadSafe;
-			queue = new WorkQueue(Integer.valueOf(map.getString("-threads")));
+			int num = Integer.valueOf(map.getString("-threads"));
+			if (num <= 0) {
+				
+				queue = new WorkQueue();
+			} else {
+				
+				queue = new WorkQueue(num);
+			}
+			
+			
 			
 			query = new ThreadSafeQueryParser(threadSafe, queue);
 

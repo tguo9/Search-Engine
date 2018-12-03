@@ -54,14 +54,16 @@ public class WorkQueue {
 			workers[i].start();
 		}
 	}
-
+	
 	/**
 	 * Private method to increment pending variable
 	 * 
 	 */
 	private synchronized void incrementPending() {
-
-		pending++;
+		synchronized(queue) {
+			pending++;
+		}
+		
 	}
 
 	/**
@@ -69,15 +71,15 @@ public class WorkQueue {
 	 * 
 	 */
 	public void decrementPending() {
-
-		synchronized (this.queue) {
+		
+		synchronized (queue) { // TODO Fix
 			pending--;
 			if (pending == 0) {
 				queue.notifyAll();
 			}
 		}
 	}
-
+	
 	/*
 	 * TODO You have to protect data CONSISTENTLY or it is not properly protected.
 	 * Use the "this" keyword to lock for pending.
@@ -91,7 +93,8 @@ public class WorkQueue {
 	 */
 	public void execute(Runnable r) {
 		incrementPending();
-		synchronized (this.queue) {
+		
+		synchronized (queue) {
 			queue.addLast(r);
 			queue.notifyAll();
 		}
@@ -101,7 +104,7 @@ public class WorkQueue {
 	 * Waits for all pending work to be finished.
 	 */
 	public void finish() {
-		synchronized (this.queue) {
+		synchronized (queue) { // TODO Fix
 
 			try {
 
@@ -124,7 +127,7 @@ public class WorkQueue {
 		// safe to do unsynchronized due to volatile keyword
 		shutdown = true;
 
-		synchronized (queue) {
+		synchronized (this.queue) {
 			queue.notifyAll();
 		}
 	}
