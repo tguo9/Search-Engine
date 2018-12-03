@@ -53,6 +53,12 @@ public class ThreadSafeQueryParser implements Query {
 		}
 	}
 
+	/**
+	 * The inner class for each task
+	 * 
+	 * @author Tao
+	 *
+	 */
 	public class QueryTask implements Runnable {
 
 		private String line;

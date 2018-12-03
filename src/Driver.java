@@ -19,7 +19,7 @@ public class Driver {
 	public static void main(String[] args) {
 
 		boolean multi = false;
-		
+
 		ArgumentMap map = new ArgumentMap(args);
 		InvertedIndex index = null;
 		Query query = null;
@@ -29,17 +29,10 @@ public class Driver {
 			multi = true;
 			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
 			index = threadSafe;
-			int num = Integer.valueOf(map.getString("-threads"));
-			if (num <= 0) {
-				
-				queue = new WorkQueue();
-			} else {
-				
-				queue = new WorkQueue(num);
-			}
-			
-			
-			
+			int num = map.getInteger("-threads", 5);
+
+			queue = new WorkQueue(num);
+
 			query = new ThreadSafeQueryParser(threadSafe, queue);
 
 			if (map.hasFlag("-path")) {
@@ -56,9 +49,8 @@ public class Driver {
 				} catch (IOException e) {
 					System.out.println("There is an error when reading the file: " + path);
 				}
-			}			
-		}
-		else {
+			}
+		} else {
 			index = new InvertedIndex();
 
 			query = new QueryParser(index);

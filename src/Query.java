@@ -1,6 +1,12 @@
 import java.io.IOException;
 import java.nio.file.Path;
 
+/**
+ * The interface for single thread and muti-thread QueryParser
+ * 
+ * @author Tao
+ *
+ */
 public interface Query {
 
 	/**

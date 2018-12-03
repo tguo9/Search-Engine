@@ -159,6 +159,37 @@ public class ArgumentMap {
 	}
 
 	/**
+	 * Return the integer from the input
+	 * 
+	 * @param flag
+	 * @return
+	 */
+	public int getInteger(String flag) {
+
+		try {
+			return Integer.parseInt(map.get(flag));
+		} catch (Exception e) {
+			return -1;
+		}
+	}
+
+	/**
+	 * Return the integer from the input or default value
+	 * 
+	 * @param flag
+	 * @param defaultValue
+	 * @return
+	 */
+	public int getInteger(String flag, int defaultValue) {
+
+		try {
+			return Integer.parseInt(map.get(flag));
+		} catch (Exception e) {
+			return defaultValue;
+		}
+	}
+
+	/**
 	 * Returns the value to which the specified flag is mapped as a {@link Path}, or
 	 * {@code null} if unable to retrieve this mapping for any reason (including
 	 * being unable to convert the value to a {@link Path} or no value existing for

@@ -2,6 +2,12 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 
+/**
+ * The thread safe version of InvertedIndexBuilder
+ * 
+ * @author Tao
+ *
+ */
 public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 
 	/**
@@ -20,6 +26,12 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 		queue.finish();
 	}
 
+	/**
+	 * The inner class for each thread
+	 * 
+	 * @author Tao
+	 *
+	 */
 	public static class BuildMapTask implements Runnable {
 		private Path path;
 		private InvertedIndex index;

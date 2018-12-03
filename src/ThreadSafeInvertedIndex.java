@@ -3,6 +3,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
 
+/**
+ * The thread safe version of InvertedIndex
+ * 
+ * @author Tao
+ *
+ */
 public class ThreadSafeInvertedIndex extends InvertedIndex {
 
 	private final ReadWriteLock lock;

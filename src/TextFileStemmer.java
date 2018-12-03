@@ -5,6 +5,12 @@ import java.util.List;
 import opennlp.tools.stemmer.Stemmer;
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
+/**
+ * The class for stemming the text
+ * 
+ * @author Tao
+ *
+ */
 public class TextFileStemmer {
 
 	/**

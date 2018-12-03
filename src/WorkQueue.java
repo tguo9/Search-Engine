@@ -54,16 +54,14 @@ public class WorkQueue {
 			workers[i].start();
 		}
 	}
-	
+
 	/**
 	 * Private method to increment pending variable
 	 * 
 	 */
 	private synchronized void incrementPending() {
-		synchronized(queue) {
-			pending++;
-		}
-		
+		pending++;
+
 	}
 
 	/**
@@ -71,19 +69,14 @@ public class WorkQueue {
 	 * 
 	 */
 	public void decrementPending() {
-		
-		synchronized (queue) { // TODO Fix
+
+		synchronized (this) {
 			pending--;
 			if (pending == 0) {
-				queue.notifyAll();
+				this.notifyAll();
 			}
 		}
 	}
-	
-	/*
-	 * TODO You have to protect data CONSISTENTLY or it is not properly protected.
-	 * Use the "this" keyword to lock for pending.
-	 */
 
 	/**
 	 * Adds a work request to the queue. A thread will process this request when
@@ -93,7 +86,7 @@ public class WorkQueue {
 	 */
 	public void execute(Runnable r) {
 		incrementPending();
-		
+
 		synchronized (queue) {
 			queue.addLast(r);
 			queue.notifyAll();
@@ -104,14 +97,14 @@ public class WorkQueue {
 	 * Waits for all pending work to be finished.
 	 */
 	public void finish() {
-		synchronized (queue) { // TODO Fix
+		synchronized (this) {
 
 			try {
 
 				while (pending > 0) {
-					queue.wait();
+					this.wait();
 				}
-				queue.notifyAll();
+				this.notifyAll();
 
 			} catch (InterruptedException e) {
 				System.err.println("Warning: Work queue interrupted.");
@@ -127,7 +120,7 @@ public class WorkQueue {
 		// safe to do unsynchronized due to volatile keyword
 		shutdown = true;
 
-		synchronized (this.queue) {
+		synchronized (queue) {
 			queue.notifyAll();
 		}
 	}

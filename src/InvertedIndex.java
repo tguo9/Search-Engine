@@ -76,17 +76,7 @@ public class InvertedIndex {
 		}
 
 		for (String location : other.location.keySet()) {
-			if (this.index.containsKey(location) == false) {
-				this.index.put(location, other.index.get(location));
-			} else {
-				for (String path : other.index.get(location).keySet()) {
-					if (!this.index.get(location).containsKey(path)) {
-						this.index.get(location).put(path, other.index.get(location).get(path));
-					} else {
-						this.index.get(location).get(path).addAll(other.index.get(location).get(path));
-					}
-				}
-			}
+			this.location.put(location, other.location.get(location));
 		}
 	}
 
