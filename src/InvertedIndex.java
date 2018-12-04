@@ -60,24 +60,22 @@ public class InvertedIndex {
 	 * @param path
 	 * @param position
 	 */
-	public void addAll(InvertedIndex other) {
-		for (String word : other.index.keySet()) {
-			if (this.index.containsKey(word) == false) {
-				this.index.put(word, other.index.get(word));
-			} else {
-				for (String path : other.index.get(word).keySet()) {
-					if (!this.index.get(word).containsKey(path)) {
-						this.index.get(word).put(path, other.index.get(word).get(path));
+	public void addAll(InvertedIndex temp) {
+		for (String word : temp.index.keySet()) {
+			if (this.index.containsKey(word)) {
+				for (String path : temp.index.get(word).keySet()) {
+					if (this.index.get(word).containsKey(path)) {
+						this.index.get(word).get(path).addAll(temp.index.get(word).get(path));
 					} else {
-						this.index.get(word).get(path).addAll(other.index.get(word).get(path));
+						this.index.get(word).put(path, temp.index.get(word).get(path));
 					}
 				}
+			} else {
+				this.index.put(word, temp.index.get(word));
 			}
 		}
 
-		for (String location : other.location.keySet()) {
-			this.location.put(location, other.location.get(location));
-		}
+		this.location.putAll(temp.location);
 	}
 
 	/**
