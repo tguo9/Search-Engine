@@ -1,6 +1,6 @@
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The thread safe version of InvertedIndexBuilder
@@ -16,7 +16,7 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 * @param number to test if prime
 	 * @return true if the number is prime
 	 */
-	public static void buildMap(ArrayList<Path> filenames, ThreadSafeInvertedIndex index, WorkQueue queue) {
+	public static void buildMap(List<Path> filenames, ThreadSafeInvertedIndex index, WorkQueue queue) {
 
 		for (Path files : filenames) {
 

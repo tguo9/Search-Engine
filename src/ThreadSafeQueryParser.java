@@ -40,9 +40,10 @@ public class ThreadSafeQueryParser implements Query {
 			}
 
 		} finally {
-
+			
 			queue.finish();
 		}
+		
 
 	}
 

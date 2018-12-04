@@ -53,7 +53,7 @@ public class WorkQueue {
 			workers[i] = new PoolWorker();
 			workers[i].start();
 		}
-		
+
 	}
 
 	/**
@@ -103,7 +103,6 @@ public class WorkQueue {
 				while (pending > 0) {
 					this.wait();
 				}
-
 
 			} catch (InterruptedException e) {
 				System.err.println("Warning: Work queue interrupted.");

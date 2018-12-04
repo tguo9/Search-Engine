@@ -3,12 +3,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
 
-/* 
- * methods in InvertedIndex
- * 
- * And use @Override annotation
- */
-
 /**
  * The thread safe version of InvertedIndex
  * 
@@ -42,13 +36,9 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		}
 
 	}
-	
-	/**
-	 * Add all methods
-	 * 
-	 * @param other
-	 */
-	public void addAll(ThreadSafeInvertedIndex other) {
+
+	@Override
+	public void addAll(InvertedIndex other) {
 		lock.lockReadWrite();
 		try {
 
@@ -67,7 +57,6 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 
 			super.toJSON(path);
 		} finally {
-
 			lock.unlockReadOnly();
 		}
 
@@ -112,9 +101,6 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 
 	}
 
-	/**
-	 * Returns a string representation of this map.
-	 */
 	@Override
 	public String toString() {
 		lock.lockReadOnly();
@@ -123,27 +109,6 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		} finally {
 			lock.unlockReadOnly();
 		}
-	}
-	
-	@Override
-	public int words() {
-
-		return super.words();
-	}
-
-	@Override
-	public int size() {
-		return super.size();
-	}
-
-	@Override
-	public int size(String word) {
-		return super.size(word);
-	}
-
-	@Override
-	public int size(String word, String path) {
-		return super.size(word, path);
 	}
 
 }
