@@ -78,7 +78,7 @@ public class ReadWriteLock {
 
 		// Decrease the number of active writers
 		writers--;
-		if (writers <= 0) {
+		if (writers == 0) {
 
 			// Notify any waiting threads if necessary
 			this.notifyAll();

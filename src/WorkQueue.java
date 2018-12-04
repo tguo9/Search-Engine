@@ -53,6 +53,7 @@ public class WorkQueue {
 			workers[i] = new PoolWorker();
 			workers[i].start();
 		}
+		
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class WorkQueue {
 	 * Method to decrement pending variable
 	 * 
 	 */
-	public void decrementPending() {
+	private void decrementPending() {
 
 		synchronized (this) {
 			pending--;
@@ -98,13 +99,11 @@ public class WorkQueue {
 	 */
 	public void finish() {
 		synchronized (this) {
-
 			try {
-
 				while (pending > 0) {
 					this.wait();
 				}
-				this.notifyAll();
+
 
 			} catch (InterruptedException e) {
 				System.err.println("Warning: Work queue interrupted.");

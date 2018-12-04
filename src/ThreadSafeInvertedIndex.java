@@ -3,6 +3,12 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
 
+/* 
+ * methods in InvertedIndex
+ * 
+ * And use @Override annotation
+ */
+
 /**
  * The thread safe version of InvertedIndex
  * 
@@ -26,27 +32,30 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 
 	@Override
 	public void add(String word, String path, int position) {
-
-		lock.lockReadOnly();
+		lock.lockReadWrite();
 		try {
 
 			super.add(word, path, position);
 		} finally {
 
-			lock.unlockReadOnly();
+			lock.unlockReadWrite();
 		}
 
 	}
-
+	
+	/**
+	 * Add all methods
+	 * 
+	 * @param other
+	 */
 	public void addAll(ThreadSafeInvertedIndex other) {
-
-		lock.lockReadOnly();
+		lock.lockReadWrite();
 		try {
 
 			super.addAll(other);
 		} finally {
 
-			lock.unlockReadOnly();
+			lock.unlockReadWrite();
 		}
 
 	}
@@ -54,8 +63,14 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 	@Override
 	public void toJSON(Path path) throws IOException {
 		lock.lockReadOnly();
-		super.toJSON(path);
-		lock.unlockReadOnly();
+		try {
+
+			super.toJSON(path);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+
 	}
 
 	/**
@@ -108,6 +123,27 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		} finally {
 			lock.unlockReadOnly();
 		}
+	}
+	
+	@Override
+	public int words() {
+
+		return super.words();
+	}
+
+	@Override
+	public int size() {
+		return super.size();
+	}
+
+	@Override
+	public int size(String word) {
+		return super.size(word);
+	}
+
+	@Override
+	public int size(String word, String path) {
+		return super.size(word, path);
 	}
 
 }

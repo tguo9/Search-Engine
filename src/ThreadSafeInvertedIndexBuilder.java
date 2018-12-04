@@ -16,7 +16,7 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 * @param number to test if prime
 	 * @return true if the number is prime
 	 */
-	public static void buildMap(ArrayList<Path> filenames, InvertedIndex index, WorkQueue queue) {
+	public static void buildMap(ArrayList<Path> filenames, ThreadSafeInvertedIndex index, WorkQueue queue) {
 
 		for (Path files : filenames) {
 
@@ -34,9 +34,9 @@ public class ThreadSafeInvertedIndexBuilder extends InvertedIndexBuilder {
 	 */
 	public static class BuildMapTask implements Runnable {
 		private Path path;
-		private InvertedIndex index;
+		private ThreadSafeInvertedIndex index;
 
-		public BuildMapTask(Path path, InvertedIndex index) {
+		public BuildMapTask(Path path, ThreadSafeInvertedIndex index) {
 			this.path = path;
 			this.index = index;
 		}

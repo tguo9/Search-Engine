@@ -45,7 +45,7 @@ public class Driver {
 				}
 
 				try {
-					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), index);
+					ThreadSafeInvertedIndexBuilder.buildMap(FileFinder.traverse(path), threadSafe, queue);
 				} catch (IOException e) {
 					System.out.println("There is an error when reading the file: " + path);
 				}
@@ -54,7 +54,7 @@ public class Driver {
 			index = new InvertedIndex();
 
 			query = new QueryParser(index);
-
+			
 			if (map.hasFlag("-path")) {
 
 				Path path = map.getPath("-path");

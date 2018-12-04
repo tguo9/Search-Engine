@@ -30,13 +30,7 @@ public class QueryParser implements Query {
 		this.index = index;
 	}
 
-	/**
-	 * Parse and search method.
-	 * 
-	 * @param path
-	 * @param exact
-	 * @throws IOException
-	 */
+	@Override
 	public void parseAndSearch(Path path, boolean exact) throws IOException {
 
 		var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
@@ -74,12 +68,7 @@ public class QueryParser implements Query {
 
 	}
 
-	/**
-	 * Write the result to JSON file
-	 * 
-	 * @param path
-	 * @throws IOException
-	 */
+	@Override
 	public void toJSONResult(Path path) throws IOException {
 
 		JSONWriter.writesResult(results, path);
