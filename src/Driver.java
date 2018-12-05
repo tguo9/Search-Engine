@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -54,7 +56,7 @@ public class Driver {
 			index = new InvertedIndex();
 
 			query = new QueryParser(index);
-			
+
 			if (map.hasFlag("-path")) {
 
 				Path path = map.getPath("-path");
@@ -70,6 +72,21 @@ public class Driver {
 					System.out.println("There is an error when reading the file: " + path);
 				}
 
+			}
+		}
+
+		if (map.hasValue("-url")) {
+			int limit = map.getInteger("-limit", 50);
+			ThreadSafeInvertedIndex threadSafe = new ThreadSafeInvertedIndex();
+			index = threadSafe;
+			queue = new WorkQueue();
+			query = new ThreadSafeQueryParser(threadSafe, queue);
+			multi = true;
+			try {
+				WebCrawler crawler = new WebCrawler(queue, threadSafe);
+				crawler.crawl(new URL(map.getString("-url")), limit);
+			} catch (MalformedURLException e) {
+				System.err.println("There is an error: " + e.getMessage());
 			}
 		}
 
@@ -102,6 +119,7 @@ public class Driver {
 
 			try {
 				query.parseAndSearch(searchPath, map.hasFlag("-exact"));
+				
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;
