@@ -74,12 +74,6 @@ public class InvertedIndex {
 				}
 			}
 		}
-
-		/*
-		 * TODO Not generally safe. Will overwrite values already in this.location
-		 * Need to do a different operation so if there is a value in both this.location
-		 * and other.location they are safely combined together.
-		 */
 		this.location.putAll(other.location);
 	}
 

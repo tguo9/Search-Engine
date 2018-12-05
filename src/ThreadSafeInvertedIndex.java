@@ -3,18 +3,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
 
-/*
- * TODO NOT THREAD SAFE.
- * 
- * You are missing some methods. You need to override EVERY public method
- * in InvertedIndex and call the appropriate lock.
- * 
- * I ALREADY SAID THIS:
- * https://github.com/usf-cs212-fall2018/project-tguo9/blob/92f48fa83c0d932564337917f75934345781f6d9/src/ThreadSafeInvertedIndex.java
- * 
- * Do not make me repeat it again.
- */
-
 /**
  * The thread safe version of InvertedIndex
  * 
