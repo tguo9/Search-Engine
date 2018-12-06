@@ -3,18 +3,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeSet;
 
-/*
- * TODO NOT THREAD SAFE.
- * 
- * You are missing some methods. You need to override EVERY public method
- * in InvertedIndex and call the appropriate lock.
- * 
- * I ALREADY SAID THIS:
- * https://github.com/usf-cs212-fall2018/project-tguo9/blob/92f48fa83c0d932564337917f75934345781f6d9/src/ThreadSafeInvertedIndex.java
- * 
- * Do not make me repeat it again.
- */
-
 /**
  * The thread safe version of InvertedIndex
  * 
@@ -119,6 +107,100 @@ public class ThreadSafeInvertedIndex extends InvertedIndex {
 		try {
 			return super.toString();
 		} finally {
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public int words() {
+		lock.lockReadOnly();
+		try {
+			return super.size();
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public int size() {
+		lock.lockReadOnly();
+		try {
+
+			return super.size();
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public int size(String word) {
+		lock.lockReadOnly();
+		try {
+
+			return super.size(word);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public int size(String word, String path) {
+		lock.lockReadOnly();
+		try {
+
+			return super.size(word, path);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public boolean contains(String word) {
+		lock.lockReadOnly();
+		try {
+			return super.contains(word);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public boolean contains(String word, String location) {
+		lock.lockReadOnly();
+		try {
+			return super.contains(word, location);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+	}
+
+	@Override
+	public boolean contains(String word, String location, int position) {
+		lock.lockReadOnly();
+		try {
+			return super.contains(word, location, position);
+		} finally {
+
+			lock.unlockReadOnly();
+		}
+
+	}
+
+	@Override
+	public void toJSONLocations(Path path) throws IOException {
+
+		lock.lockReadOnly();
+		try {
+
+			super.toJSONLocations(path);
+		} finally {
+
 			lock.unlockReadOnly();
 		}
 	}
