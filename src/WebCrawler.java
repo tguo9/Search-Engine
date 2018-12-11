@@ -1,9 +1,13 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
@@ -13,6 +17,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * @author Tao
  *
  */
+@SuppressWarnings("serial")
 public class WebCrawler extends HttpServlet{
 
 	private final HashSet<URL> linkSet;
@@ -42,6 +47,50 @@ public class WebCrawler extends HttpServlet{
 		queue.execute(new CrawlerTask(url, limit));
 		queue.finish();
 	}
+	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		response.setStatus(HttpServletResponse.SC_OK);
+
+
+		PrintWriter out = response.getWriter();
+		out.printf("<html>%n%n");
+		out.printf("<head><title>%s</title></head>%n", "HERE");
+		out.printf("<body>%n");
+
+		out.printf("<h1>Message Board</h1>%n%n");
+
+		// TODO
+
+		out.printf("<p>This request was handled by thread %s.</p>%n", Thread.currentThread().getName());
+
+		out.printf("%n</body>%n");
+		out.printf("</html>%n");
+
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		response.setStatus(HttpServletResponse.SC_OK);
+
+
+		// TODO
+
+//		String formatted = String.format("%s<br><font size=\"-2\">[ posted by %s at %s ]</font>", message, username, getDate());
+
+		// TODO
+
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.sendRedirect(request.getServletPath());
+}
+	
 
 	private class CrawlerTask implements Runnable {
 
