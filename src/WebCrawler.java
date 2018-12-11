@@ -3,6 +3,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import javax.servlet.http.HttpServlet;
+
 import opennlp.tools.stemmer.snowball.SnowballStemmer;
 
 /**
@@ -11,7 +13,7 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  * @author Tao
  *
  */
-public class WebCrawler {
+public class WebCrawler extends HttpServlet{
 
 	private final HashSet<URL> linkSet;
 	private final WorkQueue queue;
