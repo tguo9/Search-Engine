@@ -55,15 +55,12 @@ public class WebCrawler extends HttpServlet{
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
 
-
 		PrintWriter out = response.getWriter();
 		out.printf("<html>%n%n");
 		out.printf("<head><title>%s</title></head>%n", "HERE");
 		out.printf("<body>%n");
 
 		out.printf("<h1>Message Board</h1>%n%n");
-
-		// TODO
 
 		out.printf("<p>This request was handled by thread %s.</p>%n", Thread.currentThread().getName());
 
@@ -79,13 +76,6 @@ public class WebCrawler extends HttpServlet{
 
 		response.setContentType("text/html");
 		response.setStatus(HttpServletResponse.SC_OK);
-
-
-		// TODO
-
-//		String formatted = String.format("%s<br><font size=\"-2\">[ posted by %s at %s ]</font>", message, username, getDate());
-
-		// TODO
 
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.sendRedirect(request.getServletPath());
