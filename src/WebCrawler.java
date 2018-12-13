@@ -90,7 +90,6 @@ public class WebCrawler extends HttpServlet {
 		out.print("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"/crawler\">"
 				+ "<p>Seeds URL:  <input type=\"text\" name=\"url\" size=\"20\" maxlength=\"70\"> Links Limit:  "
 				+ "<input type=\"text\" name=\"limit\" size=\"20\" maxlength=\"70\">"
-
 				+ "<input class=\\\"button is-primary\\\" type=\"submit\" name=\"submit\" id=\"submit\" value=\"Crawl\" /> <a href=\"/\">Go Back</a></p></form>");
 
 		if (request.getParameter("error") != null) {

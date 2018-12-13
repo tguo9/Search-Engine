@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import opennlp.tools.stemmer.snowball.SnowballStemmer;
+
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 
@@ -130,8 +132,28 @@ public class SearchServlet extends HttpServlet {
 				out.println("<p>" + results.size() + " results. (" + (end - start) / 1000.0 + " seconds)</p>");
 
 				for (SearchResult result : results) {
-					out.println("<a href=\"" + result.getPath() + "\">"
-							+ result.getPath() + "</a><br/>\n");
+					out.println("<a href=\"" + result.getPath() + "\" target=\"_blank\">"
+							+ result.getPath() + "</a>\n");
+					
+					var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
+					var html = HTMLFetcher.fetchHTML(result.getPath(), 3);
+					if (html == null) {
+						return;
+					}
+					int count = 0;
+					for (String s : TextParser.parse(HTMLCleaner.stripHTML(html))) {
+						
+						out.println("<p>" + stemmer.stem(s).toString() + "</p>\n");
+						
+						count++;
+						
+						if (count > 2) {
+							
+							break;
+						}
+					}
+					
+					out.println("<br/>\n");
 				}
 			}
 		}
@@ -211,8 +233,8 @@ public class SearchServlet extends HttpServlet {
 
 	/**
 	 * Get the current date and time.
-	 *
-	 * @return current date and time
+	 * 
+	 * @return date
 	 */
 	public static String getDate() {
 		String format = "yyyy-MM-dd hh:mm a";
