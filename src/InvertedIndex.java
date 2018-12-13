@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,12 +9,18 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * Data straturce for the project. Store all the data.
  * 
  * @author Tao Guo
  */
-public class InvertedIndex {
+@SuppressWarnings("serial")
+public class InvertedIndex extends HttpServlet {
 
 	/**
 	 * Stores a mapping of words to the positions the words were found.
@@ -124,6 +131,107 @@ public class InvertedIndex {
 
 		return contains(word, location) ? index.get(word).get(location).contains(position) : false;
 
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		response.setStatus(HttpServletResponse.SC_OK);
+
+		PrintWriter out = response.getWriter();
+
+		out.printf("<!DOCTYPE html>%n");
+		out.printf("<html>%n");
+		out.printf("<head>%n");
+		out.printf("	<meta charset=\"utf-8\">%n");
+		out.printf("	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">%n");
+		out.printf("	<title>%s</title>%n", "Index");
+		out.printf(
+				"	<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css\">%n");
+		out.printf("	<script defer src=\"https://use.fontawesome.com/releases/v5.3.1/js/all.js\"></script>%n");
+		out.printf("</head>%n");
+		out.printf("%n");
+		out.printf("<body>%n");
+		out.printf("	<section class=\"hero is-primary is-bold\">%n");
+		out.printf("	  <div class=\"hero-body\">%n");
+		out.printf("	    <div class=\"container\">%n");
+		out.printf(
+				"	      <img align=\"center\" width=\"50\" height=\"50\" src=\"https://s3.amazonaws.com/noosa2017/cdn_uploads/2017/06/30233100/pumpkin.svg\">%n");
+		out.printf("	      </img>%n");
+		out.printf("	      <h1 class=\"title\">%n");
+		out.printf("	        Index Board%n");
+		out.printf("	      </h1>%n");
+
+		out.printf("	    </div>%n");
+		out.printf("	  </div>%n");
+		out.printf("	</section>%n");
+		out.printf("%n");
+		out.printf("	<section class=\"section\">%n");
+		out.printf("		<div class=\"container\">%n");
+		out.printf("			<h2 class=\"title\">Index</h2>%n");
+		out.printf("%n");
+
+		if (index.isEmpty()) {
+			out.printf("				<p>No messages.</p>%n");
+		} else {
+			for (String message : index.keySet()) {
+				out.printf("				<div class=\"box\">%n");
+				out.print(message);
+				for (String info : index.get(message).keySet()) {
+
+					out.printf("\n");
+					out.printf("<a href=\"" + info + "\" target=\"_blank\">" + info + "</a>\n");
+				}
+				out.printf("				</div>%n");
+
+				out.printf("%n");
+			}
+		}
+
+		out.printf("			</div>%n");
+		out.printf("%n");
+		out.printf("		</div>%n");
+		out.printf("	</section>%n");
+		out.printf("%n");
+
+		out.printf("	<section class=\"section\">%n");
+		out.printf("		<div class=\"container\">%n");
+		out.printf("			<h2 class=\"title\">Location</h2>%n");
+		out.printf("%n");
+
+		if (location.isEmpty()) {
+			out.printf("				<p>No messages.</p>%n");
+		} else {
+			for (String message : location.keySet()) {
+				out.printf("				<div class=\"box\">%n");
+				out.print(message);
+
+				out.print("\t");
+				out.print(location.get(message));
+				out.printf("				</div>%n");
+
+				out.printf("%n");
+			}
+		}
+
+		out.printf("			</div>%n");
+		out.printf("%n");
+		out.printf("		</div>%n");
+		out.printf("	</section>%n");
+
+		out.printf("	<footer class=\"footer\">%n");
+		out.printf("	  <div class=\"content has-text-centered\">%n");
+		out.printf("	    <p>%n");
+		out.printf("	      This request was handled by thread %s.%n", Thread.currentThread().getName());
+		out.printf("	    </p>%n");
+		out.printf("	  </div>%n");
+		out.printf("	</footer>%n");
+		out.printf("</body>%n");
+		out.printf("</html>%n");
+
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	/**

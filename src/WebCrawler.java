@@ -71,6 +71,9 @@ public class WebCrawler extends HttpServlet {
 		out.printf("	<section class=\"hero is-primary is-bold\">%n");
 		out.printf("	  <div class=\"hero-body\">%n");
 		out.printf("	    <div class=\"container\">%n");
+		out.printf(
+				"	      <img align=\"center\" width=\"50\" height=\"50\" src=\"https://s3.amazonaws.com/noosa2017/cdn_uploads/2017/06/30233100/pumpkin.svg\">%n");
+		out.printf("	      </img>%n");
 		out.printf("	      <h1 align=\\\"center\\\" class=\"title\">%n");
 		out.printf("	        Web Crawler%n");
 		out.printf("	      </h1>%n");

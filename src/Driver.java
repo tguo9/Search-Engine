@@ -107,6 +107,7 @@ public class Driver {
 			handler.addServletWithMapping(new ServletHolder(new SearchServlet(index, (QueryParser) query)), "/");
 			handler.addServletWithMapping(CookieConfigServlet.class, "/history");
 			handler.addServletWithMapping(new ServletHolder(crawler), "/crawler");
+			handler.addServletWithMapping(new ServletHolder(index), "/index");
 
 			ResourceHandler resourceHandler = new ResourceHandler();
 			resourceHandler.setResourceBase("bulma");

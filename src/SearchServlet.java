@@ -66,8 +66,7 @@ public class SearchServlet extends HttpServlet {
 		out.printf("	      </h2>%n");
 		out.printf("	    </div>%n");
 		out.printf("	  </div>%n");
-		
-		
+
 		out.printf("	</section>%n");
 
 		out.print(CookieConfigServlet.getTracking() ? "<p>Your activities will not be tracked.</p>" : "");
@@ -132,28 +131,28 @@ public class SearchServlet extends HttpServlet {
 				out.println("<p>" + results.size() + " results. (" + (end - start) / 1000.0 + " seconds)</p>");
 
 				for (SearchResult result : results) {
-					out.println("<a href=\"" + result.getPath() + "\" target=\"_blank\">"
-							+ result.getPath() + "</a>\n");
-					
+					out.println(
+							"<a href=\"" + result.getPath() + "\" target=\"_blank\">" + result.getPath() + "</a>\n");
+
 					var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 					var html = HTMLFetcher.fetchHTML(result.getPath(), 3);
 					if (html == null) {
 						return;
 					}
-					
+
 					int count = 0;
 					for (String s : TextParser.parse(HTMLCleaner.stripHTML(html))) {
-						
+
 						out.println("<p>" + stemmer.stem(s).toString() + "</p>\n");
-						
+
 						count++;
-						
+
 						if (count > 2) {
-							
+
 							break;
 						}
 					}
-					
+
 					out.println("<br/>\n");
 				}
 			}
@@ -210,8 +209,9 @@ public class SearchServlet extends HttpServlet {
 		out.printf("<input type=\"submit\" value=\"Search\">");
 		out.printf("\t</td>%n");
 		out.printf("\t<td>%n");
-		out.printf(
-				"<p> <a href=\"/history\">Search History</a>&nbsp;&nbsp;&nbsp;<a href=\"/crawler\">Web Crawler</a></p>\n%n");
+		out.printf("<p> " + "<a href=\"/history\">Search History</a>&nbsp;&nbsp;&nbsp;"
+				+ "<a href=\"/index\">Display Index</a>&nbsp;&nbsp;&nbsp;"
+				+ "<a href=\"/crawler\">Web Crawler</a></p>\n%n");
 		out.printf("\t</td>%n");
 		out.printf("</tr>%n");
 		out.printf("</table>%n");
