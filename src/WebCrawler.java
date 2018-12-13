@@ -60,7 +60,7 @@ public class WebCrawler extends HttpServlet{
 		out.printf("<head><title>%s</title></head>%n", "HERE");
 		out.printf("<body>%n");
 
-		out.printf("<h1>Message Board</h1>%n%n");
+		out.printf("<h1>Search Engine</h1>%n%n");
 
 		out.printf("<p>This request was handled by thread %s.</p>%n", Thread.currentThread().getName());
 
