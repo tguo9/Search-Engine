@@ -133,6 +133,11 @@ public class SearchServlet extends HttpServlet {
 				for (SearchResult result : results) {
 					out.println(
 							"<a href=\"" + result.getPath() + "\" target=\"_blank\">" + result.getPath() + "</a>\n");
+					out.println(
+							"<p> Matches: " + result.getMatches() + "</p>\n");
+					out.println(
+							"<p> Scores: " + result.getScore() + "</p>\n");
+					
 
 					var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 					var html = HTMLFetcher.fetchHTML(result.getPath(), 3);

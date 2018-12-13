@@ -90,7 +90,7 @@ public class CookieConfigServlet extends CookieBaseServlet {
 			System.out.println(decoded);
 			for (String query : decoded.split(",")) {
 				if (!query.trim().isEmpty()) {
-					out.printf("[%s]<br/>", query);
+					out.printf("[" + query + "]		" + getShortDate() + "<br/>");
 				}
 			}
 			out.println("</p>");
@@ -111,7 +111,8 @@ public class CookieConfigServlet extends CookieBaseServlet {
 			String decoded = URLDecoder.decode(visited.getValue(), StandardCharsets.UTF_8.name());
 			for (String url : decoded.split(",")) {
 				if (!url.trim().isEmpty()) {
-					out.println("<a href=\"" + url + "\"> " + url + "</a><br/>");
+					out.println("<a href=\"" + url + "\"> " + url);
+					out.printf(getShortDate() + "</a><br/>");
 				}
 			}
 			out.println("</p>");
