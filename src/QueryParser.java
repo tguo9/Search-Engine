@@ -1,7 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.TreeMap;
@@ -31,40 +28,32 @@ public class QueryParser implements Query {
 	}
 
 	@Override
-	public void parseAndSearch(Path path, boolean exact) throws IOException {
+	public void parseAndSearch(String path, boolean exact) throws IOException {
 
 		var stemmer = new SnowballStemmer(SnowballStemmer.ALGORITHM.ENGLISH);
 
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
-			String line = null;
-			while ((line = reader.readLine()) != null) {
+		TreeSet<String> queries = new TreeSet<>();
+		TextFileStemmer.stemLine(path, stemmer, queries);
 
-				TreeSet<String> queries = new TreeSet<>();
-				TextFileStemmer.stemLine(line, stemmer, queries);
+		if (!queries.isEmpty()) {
 
-				if (!queries.isEmpty()) {
+			String result = String.join(" ", queries);
 
-					String result = String.join(" ", queries);
+			if (exact == true) {
 
-					if (results.containsKey(result)) {
+				results.put(result, index.exactSearch(queries));
 
-						continue;
-					}
-
-					if (exact == true) {
-
-						results.put(result, index.exactSearch(queries));
-
-					} else {
-						results.put(result, index.partialSearch(queries));
-
-					}
-
-				}
+			} else {
+				results.put(result, index.partialSearch(queries));
 
 			}
 
 		}
+	}
+
+	public List<SearchResult> printResult(String query) {
+
+		return results.get(query);
 
 	}
 

@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,22 +19,24 @@ import opennlp.tools.stemmer.snowball.SnowballStemmer;
  *
  */
 @SuppressWarnings("serial")
-public class WebCrawler extends HttpServlet{
+public class WebCrawler extends HttpServlet {
 
-	private final HashSet<URL> linkSet;
-	private final WorkQueue queue;
-	private final ThreadSafeInvertedIndex index;
+	private int limit;
+	private HashSet<URL> urls;
+	private WorkQueue queue;
+	private InvertedIndex index;
+	private HashSet<URL> seeds;
 
 	/**
-	 * The constructor for web crawler
+	 * Initialize Crawler
 	 * 
-	 * @param worker
-	 * @param index
+	 * @param index wordIndex to build
 	 */
-	public WebCrawler(WorkQueue worker, ThreadSafeInvertedIndex index) {
-		this.queue = worker;
-		this.linkSet = new HashSet<URL>();
+	public WebCrawler(WorkQueue queue, InvertedIndex index) {
+		this.queue = queue;
 		this.index = index;
+		this.urls = new HashSet<>();
+		this.seeds = new HashSet<URL>();
 	}
 
 	/**
@@ -42,45 +45,93 @@ public class WebCrawler extends HttpServlet{
 	 * @param url
 	 * @param limit
 	 */
-	public void crawl(URL url, int limit) {
-		linkSet.add(url);
-		queue.execute(new CrawlerTask(url, limit));
+	public void crawl(URL seed, int limit) {
+		this.limit = limit;
+		urls.add(seed);
+		seeds.add(seed);
+		queue.execute(new CrawlerTask(seed, limit));
 		queue.finish();
 	}
-	
+
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
-		response.setContentType("text/html");
-		response.setStatus(HttpServletResponse.SC_OK);
-
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
-		out.printf("<html>%n%n");
-		out.printf("<head><title>%s</title></head>%n", "HERE");
-		out.printf("<body>%n");
+		out.printf("<!DOCTYPE html>%n");
+		out.printf("<html>%n");
+		out.printf("<head>%n");
+		out.printf("	<meta charset=\"utf-8\">%n");
+		out.printf("	<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">%n");
+		out.printf("	<title>%s</title>%n", "Web Crawler");
+		out.printf(
+				"	<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css\">%n");
+		out.printf("	<script defer src=\"https://use.fontawesome.com/releases/v5.3.1/js/all.js\"></script>%n");
+		out.printf("</head>%n");
+		out.printf("%n");
 
-		out.printf("<h1>Search Engine</h1>%n%n");
+		out.printf("	<section class=\"hero is-primary is-bold\">%n");
+		out.printf("	  <div class=\"hero-body\">%n");
+		out.printf("	    <div class=\"container\">%n");
+		out.printf("	      <h1 align=\\\"center\\\" class=\"title\">%n");
+		out.printf("	        Web Crawler%n");
+		out.printf("	      </h1>%n");
+		out.printf("	      </h2>%n");
+		out.printf("	    </div>%n");
+		out.printf("	  </div>%n");
+		
+		
+		out.printf("	</section>%n");
 
-		out.printf("<p>This request was handled by thread %s.</p>%n", Thread.currentThread().getName());
+		out.println("<h4>Seeds: </h4>");
 
-		out.printf("%n</body>%n");
+		for (URL u : seeds) {
+			out.println("<a href=\"" + u + "\">" + u + "</a>" + "<br/>");
+		}
+
+		out.print("<form id=\"form1\" name=\"form1\" method=\"post\" action=\"/crawler\">"
+				+ "<p>Seeds URL:  <input type=\"text\" name=\"url\" size=\"20\" maxlength=\"70\"> Links Limit:  "
+				+ "<input type=\"text\" name=\"limit\" size=\"20\" maxlength=\"70\">"
+
+				+ "<input class=\\\"button is-primary\\\" type=\"submit\" name=\"submit\" id=\"submit\" value=\"Crawl\" /> <a href=\"/\">Go Back</a></p></form>");
+
+		if (request.getParameter("error") != null) {
+			out.println("<p><strong>Invalid Input</strong></p>");
+		}
+		out.println("<p>" + urls.size() + " links are crawled. </p>");
+		out.println("<p>");
+		synchronized (urls) {
+			for (URL u : urls) {
+				out.println("<a href=\"" + u + "\">" + u + "</a>" + "<br/>");
+			}
+		}
+		out.println("</p>");
+		out.printf("</head>%n");
 		out.printf("</html>%n");
-
-		response.setStatus(HttpServletResponse.SC_OK);
+		
+		
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		try {
+			String urlString = request.getParameter("url");
+			String limit = request.getParameter("limit");
 
-		response.setContentType("text/html");
-		response.setStatus(HttpServletResponse.SC_OK);
+			this.limit = this.limit + Integer.parseInt(limit);
 
-		response.setStatus(HttpServletResponse.SC_OK);
-		response.sendRedirect(request.getServletPath());
-}
-	
+			if (urlString == null || limit == null) {
+				throw new IllegalArgumentException();
+			}
+			URL url = new URL(urlString);
+
+			crawl(url, this.limit);
+
+			response.setStatus(HttpServletResponse.SC_OK);
+			response.sendRedirect(request.getServletPath());
+
+		} catch (IllegalArgumentException | MalformedURLException e) {
+			response.sendRedirect(request.getServletPath() + "?error=1");
+		}
+	}
 
 	private class CrawlerTask implements Runnable {
 
@@ -110,15 +161,15 @@ public class WebCrawler extends HttpServlet{
 				}
 				index.addAll(temp);
 
-				if (linkSet.size() < limit) {
+				if (seeds.size() < limit) {
 					ArrayList<URL> links = LinkParser.listLinks(url, LinkParser.fetchHTML(url));
 					for (URL link : links) {
-						synchronized (linkSet) {
-							if (linkSet.size() >= limit) {
+						synchronized (seeds) {
+							if (seeds.size() >= limit) {
 								break;
 							} else {
-								if (linkSet.contains(link) == false) {
-									linkSet.add(link);
+								if (seeds.contains(link) == false) {
+									seeds.add(link);
 									queue.execute(new CrawlerTask(link, limit));
 
 								}

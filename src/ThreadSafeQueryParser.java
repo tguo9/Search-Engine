@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -29,9 +30,9 @@ public class ThreadSafeQueryParser implements Query {
 	}
 
 	@Override
-	public void parseAndSearch(Path path, boolean exact) throws IOException {
+	public void parseAndSearch(String path, boolean exact) throws IOException {
 
-		try (BufferedReader reader = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(path), StandardCharsets.UTF_8)) {
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 

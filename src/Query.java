@@ -24,6 +24,6 @@ public interface Query {
 	 * @param exact search methods
 	 * @throws IOException
 	 */
-	void parseAndSearch(Path path, boolean exact) throws IOException;
+	void parseAndSearch(String path, boolean exact) throws IOException;
 
 }

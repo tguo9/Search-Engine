@@ -4,6 +4,14 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.ContextHandler;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+
 /**
  * Driver for the project.
  * 
@@ -26,6 +34,8 @@ public class Driver {
 		InvertedIndex index = null;
 		Query query = null;
 		WorkQueue queue = null;
+		Server server = null;
+		WebCrawler crawler = null;
 
 		if (map.hasFlag("-threads")) {
 			multi = true;
@@ -83,10 +93,36 @@ public class Driver {
 			query = new ThreadSafeQueryParser(threadSafe, queue);
 			multi = true;
 			try {
-				WebCrawler crawler = new WebCrawler(queue, threadSafe);
+				crawler = new WebCrawler(queue, threadSafe);
 				crawler.crawl(new URL(map.getString("-url")), limit);
 			} catch (MalformedURLException e) {
 				System.err.println("There is an error: " + e.getMessage());
+			}
+		}
+
+		if (map.hasValue("-port")) {
+			server = new Server(map.getInteger("-port", 8080));
+			query = new QueryParser(index);
+			ServletHandler handler = new ServletHandler();
+			handler.addServletWithMapping(new ServletHolder(new SearchServlet(index, (QueryParser) query)), "/");
+			handler.addServletWithMapping(CookieConfigServlet.class, "/history");
+			handler.addServletWithMapping(new ServletHolder(crawler), "/crawler");
+
+			ResourceHandler resourceHandler = new ResourceHandler();
+			resourceHandler.setResourceBase("bulma");
+
+			ContextHandler resourceContext = new ContextHandler("/bulma");
+			resourceContext.setHandler(resourceHandler);
+
+			HandlerList handlers = new HandlerList();
+			handlers.setHandlers(new Handler[] { resourceContext, handler });
+			server.setHandler(handlers);
+			try {
+				server.start();
+				server.join();
+			} catch (Exception e) {
+				System.err.println("Encountered error when initializing the server.");
+				return;
 			}
 		}
 
@@ -118,7 +154,7 @@ public class Driver {
 			Path searchPath = map.getPath("-search");
 
 			try {
-				query.parseAndSearch(searchPath, map.hasFlag("-exact"));
+				query.parseAndSearch(searchPath.toString(), map.hasFlag("-exact"));
 			} catch (IOException e) {
 				System.out.println("There is an error when writing JSON file");
 				return;
