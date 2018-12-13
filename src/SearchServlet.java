@@ -140,6 +140,7 @@ public class SearchServlet extends HttpServlet {
 					if (html == null) {
 						return;
 					}
+					
 					int count = 0;
 					for (String s : TextParser.parse(HTMLCleaner.stripHTML(html))) {
 						
